@@ -16,7 +16,8 @@ When the user wants to commit changes, generate a commit message (msg, message),
 1. **[NEVER VIOLATE] Staging must be confirmed first**:
    - `git add` is allowed, but **only for files the user has explicitly confirmed**.
    - Never stage files without confirmation, even if a system default suggests it.
-   - **Forbidden**: `git add .`, `git add -A`, `git add --all` — always name specific paths one by one.
+   - **Forbidden**: `git add .`, `git add -A`, `git add --all` — always name specific paths explicitly.
+   - **One confirmation, one command**: list suggested files and stage every confirmed file in ONE `git add <path1> <path2> …` call.
    - If `git diff --staged` is empty, do **not** error — instead list unstaged files (`git status`), propose which to add, and only run `git add <file>` after confirmation.
 
 2. **Separate analysis from execution**:
@@ -27,15 +28,9 @@ When the user wants to commit changes, generate a commit message (msg, message),
    - Format: `<type>: <description>`
    - Common types: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `chore`.
 
-4. **Message quality**: Follow the "Commit Message Quality Standard" section — body explains why, never lists changes.
+4. **Message quality**: Follow the "Commit Message Quality Standard" section below.
 
-5. **Step-by-step confirmation**:
-   - Step 1 (Staging): **Always confirm staging scope** — list currently staged files and suggest any additions. Even if the user staged everything themselves, still list what's staged and ask them to confirm. Only run `git add <file>` after confirmation.
-   - Step 2 (Secrets): Scan staged diff for credentials before drafting.
-   - Step 3 (Draft): Generate a draft commit message for the user to review.
-   - Step 4 (Commit): Only run `git commit` after the user replies with "ok" or equivalent.
-
-6. **Tag rule compliance in every draft**: Append a one-line "Rules applied"
+5. **Tag rule compliance in every draft**: Append a one-line "Rules applied"
    list to each draft — which key rules it satisfies (type, ≤50 chars,
    imperative mood, why-not-how body, secrets clean) and how. Makes
    adherence visible, not assumed.
@@ -75,7 +70,7 @@ Rules from Chris Beams' *How to Write a Git Commit Message* (7 rules) and Linus 
 
 - Run `git status` and `git diff --staged`.
 - **Always confirm staging scope** — list "currently staged" and "suggested additions"; never skip even if files are already staged.
-- After confirmation, run `git add <file>` one at a time (**never** `git add .` / `-A`); if nothing more to add, proceed to step 2.
+- After confirmation, run ONE `git add` with all confirmed paths (**never** `git add .` / `-A`); if nothing more to add, proceed to step 2.
 
 **Example output:**
 ```
@@ -124,7 +119,7 @@ Shall I go ahead and commit?
 
 ### 4. Execute Commit
 
-Once the user confirms, run via the **Bash tool** using a heredoc (required for multi-line messages):
+Only after the user replies "ok" or equivalent, run via the **Bash tool** using a heredoc (required for multi-line messages):
 
 ```bash
 git commit -m "$(cat <<'EOF'
