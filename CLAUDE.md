@@ -23,9 +23,9 @@ the README.
 
 ## TODO (left when the repo was created, 2026-07-03)
 
-- [ ] Push the first commit to GitHub (root commit not pushed yet; the
-      remote is empty)
-- [ ] After pushing, test-install with
+- [x] Push the first commit to GitHub (done — turned out it was already
+      pushed from another machine; confirmed in sync 2026-07-04)
+- [ ] Test-install with
       `npx skills@latest add caanio/agent-skills -g` to verify the skills
       CLI accepts this structure (mattpocock/skills layout)
 - [ ] Later candidates to distil: cross-project pitfalls like pinning wheel
