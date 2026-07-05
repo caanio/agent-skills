@@ -66,6 +66,12 @@ Rules from Chris Beams' *How to Write a Git Commit Message* (7 rules) and Linus 
 
 ## Workflow
 
+### 0. Sync Check (last-line defence)
+
+- Run `git fetch` (short timeout, e.g. `GIT_SSH_COMMAND="ssh -o ConnectTimeout=5 -o BatchMode=yes" git fetch`), then `git status -sb`.
+- **Behind remote** → warn and offer to resolve now (`stash → pull --rebase → stash pop`): fixing divergence before commit beats rebasing a finished commit through conflicts.
+- **Fetch unreachable** (offline / LAN-only remote) → say so, note ahead/behind info is stale, and ask whether to proceed with a local-only commit (push deferred). Never silently skip this step.
+
 ### 1. Confirm Staging
 
 - Run `git status` and `git diff --staged`.
