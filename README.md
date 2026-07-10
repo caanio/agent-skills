@@ -47,6 +47,8 @@ Codex / Gemini: one folder per skill under `skills/`, each containing a
 |---|---|
 | [git-helper](skills/git-helper/SKILL.md) | Git commit workflow: confirm staging → secrets scan → generate commit messages meeting Conventional Commits + Chris Beams standards |
 | [haos-addon-deploy](skills/haos-addon-deploy/SKILL.md) | Deploy a self-written long-running app as a Home Assistant OS local add-on (RPi, 24/7), with every battle-tested pitfall |
+| [haos-https-tunnel](skills/haos-https-tunnel/SKILL.md) | Give a HAOS instance a real HTTPS URL via a Cloudflare Tunnel (cloudflared add-on) — no port forwarding, no device-side install |
+| [haos-cloud-backup](skills/haos-cloud-backup/SKILL.md) | Ship HAOS backups to cloud storage with rclone: upload bandwidth cap (bwlimit) and GFS-style daily/weekly/monthly retention |
 
 ## Conventions
 
