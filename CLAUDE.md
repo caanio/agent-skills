@@ -4,6 +4,17 @@ Monorepo of self-written AI agent skills, shared across agents (Claude Code /
 Codex / Gemini) and published to any machine via
 `npx skills@latest add caanio/agent-skills -g`.
 
+## Single Source of Truth (non-negotiable)
+
+- **This repo is the only place self-written skills are edited.** Never
+  hand-edit or hand-copy files in an install target (`~/.agents/skills/`,
+  `~/.claude/skills/`) or keep a parallel copy in another repo (e.g.
+  dotfiles) — that is how divergence happened before 2026-07-10.
+- Update flow: edit here → commit → push → on each machine
+  `npx skills@latest add caanio/agent-skills -g` to reinstall.
+- Install targets are real directories managed by the skills CLI, not
+  symlinks into any git repo.
+
 ## Inclusion Rules (non-negotiable)
 
 - **Content must be generic**: no environment-specific information (hosts,
