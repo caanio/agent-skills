@@ -158,6 +158,12 @@ ssh ha 'sudo docker exec addon_local_<slug> python3 -c "…"'
 | Code changed, config.yaml version **not bumped** | redo §2 delivery → `ha apps rebuild local_<slug>` |
 | Code changed, **version bumped** | redo §2 delivery → `ha store reload` → **`ha apps update local_<slug>`** (rebuild is rejected here: "Local and store versions differ, use Update instead of Rebuild") |
 
+⚠️ **For code updates, always bump `version` and take the update route.** Rebuild
+leaves the device reporting the old version while running new code — `ha apps info`
+can no longer tell which code the box is actually running, which hurts later
+debugging. Reserve rebuild for rapid iterate-and-test cycles where the version
+trail doesn't matter yet.
+
 ## 7. Persistence and Logs
 
 - **`/data/` is the persistent volume** (host side: `/data/apps/data/local_<slug>/`):
