@@ -69,8 +69,14 @@ Config lives at **`/homeassistant/rclone.conf`** (same folder as
   ```
 
 - ⚠️ The Web UI only shows rclone remotes and live transfers. Jobs, schedules
-  and bwlimit are **add-on options** (HA → add-on → Configuration tab) — users
-  looking for settings in the Web UI find nothing.
+  and bwlimit are **add-on options** (HA → Settings → Apps → the add-on →
+  Configuration tab) — users looking for settings in the Web UI find nothing.
+- ⚠️ **Display quirks that look like corruption but aren't**: the HA YAML
+  editor may render a `flags:` map back as a Python-repr string
+  (`"{'bwlimit': '1.5M'}"`) — cosmetic; trust the job log
+  (`Starting bandwidth limiter at 1.500Mi Byte/s`) over the editor. Likewise
+  the `?` characters in date filters (`*_????-??-01_*`) are rclone
+  single-character glob wildcards, not mojibake — users report both as broken.
 
 ## 3. Jobs (upload + prune)
 
@@ -82,7 +88,13 @@ Field notes that cost real debugging time:
   rules must go in `extra_flags` — order matters and `include:`/`exclude:`
   arrays don't guarantee it.
 - A job with no `schedule` runs at add-on startup — handy for a one-shot test,
-  dangerous on delete jobs. There's also a global `dry_run: true`.
+  dangerous on delete jobs.
+- **Global `dry_run: true` = free rehearsal, but remember to flip it off.**
+  Recommended flow: leave it on through the first scheduled day, read the
+  `Skipped ... as --dry-run is set` lines as validation that every job selects
+  exactly the right files, then set `dry_run: false` and restart. ⚠️ While it's
+  on, **nothing uploads or deletes at all**, yet every job logs "finished" and
+  the log looks healthy at a glance — easy to forget for weeks.
 
 ```yaml
 jobs:
@@ -163,3 +175,34 @@ ssh ha 'sudo docker exec addon_19a172aa_rclone_backup rclone --config /homeassis
 
 A 611 MB backup at `bwlimit 1.5M` takes ~7 minutes — if it finishes much faster,
 the cap isn't being applied (check the flag reached the command in the job log).
+
+## 7. Changing options from the CLI (e.g. flipping dry_run off)
+
+For a human at the UI, **Configuration tab → ⋮ → Edit in YAML → Save → restart**
+is the normal route — this section is for headless/agent changes over SSH.
+
+⚠️ `ha apps` has **no `options` subcommand** — set options via the Supervisor
+API. Always send the **full options object** (fetch → mutate → POST), never a
+partial one:
+
+```bash
+ssh ha 'bash -lc "ha apps info 19a172aa_rclone_backup --raw-json"' > opts.json
+python3 - <<'EOF'
+import json
+d = json.load(open('opts.json'))['data']['options']
+d['dry_run'] = False
+json.dump({'options': d}, open('payload.json', 'w'), ensure_ascii=False)
+EOF
+ssh ha 'bash -lc "curl -sS -X POST -H \"Authorization: Bearer \$SUPERVISOR_TOKEN\" \
+    -H \"Content-Type: application/json\" -d @- \
+    http://supervisor/addons/19a172aa_rclone_backup/options"' < payload.json
+ssh ha 'bash -lc "ha apps restart 19a172aa_rclone_backup"'
+```
+
+- ⚠️ **Escape it as `\$SUPERVISOR_TOKEN`.** The remote parent shell is
+  non-login: an unescaped `$SUPERVISOR_TOKEN` expands there to empty and the
+  API answers a misleading `401: Unauthorized` (the var must expand inside
+  `bash -lc`, which loads the env).
+- Keep the pre-change `opts.json` as the rollback copy; verify afterwards with
+  `ha apps info --raw-json` (want `"dry_run": false`, jobs intact) and the log's
+  `scheduled jobs:` listing.
