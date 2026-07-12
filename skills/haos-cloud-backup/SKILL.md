@@ -89,6 +89,14 @@ Field notes that cost real debugging time:
   arrays don't guarantee it.
 - A job with no `schedule` runs at add-on startup — handy for a one-shot test,
   dangerous on delete jobs.
+- **Filename rename is what makes name-based filters work**: HA natively
+  stores backups as `<slug>.tar` (8 hex chars, unreadable). The add-on renames
+  files in `/backup` **in place** to `{name}_{date}_{slug}.tar` (the
+  `renamed/unrenamed N backups` log lines; first run also renames pre-existing
+  backups) — the `+ Automatic_backup_*` filters above match these renamed
+  names, and local/remote filenames stay identical. Harmless to HA: the
+  Supervisor identifies backups by tar metadata, not filename, so restore is
+  unaffected; the trailing slug still maps back to the HA backup ID.
 - **Global `dry_run: true` = free rehearsal, but remember to flip it off.**
   Recommended flow: leave it on through the first scheduled day, read the
   `Skipped ... as --dry-run is set` lines as validation that every job selects
