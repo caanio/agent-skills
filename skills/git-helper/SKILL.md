@@ -35,6 +35,14 @@ When the user wants to commit changes, generate a commit message (msg, message),
    imperative mood, why-not-how body, secrets clean) and how. Makes
    adherence visible, not assumed.
 
+6. **[NEVER VIOLATE] Secrets scan must run and be shown, every commit, no exceptions**:
+   - Run the Step 2 scan on the staged diff before ever presenting a draft message.
+   - Never skip it, never infer "probably clean" from file names or diff size.
+   - Paste the actual command and its raw output (even when empty/clean) into the
+     response — a one-line claim like "secrets scan clean" without shown output
+     does not satisfy this rule.
+   - Any match → stop immediately, do not draft or commit, warn the user.
+
 ## Commit Message Quality Standard (Chris Beams + Linus Torvalds)
 
 Rules from Chris Beams' *How to Write a Git Commit Message* (7 rules) and Linus Torvalds' requirements for Linux kernel patches. **Both must be followed** and take precedence over other format conventions.
@@ -92,9 +100,10 @@ Before committing, confirming staging scope:
 Confirm staged files are correct, or tell me which to add.
 ```
 
-### 2. Secrets Check
+### 2. Secrets Check (Core Rule 6 — NEVER VIOLATE, never skip)
 
-Scan staged diff for accidental credentials before drafting:
+Scan staged diff for accidental credentials before drafting. Always run this
+and show the actual output in the response, even when clean:
 
 ```bash
 git diff --staged | grep -iE "password|secret|api_key|token|private_key|access_key"
