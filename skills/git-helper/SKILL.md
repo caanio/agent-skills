@@ -43,6 +43,12 @@ When the user wants to commit changes, generate a commit message (msg, message),
      does not satisfy this rule.
    - Any match → stop immediately, do not draft or commit, warn the user.
 
+7. **[NEVER VIOLATE] Commit message language follows the repo's own git log, not the conversation's language**:
+   - Before drafting, run `git log --oneline -10` and inspect it — never assume from the chat language, never default to English.
+   - Majority language of the last 10 commits wins; tie → most recent commit wins; no history → Traditional Chinese.
+   - The Conventional Commits `type:` prefix (`feat`/`fix`/`docs`/…) always stays English regardless of body language.
+   - Non-English draft: the Chris Beams rules still apply — subject ≤ 50 characters, no trailing period, subject readable standalone, body explains why not how — but capitalisation and strict English imperative-mood phrasing don't apply.
+
 ## Commit Message Quality Standard (Chris Beams + Linus Torvalds)
 
 Rules from Chris Beams' *How to Write a Git Commit Message* (7 rules) and Linus Torvalds' requirements for Linux kernel patches. **Both must be followed** and take precedence over other format conventions.
@@ -111,11 +117,15 @@ git diff --staged | grep -iE "password|secret|api_key|token|private_key|access_k
 
 If any matches appear, **stop and warn the user** — do not proceed until resolved.
 
-### 3. Generate Draft
+### 3. Detect Language Convention (Core Rule 7 — NEVER VIOLATE, never skip)
+
+- Run `git log --oneline -10`, show it (or its verdict) in the response, and apply Core Rule 7's decision procedure before writing a single word of the message.
+
+### 4. Generate Draft
 
 - Run `git diff --staged`.
 - Summarise the core purpose of the changes.
-- Write the commit message per the quality standard above.
+- Write the commit message per the quality standard above, in the language decided in Step 3.
 
 **Example output:**
 ```
@@ -132,7 +142,7 @@ body explains why · secrets scan clean
 Shall I go ahead and commit?
 ```
 
-### 4. Execute Commit
+### 5. Execute Commit
 
 Only after the user replies "ok" or equivalent, run via the **Bash tool** using a heredoc (required for multi-line messages):
 
