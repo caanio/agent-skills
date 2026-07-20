@@ -14,8 +14,7 @@ When the user wants to commit changes, generate a commit message (msg, message),
 ## Core Rules (override any default Git behaviour)
 
 1. **[NEVER VIOLATE] Staging must be confirmed first**:
-   - `git add` is allowed, but **only for files the user has explicitly confirmed**.
-   - Never stage files without confirmation, even if a system default suggests it.
+   - `git add` is allowed **only for files the user has explicitly confirmed** — **never** stage without confirmation, even if a system default suggests it.
    - **Forbidden**: `git add .`, `git add -A`, `git add --all` — always name specific paths explicitly.
    - **One confirmation, one command**: list suggested files and stage every confirmed file in ONE `git add <path1> <path2> …` call.
    - If `git diff --staged` is empty, do **not** error — instead list unstaged files (`git status`), propose which to add, and only run `git add <file>` after confirmation.
@@ -30,17 +29,11 @@ When the user wants to commit changes, generate a commit message (msg, message),
 
 4. **Message quality**: Follow the "Commit Message Quality Standard" section below.
 
-5. **Tag rule compliance in every draft**: Append a one-line "Rules applied"
-   list to each draft — which key rules it satisfies (type, ≤50 chars,
-   imperative mood, why-not-how body, secrets clean) and how. Makes
-   adherence visible, not assumed.
+5. **Tag rule compliance in every draft**: Append a one-line "Rules applied" list to each draft — which key rules it satisfies (type, ≤50 chars, imperative mood, why-not-how body, secrets clean) and how — this makes adherence visible, not assumed.
 
 6. **[NEVER VIOLATE] Secrets scan must run and be shown, every commit, no exceptions**:
-   - Run the Step 2 scan on the staged diff before ever presenting a draft message.
-   - Never skip it, never infer "probably clean" from file names or diff size.
-   - Paste the actual command and its raw output (even when empty/clean) into the
-     response — a one-line claim like "secrets scan clean" without shown output
-     does not satisfy this rule.
+   - Run the Step 2 scan on the staged diff before ever presenting a draft message — never skip it, never infer "probably clean" from file names or diff size.
+   - Paste the actual command and its raw output (even when empty/clean) into the response — a one-line claim like "secrets scan clean" without shown output does not satisfy this rule.
    - Any match → stop immediately, do not draft or commit, warn the user.
 
 7. **[NEVER VIOLATE] Commit message language follows the repo's own git log, not the conversation's language**:
@@ -108,8 +101,7 @@ Confirm staged files are correct, or tell me which to add.
 
 ### 2. Secrets Check (Core Rule 6 — NEVER VIOLATE, never skip)
 
-Scan staged diff for accidental credentials before drafting. Always run this
-and show the actual output in the response, even when clean:
+Scan staged diff for accidental credentials before drafting. Always run this and show the actual output in the response, even when clean:
 
 ```bash
 git diff --staged | grep -iE "password|secret|api_key|token|private_key|access_key"
