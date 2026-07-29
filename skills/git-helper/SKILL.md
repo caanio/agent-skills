@@ -29,7 +29,7 @@ When the user wants to commit changes, generate a commit message (msg, message),
 
 4. **Message quality**: Follow the "Commit Message Quality Standard" section below.
 
-5. **Tag rule compliance in every draft**: Append a one-line "Rules applied" list to each draft — which key rules it satisfies (type, ≤50 chars, imperative mood, why-not-how body, secrets clean) and how — this makes adherence visible, not assumed.
+5. **Tag rule compliance in every draft**: Append a one-line "Rules applied" list to each draft — which key rules it satisfies (type, ≤50 chars, imperative mood, why-only body, secrets clean) and how — this makes adherence visible, not assumed.
 
 6. **[NEVER VIOLATE] Secrets scan must run and be shown, every commit, no exceptions**:
    - Run the Step 2 scan on the staged diff before ever presenting a draft message — never skip it, never infer "probably clean" from file names or diff size.
@@ -40,7 +40,7 @@ When the user wants to commit changes, generate a commit message (msg, message),
    - Before drafting, run `git log --oneline -10` and inspect it — never assume from the chat language, never default to English.
    - Majority language of the last 10 commits wins; tie → most recent commit wins; no history → Traditional Chinese.
    - The Conventional Commits `type:` prefix (`feat`/`fix`/`docs`/…) always stays English regardless of body language.
-   - Non-English draft: the Chris Beams rules still apply — subject ≤ 50 characters, no trailing period, subject readable standalone, body explains why not how — but capitalisation and strict English imperative-mood phrasing don't apply.
+   - Non-English draft: the Chris Beams rules still apply — subject ≤ 50 characters, no trailing period, subject readable standalone, body explains why not what/how — but capitalisation and strict English imperative-mood phrasing don't apply.
 
 ## Commit Message Quality Standard (Chris Beams + Linus Torvalds)
 
@@ -54,13 +54,13 @@ Rules from Chris Beams' *How to Write a Git Commit Message* (7 rules) and Linus 
 4. **Do not end the subject line with a period**
 5. **Use the imperative mood**: write "Fix bug", not "Fixed bug"
 6. **Wrap the body at 72 characters**
-7. **Body explains what and why, not how**: how is in the diff; body covers motivation, context, trade-offs
+7. **Body explains why, not what or how**: what changed and how are already visible in the diff; body covers only why this change exists — motivation, context, trade-offs. Leave implementation detail to the code and to project docs, not the commit body.
 
 ### Linus Torvalds — Key Points
 
 - **First line stands alone**: readable without context, conveys the commit's intent
-- **Describe the problem, not just the solution**: explain the symptom and root cause, not just "fix X"
-- **Include motivation and impact**: why is this change needed? what breaks without it?
+- **Describe the problem being solved, not the mechanics of the fix**: explain the symptom and root cause behind the change — not what code changed or how it was fixed
+- **Include motivation and impact**: why is this change needed? what breaks without it? (this is the whole point of the body — not a how-to)
 - **Be specific**: forbid "fix stuff", "update code", "misc changes"
 - **The message is documentation**: future maintainers read the log, not the diff — message must stand on its own
 
@@ -129,7 +129,7 @@ Prevents data loss on unexpected shutdowns. Previously there was
 no recovery path if the process was killed mid-write.
 
 Rules applied: type=feat · subject 34 chars · imperative mood ·
-body explains why · secrets scan clean
+why-only body (no how) · secrets scan clean
 
 Shall I go ahead and commit?
 ```
