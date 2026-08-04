@@ -8,24 +8,53 @@ description: "Deploy a self-written app as a Home Assistant OS (HAOS) local add-
 Deploy a self-written long-running app (poller, monitor, etc.) as a Home Assistant OS
 **local add-on**, running 24/7 on a Raspberry Pi instead of a workstation that sleeps.
 Every step below has been verified on real hardware; all pitfalls are marked ⚠️.
-In the examples, `ha` = SSH alias, `<slug>` = add-on slug (becomes `local_<slug>` once installed).
+In the examples, `<alias>` = your SSH alias for the HA box, `<slug>` = add-on slug (becomes
+`local_<slug>` once installed), and `$C` = the Docker container name **resolved at runtime**
+by the snippet in Scope below — never hardcoded, because its prefix differs between Supervisor
+versions. Substitute your own values; nothing here is host-specific.
 
 ## Scope
 
 - Applies to **Home Assistant OS** (or Supervised) installs only — Container/Core
   installs have no Supervisor, no `/addons`, no `ha` CLI; this skill does not apply.
-- Battle-tested on a Raspberry Pi 4 (**aarch64**), HAOS 17.x (Supervisor + Docker
-  appliance), with the **Advanced SSH & Web Terminal** add-on (Protection mode off —
-  see §0, §8).
-- ⚠️ Recent HAOS labels add-ons as **"Apps"** in the UI and CLI (`ha apps`), but every
-  technical surface still says "addon": the `/addons` path, the `addon_local_<slug>`
-  container prefix, and the Supervisor `/addons/...` API. Don't "fix" those names.
+- Battle-tested on a Raspberry Pi 4 (**aarch64**), HAOS **17.x–18.1** (Supervisor + Docker
+  appliance; the container naming below was observed on Supervisor **2026.07.5**), with the
+  **Advanced SSH & Web Terminal** add-on (Protection mode off — see §0, §8).
+- ⚠️ Recent HAOS labels add-ons as **"Apps"** in the UI and CLI (`ha apps`), and the rename
+  is **half-applied** — never assume which spelling a given surface uses, always check:
+  - still `addon`: the `/addons` delivery path, the Supervisor REST API (`/addons/<slug>/…`),
+    and the Docker **image** name (`local/<arch>-addon-<slug>:<version>`)
+  - now `app`: the CLI (`ha apps`), the Supervisor's own store path (`/data/apps/local/…`),
+    and the Docker **container** name (`app_local_<slug>`, seen on Supervisor 2026.07.5)
+  - ⚠️ **Do not key this off the HAOS version.** The container name is produced by
+    **Supervisor**, which auto-updates independently of the OS image, so "newer HAOS ⇒
+    `app_`" is not a sound rule — and only one Supervisor version has actually been observed
+    here. Never hardcode either prefix; resolve `$C` once and reuse it everywhere:
+    ```bash
+    # -a so a stopped add-on is still found — those are exactly the ones you need to inspect
+    C=$(ssh <alias> "sudo docker ps -a --format '{{.Names}}' \
+         | grep -E '^(app|addon)_local_<slug>$'") || true
+    [ -n "$C" ] || { echo "no container for <slug> — installed under a different slug?" >&2; exit 1; }
+    ```
+    Without that guard an empty `$C` turns `docker exec $C python3 …` into
+    `docker exec python3 …`, and Docker reports "no such container: python3" — a confusing
+    error that sends you looking in the wrong place.
 
 ## 0. Global Rules (read first)
 
-- ⚠️ **Non-interactive SSH must always be `ssh ha 'bash -lc "…"'`**: a non-login shell
-  doesn't load `SUPERVISOR_TOKEN`, so every `ha` CLI / Supervisor API call returns
-  `unauthorized`.
+- ⚠️ **Every `ha` CLI / Supervisor API call needs a login shell**, which loads
+  `SUPERVISOR_TOKEN`; without it the call fails with `unauthorized`. Plain
+  `docker`/`ls`/`grep` are unaffected — only `ha` and direct `http://supervisor` calls
+  need the token.
+  - Single command: `ssh <alias> 'bash -lc "ha …"'`
+  - Multi-step: **`ssh <alias> bash -l -s <<'EOF' … EOF`** — the `-l` is what makes a
+    heredoc work; a bare `bash -s` heredoc is a *non-login* shell and every `ha` call inside
+    it fails.
+  - ⚠️ **How that failure looks matters.** `ha` writes
+    `Error: unauthorized: missing or invalid API token` to **stderr** and exits **1**. So a
+    pipeline that only consumes stdout (`ha apps info … | grep …`) shows an *empty result*,
+    which reads exactly like "that field isn't set" rather than "the call failed". Check the
+    exit code, or add `2>&1`, before concluding anything from an empty output.
 - ⚠️ **Disable Protection mode on the SSH add-on** (toggle on its info page), otherwise
   you can't reach the Supervisor API.
 - ⚠️ CLI names: use **`ha apps`** (`ha addons` is deprecated); to re-detect local add-ons
@@ -36,7 +65,7 @@ In the examples, `ha` = SSH alias, `<slug>` = add-on slug (becomes `local_<slug>
   disable its autostart.
 - A single-SD-card RPi has no redundancy: **take a full HA backup before touching anything**,
   and download it off the card. The web download is slow (HA streaming bottleneck);
-  `scp ha:/backup/<file>.tar ~/backups/` is noticeably faster.
+  `scp <alias>:/backup/<file>.tar ~/backups/` is noticeably faster.
 
 ## 1. Repo Layout
 
@@ -87,22 +116,98 @@ a **committed** version:
 
 ```bash
 # /addons is owned by root; create the folder once to gain write access
-ssh ha 'sudo mkdir -p /addons/<slug> && sudo chown $(whoami) /addons/<slug>'
-git archive --format=tar HEAD | ssh ha 'tar -x -C /addons/<slug>'
-git archive --format=tar HEAD haos | ssh ha 'tar -x --strip-components=1 -C /addons/<slug>'
-ssh ha 'rm -rf /addons/<slug>/haos'   # remove the duplicate haos/ subfolder from line 1
+ssh <alias> 'sudo mkdir -p /addons/<slug> && sudo chown $(whoami) /addons/<slug>'
+git archive --format=tar HEAD | ssh <alias> 'tar -x -C /addons/<slug>'
+git archive --format=tar HEAD haos | ssh <alias> 'tar -x --strip-components=1 -C /addons/<slug>'
+ssh <alias> 'rm -rf /addons/<slug>/haos'   # remove the duplicate haos/ subfolder from line 1
 ```
 
 ⚠️ The deploy directory must be **flat and self-contained**: config.yaml/Dockerfile/run.sh
 all at the top level of `/addons/<slug>/`.
 
+### ⚠️ Two directories must never declare the same slug (the recipe above can cause this)
+
+**Supervisor's local store walks the local add-on tree recursively** — the source does
+`path.glob("**/config.*")` (`supervisor/store/data.py`), so it accepts `config.yaml`,
+`config.yml` **and** `config.json`, at any depth. Line 3 above ships the *whole repo*, so if
+the repo also holds a **second** add-on's folder (one repo, two add-ons — e.g. a poller and an
+ingest service), that second manifest lands inside this add-on's deploy directory and now
+**two directories declare that second slug**.
+
+⚠️ **Which one wins is not deterministic.** Supervisor simply overwrites as it walks
+(`apps[app_slug] = app`), so **the last one visited wins** — and `Path.glob` returns
+filesystem `scandir` order, not sorted, not by mtime, and *not* by highest version. The
+outcome can flip after a re-delivery or a reboot, so a single "looks fine on this box" check
+proves nothing. The only safe state is: **never let two manifests declare the same slug.**
+
+When the stale copy wins, for the *other* add-on:
+
+- `version_latest` reports the stale copy's version, so `update_available` stays `false` and
+  `ha apps update` is a no-op — no matter how many times you re-deliver the real directory
+- the **Docker build context** is that stale directory too, so a successful-looking
+  `ha apps rebuild` bakes old code into the image
+- `ha store reload`, `ha supervisor restart`, `docker builder prune -a`, a full HAOS reboot,
+  and even `ha apps uninstall` + `install` all change nothing — Supervisor isn't stale, the
+  winning directory genuinely *is* old. (Real case: a whole day lost to this, misdiagnosed as
+  a Supervisor version-tracking bug.)
+
+**Best fix: don't ship the whole repo.** Send only the paths this add-on needs, so the
+collision never exists:
+
+```bash
+git archive --format=tar HEAD -- <app-dir> <shared-dir> | ssh <alias> 'tar -x -C /addons/<slug>'
+```
+
+(`.gitattributes` with `export-ignore` on the other add-on's directory achieves the same.)
+
+If you must ship everything, delete the other add-on's directory afterwards — **with the
+delete guarded**, because an unset variable here expands to `rm -rf /addons//` and takes out
+every add-on on the box:
+
+```bash
+ssh <alias> bash -l -s <<'EOF'
+set -euo pipefail
+SLUG=<slug>; OTHER=<other-addon-dir>
+ls -la -- "/addons/${SLUG:?}/${OTHER:?}"      # look before you delete
+rm -rf -- "/addons/${SLUG:?}/${OTHER:?}"
+EOF
+```
+
+Then verify — as a **mechanical** check, not an eyeball one (exits non-zero on a duplicate):
+
+```bash
+ssh <alias> bash -l -s <<'EOF'
+find /addons -name 'config.*' ! -name '.*' -not -path '*/rootfs/*' \
+  -exec sh -c 'printf "%s → " "$1"; grep "^slug:" "$1"' _ {} \;
+find /addons -name 'config.*' ! -name '.*' -not -path '*/rootfs/*' \
+  -exec grep -h "^slug:" {} \; | sort | uniq -d > /tmp/dupe_slugs
+[ ! -s /tmp/dupe_slugs ] || { echo "DUPLICATE SLUG:"; cat /tmp/dupe_slugs; exit 1; }
+EOF
+```
+
+**Diagnosing it when already deployed** — compare a source file's byte count inside the
+container against the same file on disk; if they differ, the build context is not the directory
+you delivered to, so go find the other copy (`$C` from §Scope):
+
+```bash
+# WORKDIR is whatever this add-on's Dockerfile sets, so resolve it rather than hardcoding
+ssh <alias> "sudo docker exec $C sh -c 'wc -c \"\$(pwd)/<file>.py\"'"
+ssh <alias> 'wc -c /addons/<slug>/<file>.py'   # what you delivered
+
+# every manifest on the box, wherever the local store actually lives on this install
+ssh <alias> "sudo docker inspect $C --format '{{range .Mounts}}{{.Source}}{{\"\n\"}}{{end}}'"
+```
+
+"Supervisor can read the correct version off disk" and "Supervisor is using that copy" are
+**two different claims** — verifying only the first is what makes this bug look unsolvable.
+
 ## 3. Install
 
 ```bash
-ssh ha 'bash -lc "ha store reload && ha apps install local_<slug>"'
+ssh <alias> 'bash -lc "ha store reload && ha apps install local_<slug>"'
 # First build takes minutes (longer with heavy deps like onnxruntime/opencv);
 # the build runs in the Supervisor background, so a dropped SSH session doesn't matter
-ssh ha 'bash -lc "ha apps info local_<slug> | grep -E \"state:|version:\""'   # a version line = installed
+ssh <alias> 'bash -lc "ha apps info local_<slug> | grep -E \"state:|version:\""'   # a version line = installed
 ```
 
 ## 4. Configuration (add-on options)
@@ -114,7 +219,7 @@ ssh ha 'bash -lc "ha apps info local_<slug> | grep -E \"state:|version:\""'   # 
 - **Supervisor REST API** (scriptable):
   ```bash
   echo '{"options":{...complete object...}}' \
-    | ssh ha 'bash -lc "curl -sS -X POST -H \"Authorization: Bearer \$SUPERVISOR_TOKEN\" \
+    | ssh <alias> 'bash -lc "curl -sS -X POST -H \"Authorization: Bearer \$SUPERVISOR_TOKEN\" \
               -H \"Content-Type: application/json\" -d @- http://supervisor/addons/local_<slug>/options"'
   ```
 
@@ -139,15 +244,18 @@ log immediately).
 ## 5. Start and Verify
 
 ```bash
-ssh ha 'bash -lc "ha apps start local_<slug>"'
-ssh ha 'bash -lc "ha apps logs local_<slug>"'
+ssh <alias> 'bash -lc "ha apps start local_<slug>"'
+ssh <alias> 'bash -lc "ha apps logs local_<slug>"'
 ```
 
 Testing inside the container (e.g. manually trigger one push notification):
 
 ```bash
-ssh ha 'sudo docker exec addon_local_<slug> python3 -c "…"'
+ssh <alias> "sudo docker exec $C python3 -c '…'"
 # ⚠️ the SSH add-on user has no docker socket permission — sudo required
+# ⚠️ $C must come from the resolver in §Scope — never hardcode app_local_/addon_local_,
+#    and never skip its empty check (an empty $C makes docker read the next arg as the
+#    container name, giving a "no such container: python3" that looks unrelated)
 ```
 
 ## 6. Update (⚠️ pick one of three — the wrong one gets rejected)
@@ -163,6 +271,18 @@ leaves the device reporting the old version while running new code — `ha apps 
 can no longer tell which code the box is actually running, which hurts later
 debugging. Reserve rebuild for rapid iterate-and-test cycles where the version
 trail doesn't matter yet.
+
+⚠️ **Always confirm the store actually saw the bump before running update** — this is the
+one check that turns a day-long mystery into a two-minute fix:
+
+```bash
+ssh <alias> 'bash -lc "ha apps info local_<slug> | grep -E \"^(version|version_latest|update_available):\""'
+```
+
+`version_latest` must equal the version you just delivered. If it still shows the old one after
+`ha store reload`, **stop — do not start rebuilding or reinstalling.** Supervisor is reading a
+*different* directory that declares your slug: go to §2's "Two directories must never declare
+the same slug".
 
 ## 7. Persistence and Logs
 
