@@ -20,8 +20,11 @@ Codex / Gemini) and published to any machine via
 - **Content must be generic**: no environment-specific information (hosts,
   IPs, accounts, real slugs, secrets) — placeholders only (`<slug>`, the `ha`
   alias). This repo is public.
-- **Pitfalls must have been hit on real hardware**, marked ⚠️ — no
-  theoretical values.
+- **Pitfalls must have been hit in practice**, marked ⚠️ — on real hardware for
+  the infrastructure skills, or in a recorded real session for the process
+  skills. No theoretical values, and no ⚠️ on general advice (bold it instead).
+  This governs `skills/` content; install warnings in the README are not bound
+  by it.
 - Project-specific parameters (slugs, hosts, where tokens live) stay in each
   project's own CLAUDE.md/docs; skills only capture the generic procedure.
 
