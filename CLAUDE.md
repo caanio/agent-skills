@@ -20,6 +20,14 @@ Codex / Gemini) and published to any machine via
 - **Content must be generic**: no environment-specific information (hosts,
   IPs, accounts, real slugs, secrets) — placeholders only (`<slug>`, the `ha`
   alias). This repo is public.
+- **Skills must stand on their own**: no dependency on any single user's
+  personal global config (e.g. `~/.claude/CLAUDE.md` conventions, personal
+  aliases) to function correctly — a skill installed on a fresh machine with
+  no personal dotfiles must still work as documented.
+- **No personally identifiable information**: no real names, emails, or
+  other PII in skill content, examples, or commit-authored text — this is
+  broader than "environment-specific" above and applies even to the
+  author's own identity.
 - **Pitfalls must have been hit in practice**, marked ⚠️ — on real hardware for
   the infrastructure skills, or in a recorded real session for the process
   skills. No theoretical values, and no ⚠️ on general advice (bold it instead).

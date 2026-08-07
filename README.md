@@ -56,6 +56,13 @@ Codex / Gemini: one folder per skill under `skills/`, each containing a
 
 - Content must be generic: no environment-specific information (hosts, IPs,
   accounts, slugs, secrets)
+- Skills must stand on their own: no dependency on any single user's personal
+  global config (e.g. `~/.claude/CLAUDE.md` conventions, personal aliases) —
+  a skill installed on a fresh machine with no personal dotfiles must still
+  work as documented
+- No personally identifiable information: no real names, emails, or other
+  PII in skill content, examples, or commit-authored text — broader than
+  "environment-specific" above, applies even to the author's own identity
 - Pitfalls are marked ⚠️ and must have been hit in practice — on real hardware
   for the infrastructure skills, or in a recorded real session for the process
   skills. No theoretical values, and no ⚠️ on general advice. (This governs
