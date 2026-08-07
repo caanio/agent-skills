@@ -118,6 +118,14 @@ If any matches appear, **stop and warn the user** — do not proceed until resol
 - Run `git diff --staged`.
 - Summarise the core purpose of the changes.
 - Write the commit message per the quality standard above, in the language decided in Step 3.
+- **Body hard cap: ≤4 lines / ≤3 sentences.** If the why-only draft still exceeds this,
+  that's a signal the body is drifting into what/how — cut to the single sentence that
+  answers "why does this change exist", not "reword it shorter".
+- **Escape valve**: if genuinely ≥2 independent why-reasons exist (not restatements of
+  one reason, and not a what/how detail like "where the change was made"), exceeding the
+  cap is allowed — but the draft must say so explicitly in the "Rules applied" line, e.g.
+  `body 6 lines (2 independent why-reasons, see below)`. Silent overage without this flag
+  is a rule violation, not a judgement call.
 
 **Example output:**
 ```
