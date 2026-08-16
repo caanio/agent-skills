@@ -223,6 +223,33 @@ ssh <alias> 'bash -lc "ha apps info local_<slug> | grep -E \"state:|version:\""'
               -H \"Content-Type: application/json\" -d @- http://supervisor/addons/local_<slug>/options"'
   ```
 
+⚠️ **This POST replaces the whole `options` object — it is not a patch.** Sending only the
+one field you want to change (e.g. `{"options":{"some_token":"..."}}`) drops every other
+option, and Supervisor rejects the result if any *required* field is now missing:
+`"App local_<slug> has invalid options: Missing option 'tesla_client_id' in root..."`.
+To add or change a single field, **GET the current full object first, merge in your one
+change locally, then POST the complete merged object back** — never hand-write a partial
+one:
+```bash
+ssh <alias> 'bash -lc "curl -sS -H \"Authorization: Bearer \$SUPERVISOR_TOKEN\" \
+    http://supervisor/addons/local_<slug>/info"' > /tmp/opts.json   # full current options
+python3 -c "
+import json
+d = json.load(open('/tmp/opts.json'))['data']['options']
+d['some_token'] = 'new-value'
+json.dump({'options': d}, open('/tmp/opts_new.json', 'w'))
+"
+cat /tmp/opts_new.json | ssh <alias> 'bash -lc "curl -sS -X POST -H \"Authorization: Bearer \$SUPERVISOR_TOKEN\" \
+    -H \"Content-Type: application/json\" -d @- http://supervisor/addons/local_<slug>/options"'
+rm -f /tmp/opts.json /tmp/opts_new.json   # both contain secrets in plaintext
+```
+Note: the `info` endpoint returns `password`-typed schema fields in **plaintext**, unmasked
+— that's exactly what makes this merge possible, but also why the temp files must be deleted
+right after, and why this whole exchange should be treated as touching real secrets (don't
+echo the merged object to a log or chat transcript). After POSTing, re-`GET info` and check the
+field you *didn't* intend to touch (e.g. a refresh token) is still non-empty — a wrong merge
+silently wiping a rotating credential is a much worse failure than a rejected POST.
+
 The schema supports a **list of dicts** (lets the user add/remove entries in the UI,
 e.g. monitoring targets):
 
@@ -257,6 +284,19 @@ ssh <alias> "sudo docker exec $C python3 -c '…'"
 #    and never skip its empty check (an empty $C makes docker read the next arg as the
 #    container name, giving a "no such container: python3" that looks unrelated)
 ```
+
+⚠️ **`docker exec` needs Protection mode *off* on the SSH add-on (§0); if it's on, this whole
+byte-fingerprint/exec-based verification path may be unavailable to you.** If you're an
+autonomous coding agent, don't assume you can just flip the toggle yourself — turning
+Protection mode off is a Supervisor **security-setting** change (via the same options API as
+§4), and a permission-conscious agent harness may (correctly) refuse to let you toggle it
+without the user watching. Don't fight this by finding a workaround; treat it as a real
+boundary. Fall back to **log-based verification** instead — it's usually sufficient:
+`ha apps logs local_<slug>` after start/update should show the new version's log strings
+(a line, a phrase, a startup banner) that only exist in the code you just delivered, plus a
+`grep -iE "error|traceback|exception|Errno|Fatal"` with no hits. If the deploy also added a
+reachable endpoint, hitting it for real (see §6's version-check philosophy — trust behavior
+you can observe over inference) is stronger evidence than a static byte count anyway.
 
 ## 6. Update (⚠️ pick one of three — the wrong one gets rejected)
 
