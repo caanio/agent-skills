@@ -52,6 +52,13 @@ the README.
       CLI accepts this structure (mattpocock/skills layout)
 - [ ] Later candidates to distil: cross-project pitfalls like pinning wheel
       versions on the old Mac (macOS 12 Intel)
+- [x] `python-coding-standards` skill added 2026-08-19 (type hints, no
+      globals, logging, I/O try/except, WHY-only comments, pytest
+      preference, design docs) — went through 4 deep-reviewer rounds and a
+      description-optimization pass; commits `c652c79`, `ba72c85`.
+- [ ] Docs baseline still missing: `docs/CONTEXT.md`, `docs/adr/` —
+      flagged by the docs-baseline hook 2026-08-19, deferred to next
+      session by explicit user call.
 
 ## Source Material
 
