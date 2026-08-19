@@ -1,6 +1,6 @@
 ---
 name: python-coding-standards
-description: "Use before writing or editing any Python code — scripts, functions, bug fixes, cron jobs, data-processing one-offs, or additions to an existing .py file — even if the request sounds quick, casual, or \"just a simple script.\" Applies whether the user names a .py file, describes what the script should do, or asks you to add/fix a function in Python. Covers required standards: type hints, no global variables, logging instead of print, wrapping any I/O (HTTP, DB, subprocess, file) in try/except, writing a real test, and where to place design docs. Does not apply to conceptual Python questions with no code to write (e.g. explaining language features, comparing list vs tuple, explaining what an existing traceback means when the user hasn't asked for a fix, package install help, or learning-resource recommendations), and does not apply to non-Python languages."
+description: "Use before writing or editing any Python code — scripts, functions, bug fixes, cron jobs, data-processing one-offs, or additions to an existing .py file — even if the request sounds quick, casual, or \"just a simple script.\" Applies whether the user names a .py file, describes what the script should do, or asks you to add/fix a function in Python. Covers required standards: type hints, no global variables, logging instead of print, wrapping any I/O (HTTP, DB, subprocess, file) in try/except, commenting the why not the what, writing a real test, and where to place design docs. Does not apply to conceptual Python questions with no code to write (e.g. explaining language features, comparing list vs tuple, explaining what an existing traceback means when the user hasn't asked for a fix, package install help, or learning-resource recommendations), and does not apply to non-Python languages."
 ---
 
 # python-coding-standards
@@ -56,6 +56,12 @@ rules below apply to.
    reasons. Log enough to diagnose without a repro — what was called, and
    the actual exception, not just "failed".
 
+5. **Comment the WHY, not the WHAT.** Only add a comment when it explains
+   something the code itself can't — a hidden constraint, a non-obvious
+   trade-off, a workaround for a specific bug. A well-named function or
+   variable already says what it does; restating that in a comment is
+   noise that goes stale the moment the code changes.
+
 ## Testing
 
 - Every piece of logic you write or change — a new script, a new feature,
@@ -64,11 +70,21 @@ rules below apply to.
   **[NEVER VIOLATE] Never hardcode a return value, or assert a tautology,
   just to make a test pass** — this applies to a probe just as much as a
   formal test.
-- Test infra exists → write the test first, then the implementation. No
-  test infra → at minimum, write a runnable probe: a short standalone
-  snippet that feeds the new code a known input and checks the actual
-  output against what you expect, not just that it ran without crashing.
-  The probe satisfies this rule, it isn't an exemption from it.
+- Test infra (e.g. `pytest`) already exists → write the test first, then
+  the implementation.
+- No test infra, but the code lives in an existing project (a repo, a
+  package — somewhere with a future) → set up `pytest` rather than
+  inventing a bespoke runner. It's the de facto standard, so any future
+  session or agent already knows how to run it.
+- No test infra, and the code really is a standalone one-off with no
+  project to land in → at minimum, write a runnable probe: a short
+  standalone snippet that feeds the new code a known input and checks the
+  actual output against what you expect, not just that it ran without
+  crashing. The probe satisfies this rule, it isn't an exemption from it.
+- Project already has its own hand-rolled test/probe setup → don't
+  silently replace it with `pytest`. Weigh whether the switch is worth the
+  churn, and if it looks like a real improvement, suggest it to the user
+  instead of doing it unprompted.
 
 ## Design Docs
 
