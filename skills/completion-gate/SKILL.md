@@ -1,6 +1,6 @@
 ---
 name: completion-gate
-description: "Decides whether work may be called done. Use before saying a task is complete, finished, ready, working or fixed; before writing a 'verified'/'PASS'/'tested' claim about your own deliverable; when wrapping up a session or about to commit; and after any failure. Covers what counts as verification per artifact type, which checks the producer may run and which need fresh context, the honest three-part delivery message, failure counting, and the end-of-session wrap-up order."
+description: "Decides whether work may be called done. Use before saying a task is complete, finished, ready, working or fixed; before writing a 'verified'/'PASS'/'tested' claim about your own deliverable; when wrapping up a session or about to commit; before drafting a yes/no confirmation question about a change that touches destructive operations, trust boundaries, or unattended automation; and after any failure. Covers what counts as verification per artifact type, which checks the producer may run and which need fresh context, the honest three-part delivery message, failure counting, and the end-of-session wrap-up order."
 ---
 
 # completion-gate
@@ -22,6 +22,9 @@ compared with shipping something broken and finding out later.
 - About to write **verified / PASS / tested / confirmed** as a claim about your
   own deliverable.
 - Wrapping up a session, or about to commit.
+- About to draft a yes/no confirmation question ("commit this?", "proceed?",
+  "apply this?") for a change that touches a destructive operation, a trust
+  boundary, or unattended automation.
 - **After any failure**, not just a repeated one.
 
 ## Core Rules
@@ -50,7 +53,18 @@ compared with shipping something broken and finding out later.
    read-back have no size exemption — a one-line edit to a rules file still gets
    read back, because the failure there is silent.
 
-2. **[NEVER VIOLATE] Completion language may not precede the result it
+2. **[NEVER VIOLATE] A yes/no confirmation question about a destructive
+   operation, a trust-boundary decision, or unattended automation may not
+   recommend its own answer until the judgement-call check below has run.**
+   Check the artifact-type table *before* drafting the question — not after
+   the user pushes back. If the change is a hard judgement call, get the
+   independent second opinion first, then ask "reviewed, ready to commit?" —
+   never "commit this? (recommended)".
+   ⚠️ Observed twice, independently: the model proposed the risky change as
+   done-pending-approval, and the review only happened because the user
+   pushed back — not because the model raised it.
+
+3. **[NEVER VIOLATE] Completion language may not precede the result it
    describes.**
    *Ran / PASS / verified / confirmed / passed* — when used **as a claim about
    your own deliverable** — must never be written into a file or message before
@@ -62,12 +76,12 @@ compared with shipping something broken and finding out later.
    those words — test fixtures, report templates, `assert status == "PASS"`,
    or reporting what someone else verified.)
 
-3. **State the verification method before you start.** If you cannot write down
+4. **State the verification method before you start.** If you cannot write down
    "here is the command or observation that will prove this worked" *before*
    touching anything, you do not yet understand the task. Go gather information
    instead of starting.
 
-4. **Report honestly, including the gaps.** Staying quiet about what you skipped
+5. **Report honestly, including the gaps.** Staying quiet about what you skipped
    destroys trust faster than the gap itself ever would.
 
 ## What Counts as Verification, by Artifact Type

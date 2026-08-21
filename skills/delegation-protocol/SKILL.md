@@ -21,6 +21,10 @@ Everything it reads itself, it pays for on every subsequent turn.
 - About to run agents in parallel.
 - A subagent just reported back.
 - Tempted to suggest the user switch the conversation's model.
+- Your last search/grep/read on this exact target (same repo, same symbol,
+  same file set) didn't fully resolve it and you're about to run another one
+  — that's the "don't know which file it's in" threshold firing right now,
+  not a reason to narrow once more yourself.
 
 ## Core Rules
 
@@ -51,6 +55,12 @@ Everything it reads itself, it pays for on every subsequent turn.
 | Looking up web pages or official documentation | Delegate |
 | The same mechanical change across **more than 5 files** | Cheap agent executes; you spot-check |
 | **Any judgement-level verification or review** | Fresh-context agent (mechanical checks you may run yourself — see `completion-gate`) |
+
+⚠️ **The "don't know which file it's in" row fires the moment a first search
+attempt doesn't resolve it — not after several.** Each subsequent narrowing
+grep on the same target feels like progress; measured against the rule, it's
+the same "don't know which file" state repeating. Treat a second attempt on
+the same target as the trigger, not a fourth.
 
 **"It's faster if I just do it myself" is an illusion at the main-thread level.**
 It is faster *this turn*. The context burned is repaid with interest on every
