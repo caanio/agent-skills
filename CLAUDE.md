@@ -59,6 +59,16 @@ the README.
 - [ ] Docs baseline still missing: `docs/CONTEXT.md`, `docs/adr/` —
       flagged by the docs-baseline hook 2026-08-19, deferred to next
       session by explicit user call.
+- [x] `completion-gate` and `delegation-protocol` trigger audit
+      (2026-08-21): near-zero real invocation traced via session
+      transcripts, findings and decisions logged in
+      `docs/trigger-audit-notes.md`. Sharpened both skills' triggers for
+      the specific recognition-failure moments found (a self-graded risky
+      confirmation question; a repeated same-target search) — framed as
+      portability fixes, not expected to change this maintainer's own
+      behaviour since equivalent rules already live in their personal
+      always-loaded config. Verified by `verifier` read-back both times;
+      commit `6f78073`.
 
 ## Source Material
 
