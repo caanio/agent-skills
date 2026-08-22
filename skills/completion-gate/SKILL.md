@@ -1,6 +1,6 @@
 ---
 name: completion-gate
-description: "Decides whether work may be called done. Use before saying a task is complete, finished, ready, working or fixed; before writing a 'verified'/'PASS'/'tested' claim about your own deliverable; when wrapping up a session or about to commit; before drafting a yes/no confirmation question about a change that touches destructive operations, trust boundaries, or unattended automation; and after any failure. Covers what counts as verification per artifact type, which checks the producer may run and which need fresh context, the honest three-part delivery message, failure counting, and the end-of-session wrap-up order."
+description: "Decides whether work may be called done. Use before saying a task is complete, finished, ready, working or fixed; before writing a 'verified'/'PASS'/'tested' claim about your own deliverable; when wrapping up a session, calling it a day, picking work back up tomorrow, or about to commit; before drafting a yes/no confirmation question about a change that touches destructive operations, trust boundaries, or unattended automation; and after any failure. Covers what counts as verification per artifact type, which checks the producer may run and which need fresh context, the honest three-part delivery message, failure counting, and the end-of-session wrap-up order."
 ---
 
 # completion-gate
@@ -166,10 +166,25 @@ inside it always looks like bad luck.
    rather than a yes.
    ⚠️ Without this check, step 1 degrades into claiming an update that was never
    made — observed in practice, not hypothetical.
-3. **Then** update the continuation notes / TODO index. This step writes
+3. **Decide out loud whether this also needs the adversarial second opinion**
+   from the judgement-call row above (architecture trade-off, elusive bug,
+   trust-boundary design, migration, tech choice — or a rules/config file
+   whose failure mode is silent). State a recommendation — run it or skip it —
+   with your reasoning, every time step 2 finishes, whether it passed or had
+   to escalate. Running it is optional and proportional to risk, same as Core
+   Rule 1; skipping it is a choice you record, not a default you fall into
+   silently. Steps 4–6 proceed either way — this step only blocks one thing:
+   you may not write **verified / PASS** as a claim about the change until the
+   second opinion you decided to run has actually come back.
+4. **Then** update the continuation notes / TODO index. This step writes
    pointers only, never substance — which is exactly why it comes after the real
    docs. Update the index first and it points at content that no longer exists.
-4. **Then commit — through your commit-workflow skill** (this collection ships
+   ⚠️ This checks a different scope than step 1: step 1 asks "did *this round's*
+   diff invalidate a doc", step 4 asks "has the *whole session's* accumulated
+   work drifted from the continuation notes". A round with nothing to update in
+   step 1 does not excuse skipping step 4 — reusing that verdict across both
+   has produced stale continuation notes in practice.
+5. **Then commit — through your commit-workflow skill** (this collection ships
    one: `git-helper`). Do not run `git add` / `git commit` directly from here,
    in any repo: that route skips the staging confirmation and the secrets scan,
    and the failure mode is credentials pushed to a public remote.
@@ -179,5 +194,5 @@ inside it always looks like bad luck.
    **only** circumstance in which you run it yourself: whenever such a skill is
    installed, route through it — however confident you are that you would have
    performed the same checks.
-5. **Last**, check for unpushed commits or uncommitted changes and raise them.
+6. **Last**, check for unpushed commits or uncommitted changes and raise them.
    Work that is committed but never pushed is invisible on every other machine.

@@ -62,6 +62,8 @@ rules below apply to.
    variable already says what it does; restating that in a comment is
    noise that goes stale the moment the code changes.
 
+6. **Tooling: `.venv` + `requirements.txt`, PEP 8, Black.**
+
 ## Testing
 
 - Every piece of logic you write or change — a new script, a new feature,
