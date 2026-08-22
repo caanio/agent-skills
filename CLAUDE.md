@@ -47,9 +47,13 @@ the README.
 
 - [x] Push the first commit to GitHub (done — turned out it was already
       pushed from another machine; confirmed in sync 2026-07-04)
-- [ ] Test-install with
+- [x] Test-install with
       `npx skills@latest add caanio/agent-skills -g` to verify the skills
-      CLI accepts this structure (mattpocock/skills layout)
+      CLI accepts this structure (mattpocock/skills layout) — confirmed
+      2026-08-22: all 7 skills installed and symlinked into Claude Code's
+      skill path, content matches the repo. (The same run reported 7
+      failures for a "PromptScript" target — that target doesn't support
+      `-g` global installs at all, unrelated to this repo's structure.)
 - [ ] Later candidates to distil: cross-project pitfalls like pinning wheel
       versions on the old Mac (macOS 12 Intel)
 - [x] `python-coding-standards` skill added 2026-08-19 (type hints, no
@@ -69,6 +73,16 @@ the README.
       behaviour since equivalent rules already live in their personal
       always-loaded config. Verified by `verifier` read-back both times;
       commit `6f78073`.
+- [x] `python-coding-standards` gained a Tooling rule (`.venv` +
+      requirements.txt, PEP 8, Black) and `completion-gate`'s wrap-up order
+      gained an explicit step for deciding whether a change also needs an
+      adversarial second opinion (with a note that this decision blocks
+      only the "verified/PASS" claim, not the remaining wrap-up steps) plus
+      a scope note distinguishing the per-round doc check from the
+      whole-session continuation-notes check — 2026-08-22. Landed alongside
+      an unrelated upstream merge that touched the same
+      `completion-gate` description line (commits `6f78073`, `f09a25d`);
+      reconciled in commit `dbe7e45`.
 
 ## Source Material
 
