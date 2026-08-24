@@ -11,7 +11,7 @@ compared with shipping something broken and finding out later.
 **Scope boundary** — these compose in sequence, they do not compete:
 - *Whether something counts as done* → here.
 - *How to farm a check out to a subagent* (thresholds, prompt structure,
-  anti-anchoring, tier choice) → `delegation-protocol`.
+  anti-anchoring, tier choice) → your own delegation rules, wherever they live.
 - *The mechanics of committing* (staging, secrets scan, message wording) →
   your commit-workflow skill, entirely. This skill only governs what must
   happen **before** a commit; it never replaces the commit workflow itself.
@@ -97,8 +97,9 @@ Choose the **cheapest reviewer that is actually qualified** — a cheap model
 doing mechanical read-back beats an expensive model doing nothing. You economise
 on the unit price of verification, never on its existence.
 
-When delegating any of the above, follow `delegation-protocol` — in particular,
-never hand the reviewer your reasoning or your defence of the work.
+When delegating any of the above, hand the reviewer the artifact and the
+acceptance criteria only — never your reasoning or your defence of the work.
+A reviewer who has read your argument reviews your argument.
 
 ## When No Subagent Is Available
 

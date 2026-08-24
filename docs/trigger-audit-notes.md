@@ -190,3 +190,38 @@ threshold fires on the second attempt, not the fourth. Same caveat as
 `completion-gate`'s fix: portability-only per the Master finding, expect no
 behavioural change for a setup that already duplicates the rule. Verified by
 `verifier` read-back (3/3 questions answered correctly from the file alone).
+
+## Reversal: delegation-protocol retired (2026-08-24)
+
+The 2026-08-21 "left unchanged" call rested on one premise: this skill "has
+to stand on its own for anyone who doesn't already encode the same rules in
+their own permanent context" — i.e. other people installing this public
+repo without an equivalent personal rules file. Asked the maintainer
+directly this session: **nobody else installs this repo.** That premise was
+false in practice, which removes the entire reason not to cut the duplicated
+content.
+
+Re-ran the same trim the Master finding already recommended (separate
+"genuinely load-bearing on its own" from "duplicated elsewhere"), independent
+of the 2026-08-21 session, and landed on the same split as that session's own
+analysis: only Finding 2.1 (no-evidence spot-check) is unique content, plus
+two smaller unique bits not called out by name in the original findings — the
+no-subagent-available fallback and the don't-switch-the-conversation's-model
+cache-invalidation warning. Everything else (hard thresholds, the three
+prompt elements, the reporting contract, anti-anchoring, parallel-write
+safety, the generic tier table, escalation-after-N-failures) was already a
+verbatim or near-verbatim duplicate of the maintainer's personal
+always-loaded rules.
+
+Action taken: folded the three unique bits into the maintainer's personal
+rules file (outside this repo), deleted `skills/delegation-protocol/`
+entirely, and fixed the two live cross-references in
+`completion-gate/SKILL.md` plus the README skills table so nothing points at
+a file that no longer exists. Verified by `verifier` read-back (8 checks:
+5 on the personal-rules edit, 3 confirming no orphaned references — the
+first pass found the `completion-gate` and README references this pass then
+fixed).
+
+**If this repo ever gains a second installer**: the deleted content is
+recoverable from git history (`git log -- skills/delegation-protocol`) up to
+this commit. Re-derive it from there rather than rewriting from memory.

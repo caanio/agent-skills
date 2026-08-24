@@ -83,6 +83,19 @@ the README.
       an unrelated upstream merge that touched the same
       `completion-gate` description line (commits `6f78073`, `f09a25d`);
       reconciled in commit `dbe7e45`.
+- [x] `delegation-protocol` retired (2026-08-24), superseding the
+      2026-08-21 "left unchanged" call above. Confirmed with the
+      maintainer that nobody else installs this repo, which removed the
+      "must stand on its own for other installers" reason that call relied
+      on. Content split: the one genuinely-unique rule (Finding 2.1's
+      no-evidence spot-check) plus two smaller unique bits (no-subagent
+      fallback, don't-switch-model cache-cost warning) folded into the
+      maintainer's personal always-loaded rules; everything else was
+      already-duplicated threshold/reporting-contract text, deleted with
+      no replacement. Updated the two live cross-references in
+      `completion-gate/SKILL.md` (Scope boundary, delegating-a-check note)
+      and the README skills table. Details in
+      `docs/trigger-audit-notes.md`. Verified by `verifier` read-back.
 
 ## Source Material
 
