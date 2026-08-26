@@ -64,6 +64,11 @@ rules below apply to.
 
 6. **Tooling: `.venv` + `requirements.txt`, PEP 8, Black.**
 
+7. **File header: PEP 263 encoding declaration.** Every `.py` file a user runs keeps the
+   `# -*- coding: utf-8 -*-` line in its header. Unlike a plain `encoding: utf-8` label in
+   a non-Python file's header (decorative — nothing reads it), this line is functional: the
+   interpreter parses it to decide how to decode the file.
+
 ## Testing
 
 - Every piece of logic you write or change — a new script, a new feature,
