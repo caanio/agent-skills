@@ -62,7 +62,18 @@ rules below apply to.
    variable already says what it does; restating that in a comment is
    noise that goes stale the moment the code changes.
 
-6. **Tooling: `.venv` + `requirements.txt`, PEP 8, Black.**
+6. **Tooling: `.venv` + `requirements.txt`, PEP 8, Black.** Pin every dependency
+   in `requirements.txt` with PEP 440's compatible-release operator
+   (`~=major.minor`, e.g. `numpy~=2.4`) — locks the major version, lets
+   minor/patch float to latest automatically on every install. Not
+   `==exact-version` (blocks every patch/security update until a human
+   manually bumps it) and not a bare `>=` (no ceiling — a future major-version
+   bump gets pulled in silently, defeating the point of pinning). `^=` isn't
+   valid pip/PEP 440 syntax — that's npm/Cargo/Poetry, and pip rejects it as
+   an invalid requirement. A calendar-versioned package (e.g. `pytz`, whose
+   releases look like `2025.2`) follows the same rule mechanically — pin
+   `~=2025.2` and a same-year bump (`2025.3`) is picked up automatically,
+   but a new year (`2026.1`) is not and needs a manual pin update.
 
 7. **File header: PEP 263 encoding declaration.** Every `.py` file a user runs keeps the
    `# -*- coding: utf-8 -*-` line in its header. Unlike a plain `encoding: utf-8` label in
