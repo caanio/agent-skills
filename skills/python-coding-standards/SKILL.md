@@ -103,6 +103,23 @@ rules below apply to.
   silently replace it with `pytest`. Weigh whether the switch is worth the
   churn, and if it looks like a real improvement, suggest it to the user
   instead of doing it unprompted.
+- A test that passes doesn't prove it *catches* anything — verify it by
+  breaking the code it's supposed to guard and confirming the test goes
+  red, then restore the fix. A common way to write an accidental tautology:
+  `pytest`'s `caplog` fixture attaches to the root logger, so it silently
+  captures nothing against a logger configured with `propagate=False` — a
+  logging assertion built on `caplog` there stays green even after the
+  logged level regresses. Assert against a handler attached directly to
+  that logger instead.
+- An isolated test needs every side-effecting boundary mocked or redirected
+  at once — a real database, files it writes (including incidental ones,
+  like an audit-log dump), and any logger the code under test configures.
+  Missing just one still lets the test corrupt production data or files on
+  a real run.
+- Passing tests (and a clean `ast.parse`) don't prove a script actually
+  runs — a `NameError` from a leftover stale reference, for instance,
+  shows up only when the entry point is actually executed. After editing
+  a module another script imports, run that script for real at least once.
 
 ## Design Docs
 
