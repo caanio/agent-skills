@@ -114,9 +114,9 @@ doesn't (local development), fall back to `.env`.
 The device never clones (avoids credentials for private repos); the workstation pushes
 a snapshot instead. Pick one:
 
-**Project has git commits (preferred once it does):** ships exactly the committed tree,
-so no stray local files (a half-finished edit, a debug script) ride along by accident —
-that guarantee is the whole reason this is the default.
+**Committed tree (the default once the repo has commits):** ships exactly `HEAD`, so no
+stray local files (a half-finished edit, a debug script) ride along by accident — that
+guarantee is the whole reason this is the default.
 
 ```bash
 # /addons is owned by root; create the folder once to gain write access
@@ -126,9 +126,11 @@ git archive --format=tar HEAD haos | ssh <alias> 'tar -x --strip-components=1 -C
 ssh <alias> 'rm -rf /addons/<slug>/haos'   # remove the duplicate haos/ subfolder from line 1
 ```
 
-**No git repo yet:** ship the working tree directly with `tar`, naming the paths this
-add-on actually needs (same reasoning as §2's duplicate-slug fix below — never tar the
-whole project root blindly):
+**Working tree directly, no commit required first** — either the repo has no commits yet, or
+this is a hotfix that needs to reach the box now; committing is a separate, later step (see
+`git-workflow-and-versioning` / `git-helper`), not a prerequisite for deploying. Name the paths
+this add-on actually needs, same as the committed-tree route — never tar the whole project root
+blindly (see the duplicate-slug fix below for why):
 
 ```bash
 ssh <alias> 'sudo mkdir -p /addons/<slug> && sudo chown $(whoami) /addons/<slug>'
@@ -141,8 +143,11 @@ one) — `__pycache__`, `.venv`, stray `.pyc` files, whatever's locally present 
 if you don't exclude it explicitly. Clean it off the delivered directory afterward if it
 slips through: `ssh <alias> "find /addons/<slug> -name __pycache__ -type d -exec rm -rf {} +"`.
 
-Once the project has its first commit, switch to the git-archive route above — treat the
-no-git path as a one-time bootstrap, not the standing method.
+⚠️ This path ships whatever is on disk right now, uncommitted work included — none of the
+committed-tree route's filtering. Fine for a deliberate hotfix; for a repo with no commits yet,
+treat it as a one-time bootstrap and switch to the committed-tree route once the first commit
+lands, not as the standing method. Either way, a hotfix still needs its own commit afterward —
+this route only decouples *when* that happens from *when* the box gets the fix.
 
 ⚠️ The deploy directory must be **flat and self-contained**: config.yaml/Dockerfile/run.sh
 all at the top level of `/addons/<slug>/`.
