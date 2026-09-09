@@ -1,10 +1,47 @@
 # CLAUDE.md — agent-skills
 
-See [`AGENTS.md`](AGENTS.md) for this repo's Single Source of Truth,
-Inclusion Rules, and Format conventions — every agent working in this repo
-follows those, not just Claude Code. This file holds only what's specific
-to this maintainer's own working notes: the running decision log and
-source-material provenance below.
+Monorepo of self-written AI agent skills, shared across agents (Claude Code /
+Codex / Gemini) and published to any machine via
+`npx skills@latest add caanio/agent-skills -g`.
+
+## Single Source of Truth (non-negotiable)
+
+- **This repo is the only place self-written skills are edited.** Never
+  hand-edit or hand-copy files in an install target (`~/.agents/skills/`,
+  `~/.claude/skills/`) or keep a parallel copy in another repo (e.g.
+  dotfiles) — that is how divergence happened before 2026-07-10.
+- Update flow: edit here → commit → push → on each machine
+  `npx skills@latest add caanio/agent-skills -g` to reinstall.
+- Install targets are real directories managed by the skills CLI, not
+  symlinks into any git repo.
+
+## Inclusion Rules (non-negotiable)
+
+- **Content must be generic**: no environment-specific information (hosts,
+  IPs, accounts, real slugs, secrets) — placeholders only (`<slug>`, the `ha`
+  alias). This repo is public.
+- **Skills must stand on their own**: no dependency on any single user's
+  personal global config (e.g. `~/.claude/CLAUDE.md` conventions, personal
+  aliases) to function correctly — a skill installed on a fresh machine with
+  no personal dotfiles must still work as documented.
+- **No personally identifiable information**: no real names, emails, or
+  other PII in skill content, examples, or commit-authored text — this is
+  broader than "environment-specific" above and applies even to the
+  author's own identity.
+- **Pitfalls must have been hit in practice**, marked ⚠️ — on real hardware for
+  the infrastructure skills, or in a recorded real session for the process
+  skills. No theoretical values, and no ⚠️ on general advice (bold it instead).
+  This governs `skills/` content; install warnings in the README are not bound
+  by it.
+- Project-specific parameters (slugs, hosts, where tokens live) stay in each
+  project's own CLAUDE.md/docs; skills only capture the generic procedure.
+
+## Format
+
+One folder per skill under `skills/`, each containing a `SKILL.md`
+(YAML frontmatter: `name`, `description`; the description must include
+trigger-scenario keywords). After adding a skill, update the list table in
+the README.
 
 ## TODO (left when the repo was created, 2026-07-03)
 
@@ -112,6 +149,15 @@ source-material provenance below.
       plus TODO/Source Material intact, no PII, no further duplication
       found beyond the expected bidirectional completion-gate/handover
       cross-reference).
+- [x] AGENTS.md/CLAUDE.md split reverted (2026-09-09), same day it landed.
+      `mattpocock/skills`' own `setup-matt-pocock-skills` documents the
+      opposite convention explicitly: "Never create `AGENTS.md` when
+      `CLAUDE.md` already exists (or vice versa); always edit the one
+      that's already there." Merged Single Source of Truth / Inclusion
+      Rules / Format back into this file and deleted `AGENTS.md`. Verified
+      by `verifier` read-back (7/7 checks passed: AGENTS.md gone, all five
+      sections present exactly once with no lost content, pointer text
+      removed, this TODO entry itself present, no duplication, no PII).
 
 ## Source Material
 
