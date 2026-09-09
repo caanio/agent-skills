@@ -47,6 +47,7 @@ Codex / Gemini: one folder per skill under `skills/`, each containing a
 |---|---|
 | [completion-gate](skills/completion-gate/SKILL.md) | The gate between "I think it works" and "it is done": what counts as verification per artifact type, which checks the producer may run and which need fresh context, the honest three-part delivery message, failure counting, wrap-up order |
 | [git-helper](skills/git-helper/SKILL.md) | Git commit workflow: confirm staging → secrets scan → generate commit messages meeting Conventional Commits + Chris Beams standards |
+| [handover](skills/handover/SKILL.md) | User-invoked: turn a session's work into something a maintainer with zero session context can pick up — backfill ADRs, check README/CONTEXT.md, record production facts and the deploy path, write a prioritized TODO.md |
 | [haos-addon-deploy](skills/haos-addon-deploy/SKILL.md) | Deploy a self-written long-running app as a Home Assistant OS local add-on (RPi, 24/7), with every battle-tested pitfall |
 | [haos-https-tunnel](skills/haos-https-tunnel/SKILL.md) | Give a HAOS instance a real HTTPS URL via a Cloudflare Tunnel (cloudflared add-on) — no port forwarding, no device-side install |
 | [haos-cloud-backup](skills/haos-cloud-backup/SKILL.md) | Ship HAOS backups to cloud storage with rclone: upload bandwidth cap (bwlimit) and GFS-style daily/weekly/monthly retention |

@@ -15,6 +15,16 @@ compared with shipping something broken and finding out later.
 - *The mechanics of committing* (staging, secrets scan, message wording) →
   your commit-workflow skill, entirely. This skill only governs what must
   happen **before** a commit; it never replaces the commit workflow itself.
+- *The mechanics of a thorough code review* (a multi-axis check, severity
+  labels, a real checklist) → your code-review skill, entirely — this
+  collection doesn't ship one (e.g. `code-review-and-quality`). The Code
+  row below is the one place that says what to do when none is installed.
+- *A deeper maintainer-handover pass* (backfilling ADRs, checking
+  README/CONTEXT.md against reality, recording production facts and the
+  deploy path, a prioritized TODO) → the `handover` skill. Run it only
+  after this gate passes, never in place of it — how often you reach for
+  it (every wrap-up, or only at milestone/handoff moments) is your call,
+  not this skill's.
 
 ## When to Invoke
 
@@ -88,7 +98,7 @@ compared with shipping something broken and finding out later.
 
 | Artifact | Legitimate verification |
 |---|---|
-| Code | Run the tests or actually execute it — yourself. Compiling is not behaving. Then, **when the tests are new, or the change touches anything in the judgement-call row below**, have a fresh context judge whether those tests cover what the task actually asked for. A typo fix does not need a reviewer; a new module's first test suite does. |
+| Code | Run the tests or actually execute it — yourself. Compiling is not behaving. Then, **when the tests are new, or the change touches anything in the judgement-call row below**, hand it to your code-review skill if one is installed (see Scope boundary); with none installed, at minimum have a fresh context judge whether those tests cover what the task actually asked for. A typo fix does not need a reviewer; a new module's first test suite does. |
 | Docs, rules, config | Give the file to a fresh context and have it **answer questions using only that file** — and the questions must target the passages your change touched, or the gate is theatre. Wrong answers are a finding about the file, not about the reader. |
 | A hard judgement call (architecture trade-off, elusive bug, trust-boundary design, data migration, technology choice) | An independent adversarial second opinion. When it disagrees, analyse the disagreement — do not pick whichever answer you preferred. |
 | A destructive or irreversible operation | **Out of scope for this skill.** Confirm the blast radius before, read back the effect after, and follow whatever high-risk procedure you operate under. Only add the adversarial review if the operation is *also* a hard judgement call, or if you cannot tell whether it is. |
