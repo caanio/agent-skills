@@ -158,6 +158,82 @@ the README.
       by `verifier` read-back (7/7 checks passed: AGENTS.md gone, all five
       sections present exactly once with no lost content, pointer text
       removed, this TODO entry itself present, no duplication, no PII).
+- [x] `completion-gate`'s End-of-Session Wrap-Up restructured (2026-09-10):
+      closed a real gap another session hit — the checklist had no step
+      that actually asked whether to run `handover` between the
+      continuation-notes step and commit, so finishing continuation notes
+      reflexively rolled straight into commit. Added a step that requires
+      asking (not running) `handover` every time, with a recommendation and
+      reasoning attached (never a bare yes/no), and an explicit "Completing
+      [the prior step] is not permission to skip straight to committing"
+      line — a softer phrasing failed a prior read-back, so this one is
+      written as a direct prohibition. Separately, on review with the
+      maintainer: removed the commit-via-`git-helper` step and the
+      unpushed-commits check from the list entirely — both belong to the
+      outer wrap-up sequence (completion-gate → handover → git-helper), not
+      to this skill's own checklist, matching the Scope boundary's existing
+      commit-mechanics pointer. Added a new first step requiring code
+      verification (tests run, code-review triage, a security skill for
+      trust-boundary code) before any doc gets touched, since the checklist
+      previously jumped straight to docs with no code-verification gate.
+      Scope boundary gained a fifth bullet naming `security-and-hardening`
+      and `security-audit` as the out-of-collection owners of security
+      review — the Code row already covered tests/code-review but said
+      nothing about security. Edited via the `writing-for-agents` skill
+      (`mattpocock/skills`). Verified by `verifier` read-back (11/11 checks
+      passed: step count and gist, cross-step references at every renumber
+      point, the verbatim permission sentence, the ask-not-run requirement
+      for handover, no leftover `git add`/`git commit`/`git-helper`
+      strings, the security bullet's named skills — all consistent, no
+      stale references found).
+- [x] `handover`'s Scope boundary fixed two wrong attributions (2026-09-10,
+      same session as the `completion-gate` entry above): the ADR/`CONTEXT.md`
+      bullet claimed "this collection's family ships `domain-modeling`" and
+      the conversation-handoff bullet claimed "this collection's `handoff`"
+      — both false. Checked `~/.agents/.skill-lock.json`: both
+      `domain-modeling` and `handoff` install from `mattpocock/skills`, not
+      from this repo (`skills/` here only holds `completion-gate`,
+      `git-helper`, `handover`, the three `haos-*` skills, and
+      `python-coding-standards`). Rewrote both bullets to the same pattern
+      already used for the security bullet above (`your X skill, entirely —
+      this collection doesn't ship one (e.g. ...)`), naming
+      `mattpocock/skills` explicitly. The other two bullets in the same list
+      (`completion-gate`, `git-helper`) were already correct — this repo
+      really does ship those two. Verified by `verifier` read-back (7/7
+      checks passed: both corrected bullets quote-matched as NOT claiming
+      this collection ships them and naming `mattpocock/skills`, the two
+      correct "ships" bullets unchanged, no leftover "this collection's
+      family" phrasing, no contradiction between bullets).
+- [x] `completion-gate`'s step 5 (continuation notes / TODO index) gained a
+      mechanical check (2026-09-10, same session): the maintainer caught the
+      model claiming step 5 done by seeing one existing TODO entry, without
+      diffing against everything the session actually touched — the exact
+      staleness step 5's own ⚠️ already warned about. Added a concrete command
+      to check against (`git diff HEAD --stat` for the whole session) and a
+      ⚠️ recording the miss as it happened. Dogfooding that same check then
+      caught a second, real gotcha in the same minute: `git diff --stat`
+      (no `HEAD`) compares working tree to the index only, so a fully-staged
+      file (`skills/handover/SKILL.md`, staged by the IDE, not by the model)
+      showed zero diff and was nearly left out of the TODO update entirely —
+      `git status` alone did catch it, but the first drafted ⚠️ wrongly
+      claimed `git status` under-reports too and had to be corrected before
+      it shipped. Added a second ⚠️ pinned on `git diff --stat` specifically
+      (not `git status`), with the working-tree/index/last-commit mechanics
+      spelled out. Verified by `verifier` read-back, twice (once per ⚠️ add):
+      first pass 5/5 checks passed (command name, observed-in-session
+      framing, no stale cross-references); second pass 5/5 checks passed
+      (exact command quoted, confirmed no false claim about `git status`
+      anywhere in the file, the `git diff --stat` mechanics explained
+      correctly, all step cross-references still resolve).
+- [x] `completion-gate`'s step 5 trimmed (2026-09-10, same session): the
+      case-study narrative and the `git diff --stat` internals explanation
+      logged above were cut on the maintainer's call — the step now just
+      states the hard requirement ("you must have actually run `git diff
+      HEAD --stat` ... before this step counts as done") without the story
+      or the reasoning behind it. Verified by `verifier` read-back (5/5
+      checks passed: hard-requirement clause and command name confirmed
+      present, narrative/internals confirmed absent, no `git status`
+      mention anywhere, step numbering and all cross-references intact).
 
 ## Source Material
 

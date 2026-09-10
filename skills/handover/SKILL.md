@@ -19,16 +19,17 @@ it in production.
   gate (this collection ships one: `completion-gate`). Run this skill after
   that gate passes, not instead of it.
 - *The mechanics of writing an ADR or maintaining `CONTEXT.md`* → your
-  domain-modeling skill (this collection's family ships `domain-modeling`).
-  This skill only decides *whether* one is owed and *when*, never how.
+  domain-modeling skill, entirely — this collection doesn't ship one (e.g.
+  `mattpocock/skills`' `domain-modeling`). This skill only decides *whether*
+  one is owed and *when*, never how.
 - *Committing what this skill produces* → your commit-workflow skill (this
   collection ships `git-helper`). This skill writes docs; it does not stage
   or commit them.
 - *A scratch note for a fresh **agent** to resume mid-task in the same
-  session's tool state* → a conversation-handoff skill (e.g. this
-  collection's `handoff`). That targets the next **agent turn**; this skill
-  targets the next **human**, further out, and writes durable repo files,
-  not a temp-directory note.
+  session's tool state* → a conversation-handoff skill, entirely — this
+  collection doesn't ship one (e.g. `mattpocock/skills`' `handoff`). That
+  targets the next **agent turn**; this skill targets the next **human**,
+  further out, and writes durable repo files, not a temp-directory note.
 
 ## When to invoke
 

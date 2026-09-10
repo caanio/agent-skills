@@ -19,6 +19,11 @@ compared with shipping something broken and finding out later.
   labels, a real checklist) → your code-review skill, entirely — this
   collection doesn't ship one (e.g. `code-review-and-quality`). The Code
   row below is the one place that says what to do when none is installed.
+- *Security review of code crossing a trust boundary* → your security skill,
+  entirely — this collection doesn't ship one (e.g. `security-and-hardening`
+  while writing it, `security-audit` at a milestone or before merge). The
+  Code row below governs tests and code-review triage only; it makes no
+  security judgement of its own.
 - *A deeper maintainer-handover pass* (backfilling ADRs, checking
   README/CONTEXT.md against reality, recording production facts and the
   deploy path, a prioritized TODO) → the `handover` skill. Run it only
@@ -161,49 +166,55 @@ inside it always looks like bad luck.
 
 ## End-of-Session Wrap-Up (order matters, do not reorder)
 
-1. **Update the substantive docs first.** Walk the diff and ask of each doc:
+1. **First, confirm every code change this round has actually passed its
+   Code-row verification** — tests run yourself, code-review triage if the
+   tests are new or the change is a judgement call, a security skill if it
+   crosses a trust boundary (see Scope boundary). Docs describe verified
+   behaviour, not aspirational behaviour: writing them before this holds
+   means step 2 documents something that may still be broken.
+2. **Update the substantive docs first.** Walk the diff and ask of each doc:
    "does this describe behaviour or a decision my change just invalidated?"
    If yes, update it. If unsure, list the candidates and ask — never skip
    silently. Do not re-transcribe what the code already states.
-2. **Prove step 1 actually happened.** If you edited any doc, hand the changed
+3. **Prove step 2 actually happened.** If you edited any doc, hand the changed
    file plus a summary of the intended change to a fresh reader and ask whether
    the file now reflects it. It must answer yes *and* **quote the passage back**.
-   If it cannot, return to step 1 and really make the edit — you may not
+   If it cannot, return to step 2 and really make the edit — you may not
    proceed. Twice unable to answer → stop and ask (no user → downgrade).
    This is deliberately narrower than the open-ended read-back above: that one
    asks "does this file teach correctly?", this one only asks "did the edit
    land?". Telling the reader what you intended would anchor the first question,
    but it *is* the second one — which is why the answer has to be a quotation
    rather than a yes.
-   ⚠️ Without this check, step 1 degrades into claiming an update that was never
+   ⚠️ Without this check, step 2 degrades into claiming an update that was never
    made — observed in practice, not hypothetical.
-3. **Decide out loud whether this also needs the adversarial second opinion**
+4. **Decide out loud whether this also needs the adversarial second opinion**
    from the judgement-call row above (architecture trade-off, elusive bug,
    trust-boundary design, migration, tech choice — or a rules/config file
    whose failure mode is silent). State a recommendation — run it or skip it —
-   with your reasoning, every time step 2 finishes, whether it passed or had
+   with your reasoning, every time step 3 finishes, whether it passed or had
    to escalate. Running it is optional and proportional to risk, same as Core
    Rule 1; skipping it is a choice you record, not a default you fall into
-   silently. Steps 4–6 proceed either way — this step only blocks one thing:
+   silently. Steps 5–6 proceed either way — this step only blocks one thing:
    you may not write **verified / PASS** as a claim about the change until the
    second opinion you decided to run has actually come back.
-4. **Then** update the continuation notes / TODO index. This step writes
-   pointers only, never substance — which is exactly why it comes after the real
-   docs. Update the index first and it points at content that no longer exists.
-   ⚠️ This checks a different scope than step 1: step 1 asks "did *this round's*
-   diff invalidate a doc", step 4 asks "has the *whole session's* accumulated
+5. **Then** update the continuation notes / TODO index. You must have actually
+   run `git diff HEAD --stat` for the whole session and checked every file it
+   lists — not recalled from memory — before this step counts as done. This
+   step writes pointers only, never substance — which is exactly why it comes
+   after the real docs. Update the index first and it points at content that
+   no longer exists.
+   ⚠️ This checks a different scope than step 2: step 2 asks "did *this round's*
+   diff invalidate a doc", step 5 asks "has the *whole session's* accumulated
    work drifted from the continuation notes". A round with nothing to update in
-   step 1 does not excuse skipping step 4 — reusing that verdict across both
+   step 2 does not excuse skipping step 5 — reusing that verdict across both
    has produced stale continuation notes in practice.
-5. **Then commit — through your commit-workflow skill** (this collection ships
-   one: `git-helper`). Do not run `git add` / `git commit` directly from here,
-   in any repo: that route skips the staging confirmation and the secrets scan,
-   and the failure mode is credentials pushed to a public remote.
-   If no such skill is installed, you are not exempt — you inherit its job:
-   confirm the staging scope explicitly, scan the staged diff for credentials
-   and show the raw result, and only then run the commit yourself. That is the
-   **only** circumstance in which you run it yourself: whenever such a skill is
-   installed, route through it — however confident you are that you would have
-   performed the same checks.
-6. **Last**, check for unpushed commits or uncommitted changes and raise them.
-   Work that is committed but never pushed is invisible on every other machine.
+6. **Then ask — out loud, every time — whether to run `handover`.** This is a
+   real question to the user, not a decision you make alone: attach your own
+   recommendation — run it now or skip it — and your reasoning, never a bare
+   yes/no. How often `handover` actually runs is the user's call (see Scope
+   boundary); whether you asked this time is not. Completing step 5 is not
+   permission to skip straight to committing.
+   ⚠️ Observed in practice: finishing step 5 reflexively rolls straight into
+   commit, skipping this question entirely — that is exactly the gap this
+   step closes.
