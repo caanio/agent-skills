@@ -43,6 +43,23 @@ One folder per skill under `skills/`, each containing a `SKILL.md`
 trigger-scenario keywords). After adding a skill, update the list table in
 the README.
 
+## Agent skills
+
+### Issue tracker
+
+Issues live as GitHub issues in `caanio/agent-skills`, via the `gh` CLI.
+See `docs/agents/issue-tracker.md`.
+
+### Triage labels
+
+The five canonical roles, each label string equal to its name.
+See `docs/agents/triage-labels.md`.
+
+### Domain docs
+
+Single-context: `CONTEXT.md` at the root, ADRs under `docs/adr/`.
+See `docs/agents/domain.md`.
+
 ## TODO (left when the repo was created, 2026-07-03)
 
 - [x] Push the first commit to GitHub (done — turned out it was already
@@ -234,6 +251,78 @@ the README.
       checks passed: hard-requirement clause and command name confirmed
       present, narrative/internals confirmed absent, no `git status`
       mention anywhere, step numbering and all cross-references intact).
+
+- [x] `completion-gate` gained an authoring-standard clause (2026-09-15):
+      a change's artifact type may have a standard of its own (a Python
+      standards skill, a skill-writing skill), and nothing in the file said
+      whether following it counted as verification — so a round could pass the
+      gate having never been checked against the standard it was written under.
+      Landed as 13 lines appended to the artifact-type table, with the
+      wrap-up checklist untouched. Rules split mechanical (settle yourself)
+      from judgement (route to the table's judgement-call row, whichever way
+      you think it came out), anything unsortable counts as judgement, and
+      both "nothing governs this file" and "its standard already ran" carry
+      the same burden of evidence as any other finding. Verified by `verifier`
+      read-back (16/16 checks passed: placement inside the verification
+      section, every cross-reference resolved, no duplication against Core
+      Rule 1, wrap-up numbering confirmed untouched, 5 read-back questions
+      answered from the file alone).
+- [ ] **Do not re-attempt this as a wrap-up step** (recorded 2026-09-15, the
+      same session): the clause above was first built as a new step 4 in the
+      End-of-Session Wrap-Up, grew to 55 added lines over two rounds, and was
+      reverted in full. Three rounds of `deep-reviewer` established that the
+      failure was structural, not verbal — anything shaped as a step inherits
+      three costs. It has a *position*, so content written after it escapes it
+      (the continuation-notes step and anything a later pass writes). It needs
+      *re-entry routing*, which has to enumerate every earlier step and leaks
+      through whichever one it misses. It needs *rounds*, which then have to be
+      reconciled with Failure Counting. Round 2 closed two attack surfaces and
+      left four open; round 3 closed another and left three, two of which
+      predate the work. Attaching the rule to the artifact-type table instead
+      costs none of the three, because the table is consulted rather than
+      executed in sequence. That discarded draft — 261 lines in full, 55 of them
+      new — is not kept anywhere in the repo. Deliberately not written up as an
+      ADR: `docs/adr/` does not exist here yet and creating it is gated on a
+      separate docs-baseline decision, so this entry is the record.
+- [ ] Two gaps this session surfaced but did not close, both pre-existing:
+      the wrap-up has no step that runs the Docs-row read-back against a doc it
+      just wrote (step 3 only proves the edit landed, and deliberately anchors
+      its reader, so it cannot also ask the open question), and the Scope
+      boundary hands security review to an external skill without the
+      "with none installed" fallback the Code row gives. On a machine with no
+      security skill, the wrap-up's first step cannot be satisfied or
+      downgraded.
+
+- [x] `/setup-matt-pocock-skills` run on this repo (2026-09-15, same session):
+      wrote `docs/agents/issue-tracker.md` (GitHub Issues via the `gh` CLI,
+      PRs-as-request-surface left off), `docs/agents/triage-labels.md` (the
+      five canonical roles, label strings equal to their names), and
+      `docs/agents/domain.md` (single-context), plus an `## Agent skills`
+      section in this file pointing at all three. All three doc files are
+      verbatim copies of the skill's seed templates — no field needed
+      overriding, since every choice landed on a template default. Verified by
+      `verifier` read-back (24/24 checks passed: completeness, every
+      cross-reference resolved, the label table, the PR flag's value, section
+      placement between Format and TODO, and 4 read-back questions answered
+      from the files alone).
+- [x] Baseline-hook alignment, in `dotfiles-ai` not here (2026-09-15, same
+      session): running the setup skill surfaced that its `domain.md` puts
+      `CONTEXT.md` at the repo root while the local docs-baseline hook looked
+      only under `docs/`, so a repo that followed the skill would be reported
+      as missing a file it actually had. The same hook also had no lazy-ADR
+      exemption for `docs/adr/`, though it already had one for `CONTEXT.md`.
+      Fixed on the hook side rather than by editing this repo's docs, keeping
+      `docs/agents/*.md` identical to upstream: `doc-baseline-check.sh` now
+      accepts either `CONTEXT.md` location and skips `docs/adr/` when
+      `docs/agents/domain.md` exists (v1.2.0 → v1.3.0). Verified by running
+      the hook across four scenarios, not by reading it.
+- [ ] ADR placement, settled 2026-09-15: ADRs are not pre-created here. The
+      setup skill's `domain.md` states the position — `/domain-modeling`
+      creates `CONTEXT.md` and ADRs lazily, once a term or decision actually
+      resolves — and the baseline hook now matches it. An empty `docs/adr/`
+      was created and removed again in the same session; git never tracked it.
+      The design decision recorded two entries above stays in this TODO rather
+      than an ADR for that reason.
 
 ## Source Material
 

@@ -108,6 +108,19 @@ compared with shipping something broken and finding out later.
 | A hard judgement call (architecture trade-off, elusive bug, trust-boundary design, data migration, technology choice) | An independent adversarial second opinion. When it disagrees, analyse the disagreement — do not pick whichever answer you preferred. |
 | A destructive or irreversible operation | **Out of scope for this skill.** Confirm the blast radius before, read back the effect after, and follow whatever high-risk procedure you operate under. Only add the adversarial review if the operation is *also* a hard judgement call, or if you cannot tell whether it is. |
 
+**Where an artifact type has an authoring standard of its own** — your Python
+standards, your skill-writing skill, your API-design skill — that standard's
+rules are part of this table's verification for that type, not a separate pass
+beside it. Judge the diff against them one rule at a time. Rules where every
+reader reaches the same verdict (a missing type hint, a `print` where logging
+is required) you settle yourself; rules where competent readers could differ
+(does this test cover the right thing, is this the right abstraction) are the
+judgement-call row, whichever way you think they came out — and so is any rule
+you cannot confidently sort. Claiming a file has no such standard, or that its
+standard already ran and the work has not moved since, is a finding like any
+other: say where you looked. Where no such standard is installed anywhere, the
+type's own row already says what to do.
+
 Choose the **cheapest reviewer that is actually qualified** — a cheap model
 doing mechanical read-back beats an expensive model doing nothing. You economise
 on the unit price of verification, never on its existence.
