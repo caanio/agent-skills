@@ -52,6 +52,7 @@ Codex / Gemini: one folder per skill under `skills/`, each containing a
 | [haos-https-tunnel](skills/haos-https-tunnel/SKILL.md) | Give a HAOS instance a real HTTPS URL via a Cloudflare Tunnel (cloudflared add-on) — no port forwarding, no device-side install |
 | [haos-cloud-backup](skills/haos-cloud-backup/SKILL.md) | Ship HAOS backups to cloud storage with rclone: upload bandwidth cap (bwlimit) and GFS-style daily/weekly/monthly retention |
 | [python-coding-standards](skills/python-coding-standards/SKILL.md) | Personal Python defaults: type hints, no globals, `logging` over `print()`, wrapping any I/O in try/except, commenting the why not the what, `.venv`/requirements.txt/PEP 8/Black, preferring pytest for real tests, where design docs go |
+| [web-stack-selector](skills/web-stack-selector/SKILL.md) | Pick the frontend library, CSS layer, map/2D/3D engine and matching MCP for a page: routes by stack (vanilla/server-rendered, React, PHP Laravel/Symfony) then by scene, checks CSP / no-build / low-power / license constraints; star snapshot in `references/` |
 
 ## Conventions
 
