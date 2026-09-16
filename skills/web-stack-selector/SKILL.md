@@ -1,11 +1,11 @@
 ---
 name: web-stack-selector
-description: "Pick the frontend library, CSS layer, JS utility, map or 2D/3D engine, chart or data-table library, and the MCP servers to install, for a web page on any backend (Flask/Django templates, PHP Laravel/Symfony, React). Use when a page or component is about to be built and the library is not fixed yet, or when asked shadcn-or-X or which frontend MCP. Backend-only work (API, schema, auth) has no UI to route."
+description: "Pick the frontend library, CSS layer, JS utility, map or 2D/3D engine, chart or data-table library, and the MCP servers to install, for a web page on any backend (Flask/Django templates, PHP Laravel/Symfony, React). Use whenever the user asks which library, package, component kit, 套件, 元件庫 or 地圖套件 to use for a page, dashboard, admin UI, map, chart or 3D scene, even as a one-line question with no code yet; also when a page is about to be built and the library is not fixed, or when asked shadcn-or-X or which frontend MCP. Backend-only work (API, schema, auth) has no UI to route."
 ---
 
 # web-stack-selector
 
-Version: 1.0.0 | Date: 2026-09-16
+Version: 1.1.0 | Date: 2026-09-16
 
 Every pick below **meets the bar**: >= 1,000 GitHub stars, a permissive
 license (MIT / BSD / ISC / Apache-2.0 / 0BSD), maintained.
