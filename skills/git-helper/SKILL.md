@@ -116,6 +116,10 @@ If any matches appear, **stop and warn the user** — do not proceed until resol
 ### 4. Generate Draft
 
 - Run `git diff --staged`.
+- **Describe the staged diff against HEAD, not the session's edit history.**
+  Intermediate edits that were later reverted or superseded within the same
+  commit are invisible in the diff and must not appear in the message.
+  Test: every claim in the message must be locatable in `git diff --staged`.
 - Summarise the core purpose of the changes.
 - Write the commit message per the quality standard above, in the language decided in Step 3.
 - **Body hard cap: ≤4 lines / ≤3 sentences.** If the why-only draft still exceeds this,
