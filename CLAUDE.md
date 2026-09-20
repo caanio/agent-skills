@@ -324,6 +324,46 @@ See `docs/agents/domain.md`.
       The design decision recorded two entries above stays in this TODO rather
       than an ADR for that reason.
 
+- [x] `completion-gate`'s Code row now requires the code review to run in a
+      fresh context (2026-09-20). Surfaced by a real session in another repo:
+      a 14-file rewrite got fifteen `deep-reviewer` rounds on one class and
+      that was taken as the Code row's code review, until the maintainer asked
+      which code-review skill had run — none had. A fresh-context `/code-review`
+      on the same diff then found two real crash paths outside that class. Two
+      distinct gaps: the row said "your code-review skill" without saying the
+      reviewer must be a fresh context, so a same-context checklist
+      (`code-review-and-quality`) could pass for it despite Core Rule 1; and
+      nothing said an adversarial second opinion (the judgement-call row) does
+      not substitute for the Code row, nor that it only reviews the scope it
+      was handed. Landed as a fresh-context requirement in the Code row plus a
+      ⚠️ recording the case, the Scope boundary's code-review examples
+      replaced with fresh-context ones (`/code-review`, or any review agent
+      dispatched with only the diff), and the authoring-standard clause
+      gaining `test-driven-development` and `code-review-and-quality` (as a
+      same-context checklist) as examples. Every skill name stays an `e.g.`
+      with the existing "with none installed" fallback untouched, per the
+      Inclusion Rules. The other session confirmed the failure mode on
+      request: it had loaded the skill via the Skill tool, read the Scope
+      boundary, and still filled the Code row with the adversarial review —
+      a substitution, not a missed pointer. A `writing-for-agents` pass then
+      cut one duplication (the same-context routing had landed in three
+      places; now the rule lives in the Code row and the name in the
+      authoring clause only) and unified the leading word to `same-context`.
+      Deliberately not added: a mechanical security trigger keyed on paths
+      like webui/auth/parser (project-specific, and the Scope boundary already
+      says this skill makes no security judgement of its own); a
+      delivery-message rule naming which row each check satisfied (not
+      approved); trimming the ⚠️'s numbers (left as written). The Scope
+      boundary's security bullet gained a built-in `/security-review` of the
+      pending diff as a before-merge example — deliberately without a
+      fresh-context claim: the official docs state its scope (changes on the
+      current branch) but not its execution model, unlike `/code-review`,
+      which is documented as a background subagent. Verified by
+      `verifier` read-back, three times: 10/10 after the first pass (one
+      check self-corrected mid-report), 8/8 after the trim, 7/7 after the
+      `/security-review` example, with the read-back questions answered from
+      the file alone each time.
+
 ## Source Material
 
 `haos-addon-deploy` was distilled from the verified deployment records of

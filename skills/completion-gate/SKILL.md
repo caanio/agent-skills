@@ -17,11 +17,13 @@ compared with shipping something broken and finding out later.
   happen **before** a commit; it never replaces the commit workflow itself.
 - *The mechanics of a thorough code review* (a multi-axis check, severity
   labels, a real checklist) → your code-review skill, entirely — this
-  collection doesn't ship one (e.g. `code-review-and-quality`). The Code
-  row below is the one place that says what to do when none is installed.
+  collection doesn't ship one (e.g. a built-in `/code-review` that forks a
+  fresh context, or any review agent you dispatch with only the diff). The
+  Code row below is the one place that says what to do when none is installed.
 - *Security review of code crossing a trust boundary* → your security skill,
   entirely — this collection doesn't ship one (e.g. `security-and-hardening`
-  while writing it, `security-audit` at a milestone or before merge). The
+  while writing it; `security-audit`, or a built-in `/security-review` of the
+  pending diff, at a milestone or before merge). The
   Code row below governs tests and code-review triage only; it makes no
   security judgement of its own.
 - *A deeper maintainer-handover pass* (backfilling ADRs, checking
@@ -103,13 +105,15 @@ compared with shipping something broken and finding out later.
 
 | Artifact | Legitimate verification |
 |---|---|
-| Code | Run the tests or actually execute it — yourself. Compiling is not behaving. Then, **when the tests are new, or the change touches anything in the judgement-call row below**, hand it to your code-review skill if one is installed (see Scope boundary); with none installed, at minimum have a fresh context judge whether those tests cover what the task actually asked for. A typo fix does not need a reviewer; a new module's first test suite does. |
+| Code | Run the tests or actually execute it — yourself. Compiling is not behaving. Then, **when the tests are new, or the change touches anything in the judgement-call row below**, hand it to a code review that runs in a **fresh context** (see Scope boundary) — a same-context review checklist is an authoring aid, not this check: you would be grading your own work (Core Rule 1); with none installed, at minimum have a fresh context judge whether those tests cover what the task actually asked for. A typo fix does not need a reviewer; a new module's first test suite does. ⚠️ An adversarial second opinion is the judgement-call row's check, not this one's, and it reviews only the scope you handed it. Observed: fifteen rounds of adversarial review on one class, taken as the code review of a 14-file diff; a fresh-context review of the same diff then found two real crash paths outside that class in five minutes. |
 | Docs, rules, config | Give the file to a fresh context and have it **answer questions using only that file** — and the questions must target the passages your change touched, or the gate is theatre. Wrong answers are a finding about the file, not about the reader. |
 | A hard judgement call (architecture trade-off, elusive bug, trust-boundary design, data migration, technology choice) | An independent adversarial second opinion. When it disagrees, analyse the disagreement — do not pick whichever answer you preferred. |
 | A destructive or irreversible operation | **Out of scope for this skill.** Confirm the blast radius before, read back the effect after, and follow whatever high-risk procedure you operate under. Only add the adversarial review if the operation is *also* a hard judgement call, or if you cannot tell whether it is. |
 
 **Where an artifact type has an authoring standard of its own** — your Python
-standards, your skill-writing skill, your API-design skill — that standard's
+standards, your skill-writing skill, your API-design skill, your TDD skill for
+the tests (e.g. `test-driven-development`), a same-context review checklist
+(e.g. `code-review-and-quality`) — that standard's
 rules are part of this table's verification for that type, not a separate pass
 beside it. Judge the diff against them one rule at a time. Rules where every
 reader reaches the same verdict (a missing type hint, a `print` where logging
