@@ -11,7 +11,9 @@ Codex / Gemini) and published to any machine via
   `~/.claude/skills/`) or keep a parallel copy in another repo (e.g.
   dotfiles) — that is how divergence happened before 2026-07-10.
 - Update flow: edit here → commit → push → on each machine
-  `npx skills@latest add caanio/agent-skills -g` to reinstall.
+  `npx skills@latest update <skill> -g` (or `update -g` for every installed
+  skill); `npx skills@latest add caanio/agent-skills -g` only when a skill
+  is new to that machine.
 - Install targets are real directories managed by the skills CLI, not
   symlinks into any git repo.
 
