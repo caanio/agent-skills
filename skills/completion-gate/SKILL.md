@@ -183,10 +183,12 @@ inside it always looks like bad luck.
 
 ## End-of-Session Wrap-Up (order matters, do not reorder)
 
-1. **First, confirm every code change this round has actually passed its
-   Code-row verification** — tests run yourself, code-review triage if the
-   tests are new or the change is a judgement call, a security skill if it
-   crosses a trust boundary (see Scope boundary). Docs describe verified
+1. **First, confirm every artifact this round has produced — code, docs,
+   rules, config — has actually passed its own row in the table above.**
+   For code: tests run yourself, code-review triage if the tests are new or
+   the change is a judgement call, a security skill if it crosses a trust
+   boundary (see Scope boundary). For docs, rules and config: the Docs row's
+   read-back, with no size exemption (Core Rule 1). Docs describe verified
    behaviour, not aspirational behaviour: writing them before this holds
    means step 2 documents something that may still be broken.
 2. **Update the substantive docs first.** Walk the diff and ask of each doc:
@@ -202,7 +204,8 @@ inside it always looks like bad luck.
    asks "does this file teach correctly?", this one only asks "did the edit
    land?". Telling the reader what you intended would anchor the first question,
    but it *is* the second one — which is why the answer has to be a quotation
-   rather than a yes.
+   rather than a yes. A doc edited in step 2 still owes the Docs row's open
+   read-back on top of this check; run it before step 4.
    ⚠️ Without this check, step 2 degrades into claiming an update that was never
    made — observed in practice, not hypothetical.
 4. **Decide out loud whether this also needs the adversarial second opinion**

@@ -289,11 +289,26 @@ See `docs/agents/domain.md`.
 - [ ] Two gaps this session surfaced but did not close, both pre-existing:
       the wrap-up has no step that runs the Docs-row read-back against a doc it
       just wrote (step 3 only proves the edit landed, and deliberately anchors
-      its reader, so it cannot also ask the open question), and the Scope
-      boundary hands security review to an external skill without the
-      "with none installed" fallback the Code row gives. On a machine with no
-      security skill, the wrap-up's first step cannot be satisfied or
-      downgraded.
+      its reader, so it cannot also ask the open question) — **closed
+      2026-09-24, see below**; and the Scope boundary hands security review to
+      an external skill without the "with none installed" fallback the Code row
+      gives. On a machine with no security skill, the wrap-up's first step
+      cannot be satisfied or downgraded — still open.
+- [x] `completion-gate`'s wrap-up step 1 widened from "every code change
+      passed its Code-row verification" to "every artifact this round produced
+      passed its own row in the table" (2026-09-24), closing the first gap
+      above: Core Rule 1 already said the Docs row has no size exemption, but
+      no wrap-up step ever triggered it, so a rules-file edit could pass the
+      whole checklist having only had step 3's narrow "did the edit land"
+      quotation check. Step 3 gained one sentence sending a doc edited in
+      step 2 back through the Docs row before step 4. Deliberately not a new
+      step, per the 2026-09-15 record above. Edited via `writing-for-agents`.
+      Verified by `verifier` read-back (10/10 checks passed: both edited
+      sentences quoted, all six wrap-up steps' cross-references resolve, the
+      Docs-row procedure stated in full exactly once, Core Rule 1's
+      no-size-exemption line unchanged, no PII in either diff, 3 read-back
+      questions answered from the file alone); the two non-existence claims
+      re-checked by grep on the main thread.
 
 - [x] `/setup-matt-pocock-skills` run on this repo (2026-09-15, same session):
       wrote `docs/agents/issue-tracker.md` (GitHub Issues via the `gh` CLI,
