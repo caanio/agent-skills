@@ -55,6 +55,17 @@ versions. Substitute your own values; nothing here is host-specific.
     pipeline that only consumes stdout (`ha apps info … | grep …`) shows an *empty result*,
     which reads exactly like "that field isn't set" rather than "the call failed". Check the
     exit code, or add `2>&1`, before concluding anything from an empty output.
+- ⚠️ **`ssh` reads stdin, so give each `ssh` the stdin it actually needs.** Both
+  directions have bitten real deploys, and both fail **silently**: no error, the commands
+  just never run.
+  - Script *for the remote* in a heredoc → `ssh <alias> bash -l -s <<'EOF'` with **no `-n`**:
+    `-n` points stdin at `/dev/null`, so the heredoc never reaches the remote shell.
+  - One-shot `ssh <alias> '…'` **inside a script that is itself read from stdin** (a
+    `bash <<'EOF'` wrapper, or any script piped into `bash`) → add **`-n`** (or
+    `</dev/null`). Without it, that `ssh` swallows the rest of the local script as its own
+    stdin, and every line after it is skipped.
+  - The tell: a step's output is simply **missing**. Read a missing block as "didn't run",
+    never as "passed", and re-run that step on its own to confirm.
 - ⚠️ **Disable Protection mode on the SSH add-on** (toggle on its info page), otherwise
   you can't reach the Supervisor API.
 - ⚠️ CLI names: use **`ha apps`** (`ha addons` is deprecated); to re-detect local add-ons
