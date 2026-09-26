@@ -85,14 +85,10 @@ Settled — reopen only on new evidence:
 
 Open:
 
-4. `completion-gate`'s Scope boundary hands security review to an external
-   skill without the "with none installed" fallback the Code row has — on a
-   machine with no security skill, wrap-up step 1 can be neither satisfied
-   nor downgraded. Log: 2026-09-15.
-5. `git-helper` step 2b matches its own rule text, so a commit editing text
+4. `git-helper` step 2b matches its own rule text, so a commit editing text
    that quotes its pattern words stops for per-line confirmation; revisit
    the pattern if confirmation fatigue shows up. Log: 2026-09-26.
-6. Candidate to distil: cross-project pitfalls like pinning wheel versions
+5. Candidate to distil: cross-project pitfalls like pinning wheel versions
    on the old Mac (macOS 12 Intel). Log: 2026-07-03.
 
 ## Source Material

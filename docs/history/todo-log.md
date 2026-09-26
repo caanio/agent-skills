@@ -360,3 +360,37 @@ Entries run oldest first; new entries are appended at the end.
       verbatim move, untouched sections, every open entry traced, every Open
       items claim sourced, paths exist, no PII, 4 read-back questions
       answered from `CLAUDE.md` alone).
+
+- [x] `completion-gate`'s Scope boundary gained the missing "no security
+      skill" fallback (2026-09-26), closing the second gap recorded under
+      2026-09-15 above. The security bullet now says: with none you can run
+      yourself, at minimum hand a fresh context the diff and ask where it
+      takes anything from outside the program's control and what that can
+      make the code do or expose; that is a stand-in, not the review — its
+      output goes under delivery part 2 without being called a security
+      review or a pass, and the security review is listed under part 3 as
+      not done; no fresh context either → the existing downgrade, naming the
+      security review as the gate that did not run. Wrap-up step 1 gained a
+      pointer to that stand-in so a literal reader who ran it can still pass
+      step 1; the reporting rule stays in the bullet only (a first draft
+      restated it in step 1; cut as duplication under `writing-for-agents`).
+      Placed in the Scope boundary bullet rather than as a new
+      table row, mirroring where the Code row keeps its own "with none
+      installed" path. A `deep-reviewer` round (opus) rejected the first
+      draft on three points, all taken: the question named "the boundary it
+      crosses", which hands the author's own judgement to the reviewer
+      against the skill's anti-anchoring rule, and asked only about inputs,
+      missing exposure changes with no input path (bind address, CORS,
+      leaked error detail); "part 3 says so" was descriptive and skippable;
+      and the test "none installed" never fires on a host whose built-in
+      security command is always present but not launchable by the agent
+      (whether the agent can launch it is [unconfirmed]), so it became
+      "none you can run yourself" — accepted knowing it hands a lazy model
+      a "couldn't run it" excuse, since that path costs more work (the
+      stand-in plus a part-3 disclosure), not less. Edited via
+      `writing-for-agents`. Verified by `verifier` read-back twice: 7/7 on
+      the first draft, 9/9 after the rewrites (fallback and downgrade path
+      readable from the file alone, step 1 routes to a place that now has
+      one, no passage calls the stand-in a review, added lines ≤ 80 chars,
+      no PII in the diff); the not-found claims re-checked by grep in the
+      main session. README row unchanged (it does not mention security).

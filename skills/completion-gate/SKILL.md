@@ -23,9 +23,15 @@ compared with shipping something broken and finding out later.
 - *Security review of code crossing a trust boundary* → your security skill,
   entirely — this collection doesn't ship one (e.g. `security-and-hardening`
   while writing it; `security-audit`, or a built-in `/security-review` of the
-  pending diff, at a milestone or before merge). The
-  Code row below governs tests and code-review triage only; it makes no
-  security judgement of its own.
+  pending diff, at a milestone or before merge). With none you can run
+  yourself, you must at minimum hand a fresh context the diff and ask where
+  it takes anything from outside the program's control, and what that can
+  make the code do or expose. That is a stand-in, not the review: paste its
+  output under part 2 of the delivery message without calling it a security
+  review or a pass, and list the security review under part 3 as not done.
+  No fresh context either → the downgrade below, naming the security review
+  as the gate that did not run. The Code row below governs tests and
+  code-review triage only; it makes no security judgement of its own.
 - *A deeper maintainer-handover pass* (backfilling ADRs, checking
   README/CONTEXT.md against reality, recording production facts and the
   deploy path, a prioritized TODO) → the `handover` skill. Run it only
@@ -187,10 +193,11 @@ inside it always looks like bad luck.
    rules, config — has actually passed its own row in the table above.**
    For code: tests run yourself, code-review triage if the tests are new or
    the change is a judgement call, a security skill if it crosses a trust
-   boundary (see Scope boundary). For docs, rules and config: the Docs row's
-   read-back, with no size exemption (Core Rule 1). Docs describe verified
-   behaviour, not aspirational behaviour: writing them before this holds
-   means step 2 documents something that may still be broken.
+   boundary — or, with none you can run, the Scope boundary's stand-in. For
+   docs, rules and config: the Docs row's read-back, with no size exemption
+   (Core Rule 1). Docs describe verified behaviour, not aspirational
+   behaviour: writing them before this holds means step 2 documents something
+   that may still be broken.
 2. **Update the substantive docs first.** Walk the diff and ask of each doc:
    "does this describe behaviour or a decision my change just invalidated?"
    If yes, update it. If unsure, list the candidates and ask — never skip
