@@ -272,23 +272,28 @@ change locally, then POST the complete merged object back** — never hand-write
 one:
 ```bash
 ssh <alias> 'bash -lc "curl -sS -H \"Authorization: Bearer \$SUPERVISOR_TOKEN\" \
-    http://supervisor/addons/local_<slug>/info"' > /tmp/opts.json   # full current options
-python3 -c "
+    http://supervisor/addons/local_<slug>/info"' > opts.json   # full current options
+python3 - <<'EOF'
 import json
-d = json.load(open('/tmp/opts.json'))['data']['options']
+d = json.load(open('opts.json'))['data']['options']
 d['some_token'] = 'new-value'
-json.dump({'options': d}, open('/tmp/opts_new.json', 'w'))
-"
-cat /tmp/opts_new.json | ssh <alias> 'bash -lc "curl -sS -X POST -H \"Authorization: Bearer \$SUPERVISOR_TOKEN\" \
-    -H \"Content-Type: application/json\" -d @- http://supervisor/addons/local_<slug>/options"'
-rm -f /tmp/opts.json /tmp/opts_new.json   # both contain secrets in plaintext
+json.dump({'options': d}, open('payload.json', 'w'))
+EOF
+chmod 600 opts.json payload.json   # password-typed options come back in plaintext — see below
+ssh <alias> 'bash -lc "curl -sS -X POST -H \"Authorization: Bearer \$SUPERVISOR_TOKEN\" \
+    -H \"Content-Type: application/json\" -d @- http://supervisor/addons/local_<slug>/options"' < payload.json
 ```
 Note: the `info` endpoint returns `password`-typed schema fields in **plaintext**, unmasked
-— that's exactly what makes this merge possible, but also why the temp files must be deleted
-right after, and why this whole exchange should be treated as touching real secrets (don't
-echo the merged object to a log or chat transcript). After POSTing, re-`GET info` and check the
-field you *didn't* intend to touch (e.g. a refresh token) is still non-empty — a wrong merge
-silently wiping a rotating credential is a much worse failure than a rejected POST.
+— that's exactly what makes this merge possible, but also why both files are `chmod 600`
+before the POST, and why this whole exchange should be treated as touching real secrets (don't
+echo the merged object to a log or chat transcript).
+
+After POSTing, **keep the pre-change `opts.json` as the rollback copy** while you re-`GET info`
+and check the field you *didn't* intend to touch (e.g. a refresh token) is still non-empty — a
+wrong merge silently wiping a rotating credential is a much worse failure than a rejected POST,
+and `opts.json` is the only place its old value survives. If it was wiped, POST
+`{"options": <opts.json's data.options>}` back the same way. Once it checks out,
+`rm -f opts.json payload.json`.
 
 The schema supports a **list of dicts** (lets the user add/remove entries in the UI,
 e.g. monitoring targets):

@@ -1,6 +1,6 @@
 # TODO log (2026-07-03 – 2026-09-26)
 
-Version: 1.0.2 | Moved verbatim from `CLAUDE.md`'s TODO section on
+Version: 1.0.3 | Moved verbatim from `CLAUDE.md`'s TODO section on
 2026-09-26; entries unchanged, including their checkbox state at the time.
 How to read: **a log, not current state** — later entries often supersede
 earlier ones, and a `[ ]` here only means it was open when written.
@@ -516,3 +516,22 @@ Entries run oldest first; new entries are appended at the end.
       `verifier`: citation check 4/4 PASS before applying; `CLAUDE.md`
       read-back PASS; the `python-coding-standards` open read-back failed
       question 5 (above), which is why that hunk was reverted.
+- [x] `haos-addon-deploy` §4 options temp files closed 2026-09-26
+      (maintainer call: port `haos-cloud-backup` §7's handling). §4 said
+      a wrong merge wiping a rotating credential is the worst failure and
+      asked for a re-GET check, yet deleted the pre-change copy before
+      that check, so a failed check had no old value to restore. The
+      block now writes `opts.json` / `payload.json` in the working
+      directory instead of `/tmp`, runs `chmod 600` on both before the
+      POST, keeps `opts.json` as the rollback copy through the re-GET
+      check (POST its `data.options` back if the untouched field was
+      wiped), and deletes both only once the check passes. No ⚠️ added:
+      a procedure fix, not a newly hit pitfall. `/tmp/dupe_slugs` in §2
+      stays (no secrets). Edited via `writing-for-agents`. The block
+      passes `bash -n` and `zsh -n`; the merge step run against a fake
+      options file kept the untouched fields and left both files
+      `-rw-------`. Verified by `verifier`: mechanical checks 5/5 PASS
+      (fences balanced, no `/tmp/opts` or `opts_new.json` left, filenames
+      consistent, placeholders only, ⚠️ count 3 before and after); open
+      read-back Q1–Q5 all answered from the file, no statement left that
+      deletes right after the POST.

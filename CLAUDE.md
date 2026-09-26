@@ -91,21 +91,21 @@ Settled — reopen only on new evidence:
 6. `python-coding-standards` keeps `[NEVER VIOLATE]` on rules 1, 2 and the
    testing rule together: with only the testing rule tagged, a fresh reader
    ranked rules 1 and 2 as weaker. Log: 2026-09-26.
+7. `haos-addon-deploy` §4 handles the options temp files like
+   `haos-cloud-backup` §7: `chmod 600` before the POST, `opts.json` kept
+   as the rollback copy until the re-GET check passes. Maintainer call,
+   log: 2026-09-26.
 
 Open — each awaits a maintainer call (log: 2026-09-26, prompt audit
 third pass):
 
-1. `haos-addon-deploy` §4 deletes the options temp files right after the
-   POST, with no `chmod 600` and no rollback copy; `haos-cloud-backup` §7
-   does both for the same Supervisor procedure. Decide: port §7's
-   handling into §4, or keep §4 as is.
-2. `git-helper` Core Rule 7 falls back to Traditional Chinese when a repo
+1. `git-helper` Core Rule 7 falls back to Traditional Chinese when a repo
    has no history. Decide: keep, or fall back to the conversation's
    language so the public skill stays generic.
-3. `python-coding-standards` rule 7 calls the PEP 263 line functional;
+2. `python-coding-standards` rule 7 calls the PEP 263 line functional;
    Python 3 already decodes source as UTF-8 (PEP 3120). Decide: keep the
    wording, or say the line is a convention.
-4. `web-stack-selector` lists `simple-datatables (LGPL)` as excluded with
+3. `web-stack-selector` lists `simple-datatables (LGPL)` as excluded with
    no row in the survey file. Decide: add a survey row on the next
    re-survey, or drop the name.
 
