@@ -381,6 +381,30 @@ See `docs/agents/domain.md`.
       `/security-review` example, with the read-back questions answered from
       the file alone each time.
 
+- [x] `git-helper` gained a personal-data (PII) scan and `completion-gate`'s
+      Docs row a fixed read-back question (2026-09-26). Surfaced by a real
+      session in another repo: a note recording that a value had been
+      swapped for a placeholder is itself a leak, because it tells anyone
+      reading the history where the original lives. Core Rule 6 now
+      requires both scans with raw output shown; Step 2 split into 2a
+      (secrets, pattern unchanged) and 2b (PII: decimal-degree coordinates
+      plus origin-label words, added lines only; names and device names
+      checked by eye and said so in "Rules applied"). The mechanical scan
+      lives in `git-helper`, per `completion-gate`'s Scope boundary, which
+      already hands the secrets scan to the commit-workflow skill;
+      `completion-gate` only gained the question. README's `git-helper`
+      row updated to match. Verified by `verifier` read-back: `git-helper`
+      8/8, `completion-gate` 5/5, README 5/5.
+- [ ] Two open points from the same change: (1) the fixed question sits
+      only in the Docs row, so a placeholder swap inside a code file (a
+      test fixture) is not asked about there — left as is by explicit
+      maintainer call, since 2b scans every staged file regardless of type;
+      (2) 2b matches its own rule text, so any commit that edits text
+      quoting its pattern words (this skill's Step 2, a rules file stating
+      the same policy) stops for per-line confirmation — already hit while
+      landing this change. Revisit the pattern if confirmation
+      fatigue shows up in practice.
+
 ## Source Material
 
 `haos-addon-deploy` was distilled from the verified deployment records of

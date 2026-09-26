@@ -29,12 +29,13 @@ When the user wants to commit changes, generate a commit message (msg, message),
 
 4. **Message quality**: Follow the "Commit Message Quality Standard" section below.
 
-5. **Tag rule compliance in every draft**: Append a one-line "Rules applied" list to each draft — which key rules it satisfies (type, ≤50 chars, imperative mood, why-only body, secrets clean) and how — this makes adherence visible, not assumed.
+5. **Tag rule compliance in every draft**: Append a one-line "Rules applied" list to each draft — which key rules it satisfies (type, ≤50 chars, imperative mood, why-only body, secrets clean, PII clean) and how — this makes adherence visible, not assumed.
 
-6. **[NEVER VIOLATE] Secrets scan must run and be shown, every commit, no exceptions**:
-   - Run the Step 2 scan on the staged diff before ever presenting a draft message — never skip it, never infer "probably clean" from file names or diff size.
-   - Paste the actual command and its raw output (even when empty/clean) into the response — a one-line claim like "secrets scan clean" without shown output does not satisfy this rule.
-   - Any match → stop immediately, do not draft or commit, warn the user.
+6. **[NEVER VIOLATE] Secrets scan and personal-data (PII) scan must both run and be shown, every commit, no exceptions**:
+   - Run both Step 2 scans on the staged diff before ever presenting a draft message — never skip either, never infer "probably clean" from file names or diff size.
+   - Paste the actual commands and their raw output (even when empty/clean) into the response — a one-line claim like "secrets scan clean" or "PII clean" without shown output does not satisfy this rule.
+   - Secrets match → stop immediately, do not draft or commit, warn the user.
+   - Personal-data match → stop, list every hit with its line, and proceed only after the user confirms each one is not personal (a public landmark's coordinates in a test is fine; a home, workplace or regular stop is not). A note saying a value "was real" or "was replaced with a fictional value" is a hit in its own right: it tells anyone reading the history where the real value lived.
 
 7. **[NEVER VIOLATE] Commit message language follows the repo's own git log, not the conversation's language**:
    - Before drafting, run `git log --oneline -10` and inspect it — never assume from the chat language, never default to English.
@@ -99,15 +100,25 @@ Before committing, confirming staging scope:
 Confirm staged files are correct, or tell me which to add.
 ```
 
-### 2. Secrets Check (Core Rule 6 — NEVER VIOLATE, never skip)
+### 2. Secrets and Personal-Data Check (Core Rule 6 — NEVER VIOLATE, never skip)
 
-Scan staged diff for accidental credentials before drafting. Always run this and show the actual output in the response, even when clean:
+Scan the staged diff before drafting. Always run both and show the actual output in the response, even when clean.
+
+**2a. Secrets** — credentials that grant access:
 
 ```bash
 git diff --staged | grep -iE "password|secret|api_key|token|private_key|access_key"
 ```
 
 If any matches appear, **stop and warn the user** — do not proceed until resolved.
+
+**2b. Personal data (PII)** — values that identify a person or a place, and labels that reveal a placeholder's origin. Added lines only; decimal-degree coordinates (4+ decimals) plus the words that tag a value as real, home, or replaced:
+
+```bash
+git diff --staged | grep -E '^\+' | grep -iE '\b[0-9]{1,3}\.[0-9]{4,}\b|real (home|work|address|coordinate)|fictional|placeholder|replaced with|真實|虛構|住家|家附近'
+```
+
+If any matches appear, **stop and list each hit** — proceed only after the user confirms every hit is not personal. Names, nicknames, family terms, device names and account IDs belong to the same check but have no reliable pattern: read the diff for them by eye and say so in the "Rules applied" line.
 
 ### 3. Detect Language Convention (Core Rule 7 — NEVER VIOLATE, never skip)
 
@@ -141,7 +152,7 @@ Prevents data loss on unexpected shutdowns. Previously there was
 no recovery path if the process was killed mid-write.
 
 Rules applied: type=feat · subject 34 chars · imperative mood ·
-why-only body (no how) · secrets scan clean
+why-only body (no how) · secrets scan clean · PII clean
 
 Shall I go ahead and commit?
 ```
