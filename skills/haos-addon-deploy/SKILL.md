@@ -134,12 +134,12 @@ guarantee is the whole reason this is the default.
 ssh <alias> 'sudo mkdir -p /addons/<slug> && sudo chown $(whoami) /addons/<slug>'
 git archive --format=tar HEAD | ssh <alias> 'tar -x -C /addons/<slug>'
 git archive --format=tar HEAD haos | ssh <alias> 'tar -x --strip-components=1 -C /addons/<slug>'
-ssh <alias> 'rm -rf /addons/<slug>/haos'   # remove the duplicate haos/ subfolder from line 1
+ssh <alias> 'rm -rf /addons/<slug>/haos'   # remove the duplicate haos/ subfolder the full-HEAD archive brought along
 ```
 
 **Working tree directly, no commit required first** — either the repo has no commits yet, or
 this is a hotfix that needs to reach the box now; committing is a separate, later step (see
-`git-workflow-and-versioning` / `git-helper`), not a prerequisite for deploying. Name the paths
+`git-helper`), not a prerequisite for deploying. Name the paths
 this add-on actually needs, same as the committed-tree route — never tar the whole project root
 blindly (see the duplicate-slug fix below for why):
 
@@ -167,7 +167,8 @@ all at the top level of `/addons/<slug>/`.
 
 **Supervisor's local store walks the local add-on tree recursively** — the source does
 `path.glob("**/config.*")` (`supervisor/store/data.py`), so it accepts `config.yaml`,
-`config.yml` **and** `config.json`, at any depth. Line 3 above ships the *whole repo*, so if
+`config.yml` **and** `config.json`, at any depth. The committed-tree route's `git archive --format=tar HEAD`
+ships the *whole repo*, so if
 the repo also holds a **second** add-on's folder (one repo, two add-ons — e.g. a poller and an
 ingest service), that second manifest lands inside this add-on's deploy directory and now
 **two directories declare that second slug**.
@@ -264,7 +265,7 @@ ssh <alias> 'bash -lc "ha apps info local_<slug> | grep -E \"state:|version:\""'
 ⚠️ **This POST replaces the whole `options` object — it is not a patch.** Sending only the
 one field you want to change (e.g. `{"options":{"some_token":"..."}}`) drops every other
 option, and Supervisor rejects the result if any *required* field is now missing:
-`"App local_<slug> has invalid options: Missing option 'tesla_client_id' in root..."`.
+`"App local_<slug> has invalid options: Missing option '<required_option>' in root..."`.
 To add or change a single field, **GET the current full object first, merge in your one
 change locally, then POST the complete merged object back** — never hand-write a partial
 one:

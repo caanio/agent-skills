@@ -32,8 +32,8 @@ ssh ha 'bash -lc "ha apps install 19a172aa_rclone_backup"'
 ```
 
 Single-add-on repo; installed slug is `19a172aa_rclone_backup` (hash is fixed by
-the repo URL). ⚠️ `ha store add`, not `add-repository` — see `haos-addon-deploy` §2
-for the silent-wrong-subcommand trap.
+the repo URL). ⚠️ `ha store add`, not `add-repository` — see `haos-https-tunnel`
+§2 for the silent-wrong-subcommand trap.
 
 ## 2. Cloud auth (rclone.conf) — do this BEFORE configuring jobs
 

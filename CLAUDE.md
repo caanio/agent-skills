@@ -86,7 +86,22 @@ Settled — reopen only on new evidence:
    rule 6 as a ⚠️ paragraph; too rare for its own skill, too specific for
    the global rules file. Log: 2026-09-26.
 
-Open: none.
+Open — maintainer calls left by the 2026-09-26 prompt audit (log:
+2026-09-26):
+
+- `git-helper` Core Rule 2 limits analysis to `git status` / `git diff`,
+  yet Step 0 runs `git fetch` and Rule 7 runs `git log`: widen the list
+  to read-only commands, or scope Steps 0/3 outside "analysis".
+- `haos-cloud-backup` hardcodes the container name three times;
+  `haos-addon-deploy` § Scope says never hardcode the prefix and resolve
+  it at run time.
+- `haos-addon-deploy` §0 has the agent disable Protection mode; §5 makes
+  that toggle the user's.
+- `haos-cloud-backup` keeps `opts.json`; `haos-addon-deploy` deletes the
+  same temp files because they hold plaintext secrets.
+- `web-stack-selector`'s "maintained" bar (~3 months) fails five of its
+  own picks, and d3 / wireui share a last-push date with opposite
+  verdicts: tighten the picks or widen the bar.
 
 ## Source Material
 

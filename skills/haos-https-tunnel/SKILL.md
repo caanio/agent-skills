@@ -111,7 +111,7 @@ curl -s -o /dev/null -w "%{http_code} %{time_total}s\n" https://ha.<domain>/
 - ⚠️ A precheck line `UDP Connectivity … QUIC connection failed / degraded transport,
   will proceed using 'http2'` is **fine** — some networks block outbound UDP 7844;
   http2 fallback works. Only a hard fail matters.
-- Nearby edge locations in the "Registered tunnel connection" lines (e.g. `tpe01`)
+- Nearby edge locations in the "Registered tunnel connection" lines (e.g. `<iata>01`)
   = good latency; nothing to configure.
 
 ## 7. Post-setup (tell the user)

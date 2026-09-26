@@ -1,6 +1,6 @@
 # TODO log (2026-07-03 – 2026-09-26)
 
-Version: 1.0.0 | Moved verbatim from `CLAUDE.md`'s TODO section on
+Version: 1.0.1 | Moved verbatim from `CLAUDE.md`'s TODO section on
 2026-09-26; entries unchanged, including their checkbox state at the time.
 How to read: **a log, not current state** — later entries often supersede
 earlier ones, and a `[ ]` here only means it was open when written.
@@ -439,3 +439,21 @@ Entries run oldest first; new entries are appended at the end.
       scans clean for PII, and the read-back answered the four questions
       (default pip behaviour, fail-fast command, per-environment fix,
       shared requirements untouched) from the paragraph text.
+- [x] Prompt audit (`/claude-api prompt-audit`, target Claude Opus 5.5)
+      run 2026-09-26 over every skill, `CLAUDE.md` and `docs/agents/`:
+      38 findings, 33 of them stale facts or cross-file conflicts; the
+      report stayed session-local. First batch landed the same day, the
+      mechanical fixes only: `haos-addon-deploy` §2's "line 1" / "Line 3
+      above" pointers now name the command (a second snippet had shifted
+      the count), its pointer to a skill this collection doesn't ship is
+      gone, `haos-cloud-backup`'s `ha store add` cross-reference now
+      points at `haos-https-tunnel` §2 where the trap is written, example
+      placeholders updated in `haos-addon-deploy` and `haos-https-tunnel`,
+      and `python-coding-standards`' description no longer excludes
+      package-install help, so the no-wheel pitfall in rule 6 can route.
+      Still open from the audit, awaiting a maintainer call: git-helper's
+      "analysis uses only status/diff" line vs its own `git fetch` /
+      `git log` steps; `haos-cloud-backup`'s hardcoded container name;
+      `haos-addon-deploy` §0 vs §5 on who toggles Protection mode;
+      `haos-cloud-backup` keeping `opts.json`; `web-stack-selector`'s
+      "maintained" bar vs its own picks. Verified by `verifier` 9/9.
