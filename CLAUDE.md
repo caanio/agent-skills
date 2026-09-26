@@ -85,10 +85,7 @@ Settled — reopen only on new evidence:
 
 Open:
 
-4. `git-helper` step 2b matches its own rule text, so a commit editing text
-   that quotes its pattern words stops for per-line confirmation; revisit
-   the pattern if confirmation fatigue shows up. Log: 2026-09-26.
-5. Candidate to distil: cross-project pitfalls like pinning wheel versions
+4. Candidate to distil: cross-project pitfalls like pinning wheel versions
    on the old Mac (macOS 12 Intel). Log: 2026-07-03.
 
 ## Source Material

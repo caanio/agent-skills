@@ -112,13 +112,13 @@ git diff --staged | grep -iE "password|secret|api_key|token|private_key|access_k
 
 If any matches appear, **stop and warn the user** — do not proceed until resolved.
 
-**2b. Personal data (PII)** — values that identify a person or a place, and labels that reveal a placeholder's origin. Added lines only; decimal-degree coordinates (4+ decimals) plus the words that tag a value as real, home, or replaced:
+**2b. Personal data (PII)** — values that identify a person or a place, and labels that reveal a placeholder's origin. Added lines only; decimal-degree coordinates (4+ decimals) plus the words that tag a value as real, home or invented. Lines quoting this scan command are skipped, so editing this rule does not trip it:
 
 ```bash
-git diff --staged | grep -E '^\+' | grep -iE '\b[0-9]{1,3}\.[0-9]{4,}\b|real (home|work|address|coordinate)|fictional|placeholder|replaced with|真實|虛構|住家|家附近'
+git diff --staged | grep -E '^\+' | grep -vE '^\+\+\+|grep -iE' | grep -iE '\b[0-9]{1,3}\.[0-9]{4,}\b|real (home|work|address|coordinate|name)|fictional|真實|虛構|住家|家附近'
 ```
 
-If any matches appear, **stop and list each hit** — proceed only after the user confirms every hit is not personal. Names, nicknames, family terms, device names and account IDs belong to the same check but have no reliable pattern: read the diff for them by eye and say so in the "Rules applied" line.
+If any matches appear, **stop and list each hit** — proceed only after the user confirms every hit is not personal. Names, nicknames, family terms, device names, account IDs, and a bare "placeholder" or "replaced" note with no origin word beside it belong to the same check but have no reliable pattern (those two words are everyday vocabulary in skill text and were dropped from the scan for that reason): read the diff for them by eye and say so in the "Rules applied" line.
 
 ### 3. Detect Language Convention (Core Rule 7 — NEVER VIOLATE, never skip)
 
