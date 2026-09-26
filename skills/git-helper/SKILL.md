@@ -38,8 +38,8 @@ When the user wants to commit changes, generate a commit message (msg, message),
    - Personal-data match → stop, list every hit with its line, and proceed only after the user confirms each one is not personal (a public landmark's coordinates in a test is fine; a home, workplace or regular stop is not). A note saying a value "was real" or "was replaced with a fictional value" is a hit in its own right: it tells anyone reading the history where the real value lived.
 
 7. **[NEVER VIOLATE] Commit message language follows the repo's own git log, not the conversation's language**:
-   - Before drafting, run `git log --oneline -10` and inspect it — never assume from the chat language, never default to English.
-   - Majority language of the last 10 commits wins; tie → most recent commit wins; no history → Traditional Chinese.
+   - Before drafting, run `git log --oneline -10` and inspect it — when history exists, the log decides: never assume from the chat language, never default to English.
+   - Majority language of the last 10 commits wins; tie → most recent commit wins; no history → the conversation's language, and the draft says "no history — using the conversation's language" so the user can switch it before saying ok.
    - The Conventional Commits `type:` prefix (`feat`/`fix`/`docs`/…) always stays English regardless of body language.
    - Non-English draft: the Chris Beams rules still apply — subject ≤ 50 characters, no trailing period, subject readable standalone, body explains why not what/how — but capitalisation and strict English imperative-mood phrasing don't apply.
 

@@ -535,3 +535,13 @@ Entries run oldest first; new entries are appended at the end.
       consistent, placeholders only, ⚠️ count 3 before and after); open
       read-back Q1–Q5 all answered from the file, no statement left that
       deletes right after the POST.
+- [x] `git-helper` Core Rule 7 no-history fallback closed 2026-09-26
+      (maintainer call: fall back to the conversation's language). The
+      rule hardcoded Traditional Chinese for a repo with no commits, the
+      author's preference inside a public generic skill. The no-history
+      branch now uses the conversation's language and the draft states
+      "no history — using the conversation's language", so the user can
+      switch it at the existing ok gate; the "never assume from the chat
+      language" clause is scoped to when history exists. Rejected: keep
+      (not generic); ask before drafting (an extra round-trip the ok gate
+      already covers). Edited via `writing-for-agents`.

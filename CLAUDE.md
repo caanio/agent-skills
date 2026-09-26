@@ -95,17 +95,17 @@ Settled — reopen only on new evidence:
    `haos-cloud-backup` §7: `chmod 600` before the POST, `opts.json` kept
    as the rollback copy until the re-GET check passes. Maintainer call,
    log: 2026-09-26.
+8. `git-helper` Core Rule 7 falls back to the conversation's language
+   when a repo has no history, and the draft says so; no hardcoded
+   language in the public skill. Maintainer call, log: 2026-09-26.
 
 Open — each awaits a maintainer call (log: 2026-09-26, prompt audit
 third pass):
 
-1. `git-helper` Core Rule 7 falls back to Traditional Chinese when a repo
-   has no history. Decide: keep, or fall back to the conversation's
-   language so the public skill stays generic.
-2. `python-coding-standards` rule 7 calls the PEP 263 line functional;
+1. `python-coding-standards` rule 7 calls the PEP 263 line functional;
    Python 3 already decodes source as UTF-8 (PEP 3120). Decide: keep the
    wording, or say the line is a convention.
-3. `web-stack-selector` lists `simple-datatables (LGPL)` as excluded with
+2. `web-stack-selector` lists `simple-datatables (LGPL)` as excluded with
    no row in the survey file. Decide: add a survey row on the next
    re-survey, or drop the name.
 
