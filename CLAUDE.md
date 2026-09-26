@@ -9,7 +9,7 @@ Codex / Gemini) and published to any machine via
 - **This repo is the only place self-written skills are edited.** Never
   hand-edit or hand-copy files in an install target (`~/.agents/skills/`,
   `~/.claude/skills/`) or keep a parallel copy in another repo (e.g.
-  dotfiles) — that is how divergence happened before 2026-07-10.
+  dotfiles) — a parallel copy is how the two silently drift apart.
 - Update flow: edit here → commit → push → on each machine
   `npx skills@latest update <skill> -g` (or `update -g` for every installed
   skill); `npx skills@latest add caanio/agent-skills -g` only when a skill
@@ -88,8 +88,26 @@ Settled — reopen only on new evidence:
 5. `web-stack-selector`'s "maintained" bar is a push within ~6 months of
    the survey date, defined only in its `SKILL.md`; a pick below it stays
    but is flagged in place. Maintainer call, log: 2026-09-26.
+6. `python-coding-standards` keeps `[NEVER VIOLATE]` on rules 1, 2 and the
+   testing rule together: with only the testing rule tagged, a fresh reader
+   ranked rules 1 and 2 as weaker. Log: 2026-09-26.
 
-Open: none.
+Open — each awaits a maintainer call (log: 2026-09-26, prompt audit
+third pass):
+
+1. `haos-addon-deploy` §4 deletes the options temp files right after the
+   POST, with no `chmod 600` and no rollback copy; `haos-cloud-backup` §7
+   does both for the same Supervisor procedure. Decide: port §7's
+   handling into §4, or keep §4 as is.
+2. `git-helper` Core Rule 7 falls back to Traditional Chinese when a repo
+   has no history. Decide: keep, or fall back to the conversation's
+   language so the public skill stays generic.
+3. `python-coding-standards` rule 7 calls the PEP 263 line functional;
+   Python 3 already decodes source as UTF-8 (PEP 3120). Decide: keep the
+   wording, or say the line is a convention.
+4. `web-stack-selector` lists `simple-datatables (LGPL)` as excluded with
+   no row in the survey file. Decide: add a survey row on the next
+   re-survey, or drop the name.
 
 ## Source Material
 

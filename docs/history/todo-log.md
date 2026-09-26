@@ -1,6 +1,6 @@
 # TODO log (2026-07-03 – 2026-09-26)
 
-Version: 1.0.1 | Moved verbatim from `CLAUDE.md`'s TODO section on
+Version: 1.0.2 | Moved verbatim from `CLAUDE.md`'s TODO section on
 2026-09-26; entries unchanged, including their checkbox state at the time.
 How to read: **a log, not current state** — later entries often supersede
 earlier ones, and a `[ ]` here only means it was open when written.
@@ -490,3 +490,29 @@ Entries run oldest first; new entries are appended at the end.
       every touched passage answered all nine questions from the files;
       the §7 order question passed on the third draft and again after the
       grep gate was dropped. `deep-reviewer` skipped by maintainer call.
+- [x] Prompt audit third pass (`/claude-api prompt-audit`, target Claude
+      Opus 5.5) closed 2026-09-26. One hunk kept: `CLAUDE.md`'s
+      single-source rule dropped its dated incident clause and keeps the
+      reason (a parallel copy silently drifts apart). One hunk tried and
+      reverted: dropping `[NEVER VIOLATE]` from `python-coding-standards`
+      rules 1 and 2 (`git blame` puts all three tags in the first commit
+      `c652c79c`). With only the testing rule (`:107`) still tagged, a
+      fresh reader ranked rules 1 and 2 below it and said a reader "could
+      … misread 'optional by omission'", so all three tags stay. The
+      `[NEVER VIOLATE]` tags in `completion-gate` and `git-helper` stay
+      because they guard
+      self-certification, destructive confirmation, staging and the
+      secrets/PII scan, not because each traces to an incident.
+      Still open, awaiting a maintainer call: `haos-addon-deploy` §4 still
+      deletes the options temp files right after the POST with no
+      `chmod 600` or rollback copy, unlike `haos-cloud-backup` §7 (flagged,
+      not rewritten: the newer passage adds a command to run);
+      `git-helper` defaulting to Traditional Chinese when there is no
+      history, in a public generic skill; `python-coding-standards`
+      rule 7 calling the PEP 263 line functional, redundant for UTF-8
+      files under PEP 3120; `web-stack-selector` listing
+      `simple-datatables (LGPL)` as excluded with no survey row behind it.
+      writing-for-agents was run after the edits, not before. Checked by
+      `verifier`: citation check 4/4 PASS before applying; `CLAUDE.md`
+      read-back PASS; the `python-coding-standards` open read-back failed
+      question 5 (above), which is why that hunk was reverted.
