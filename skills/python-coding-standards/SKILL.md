@@ -75,6 +75,25 @@ rules below apply to.
    `~=2025.2` and a same-year bump (`2025.3`) is picked up automatically,
    but a new year (`2026.1`) is not and needs a manual pin update.
 
+   ⚠️ A pin cannot help when the platform has no wheel at all: pip says
+   nothing and falls back to building from source, which on a slow machine
+   looks like a hang lasting tens of minutes. Hit twice with compiled
+   packages (`opencv-python`, `onnxruntime`): their newer releases ship
+   wheels only for macOS 13+, installed on an Intel Mac stuck on macOS 12;
+   and the same packages in an Alpine (musl) container, where no
+   `musllinux` wheel exists. Make the install fail fast instead:
+
+   ```
+   .venv/bin/python -m pip install --only-binary :all: -r requirements.txt
+   ```
+
+   `No matching distribution found for <package>` names the one with no
+   wheel. Fix it per environment, keeping the shared `requirements.txt`
+   untouched: on the old machine, first install that package with a `<`
+   upper bound at the last release that still ships a wheel for it, then
+   install the rest; in a container, switch to a glibc base image (Debian)
+   rather than pinning.
+
 7. **File header: PEP 263 encoding declaration.** Every `.py` file a user runs keeps the
    `# -*- coding: utf-8 -*-` line in its header. Unlike a plain `encoding: utf-8` label in
    a non-Python file's header (decorative — nothing reads it), this line is functional: the

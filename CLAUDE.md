@@ -82,11 +82,11 @@ Settled — reopen only on new evidence:
 3. The PII read-back question sits only in `completion-gate`'s Docs row;
    placeholder swaps in code files are covered by `git-helper` step 2b
    scanning every staged file. Maintainer call, log: 2026-09-26.
+4. The old-Mac wheel-pin pitfall lives in `python-coding-standards`
+   rule 6 as a ⚠️ paragraph; too rare for its own skill, too specific for
+   the global rules file. Log: 2026-09-26.
 
-Open:
-
-4. Candidate to distil: cross-project pitfalls like pinning wheel versions
-   on the old Mac (macOS 12 Intel). Log: 2026-07-03.
+Open: none.
 
 ## Source Material
 

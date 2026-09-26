@@ -420,3 +420,22 @@ Entries run oldest first; new entries are appended at the end.
       read-back answered that a bare "placeholder" note is an eye check.
       The dotfiles count was measured in the main session, not by the
       verifier.
+- [x] Open item 4 (old-Mac wheel pins, 2026-07-03) closed 2026-09-26 by
+      folding it into `python-coding-standards` rule 6 as a ⚠️ paragraph,
+      not a new skill. Inventory of the two source projects found one real
+      old-Mac pitfall (compiled packages whose newer wheels are macOS 13+
+      only, so pip on macOS 12 Intel silently builds from source and looks
+      hung) plus the same root cause in an Alpine container (no musllinux
+      wheel, already covered by `haos-addon-deploy`); the brew/gcloud
+      Tier 3 warning was dropped as not a pip issue. A standalone skill was
+      rejected for trigger frequency (a few hits a year, two recorded
+      cases) and the global rules file for being always-loaded. The
+      machine-specific version bounds stay in the project README; the
+      skill carries only the generic fail-fast (`--only-binary :all:`), the
+      error string, and the per-environment fix. The error string was
+      reproduced on the maintainer's macOS 12 Intel machine on 2026-09-26.
+      Edited via `writing-for-agents`. Verified by `verifier` read-back
+      7/7: files complete, code fence closed, numbering 6→7 intact, diff
+      scans clean for PII, and the read-back answered the four questions
+      (default pip behaviour, fail-fast command, per-environment fix,
+      shared requirements untouched) from the paragraph text.
