@@ -62,348 +62,38 @@ See `docs/agents/triage-labels.md`.
 Single-context: `CONTEXT.md` at the root, ADRs under `docs/adr/`.
 See `docs/agents/domain.md`.
 
-## TODO (left when the repo was created, 2026-07-03)
+## Open items (last updated 2026-09-26)
 
-- [x] Push the first commit to GitHub (done — turned out it was already
-      pushed from another machine; confirmed in sync 2026-07-04)
-- [x] Test-install with
-      `npx skills@latest add caanio/agent-skills -g` to verify the skills
-      CLI accepts this structure (mattpocock/skills layout) — confirmed
-      2026-08-22: all 7 skills installed and symlinked into Claude Code's
-      skill path, content matches the repo. (The same run reported 7
-      failures for a "PromptScript" target — that target doesn't support
-      `-g` global installs at all, unrelated to this repo's structure.)
-- [ ] Later candidates to distil: cross-project pitfalls like pinning wheel
-      versions on the old Mac (macOS 12 Intel)
-- [x] `python-coding-standards` skill added 2026-08-19 (type hints, no
-      globals, logging, I/O try/except, WHY-only comments, pytest
-      preference, design docs) — went through 4 deep-reviewer rounds and a
-      description-optimization pass; commits `c652c79`, `ba72c85`.
-- [ ] Docs baseline still missing: `docs/CONTEXT.md`, `docs/adr/` —
-      flagged by the docs-baseline hook 2026-08-19, deferred to next
-      session by explicit user call.
-- [x] `completion-gate` and `delegation-protocol` trigger audit
-      (2026-08-21): near-zero real invocation traced via session
-      transcripts, findings and decisions logged in
-      `docs/trigger-audit-notes.md`. Sharpened both skills' triggers for
-      the specific recognition-failure moments found (a self-graded risky
-      confirmation question; a repeated same-target search) — framed as
-      portability fixes, not expected to change this maintainer's own
-      behaviour since equivalent rules already live in their personal
-      always-loaded config. Verified by `verifier` read-back both times;
-      commit `6f78073`.
-- [x] `python-coding-standards` gained a Tooling rule (`.venv` +
-      requirements.txt, PEP 8, Black) and `completion-gate`'s wrap-up order
-      gained an explicit step for deciding whether a change also needs an
-      adversarial second opinion (with a note that this decision blocks
-      only the "verified/PASS" claim, not the remaining wrap-up steps) plus
-      a scope note distinguishing the per-round doc check from the
-      whole-session continuation-notes check — 2026-08-22. Landed alongside
-      an unrelated upstream merge that touched the same
-      `completion-gate` description line (commits `6f78073`, `f09a25d`);
-      reconciled in commit `dbe7e45`.
-- [x] `delegation-protocol` retired (2026-08-24), superseding the
-      2026-08-21 "left unchanged" call above. Confirmed with the
-      maintainer that nobody else installs this repo, which removed the
-      "must stand on its own for other installers" reason that call relied
-      on. Content split: the one genuinely-unique rule (Finding 2.1's
-      no-evidence spot-check) plus two smaller unique bits (no-subagent
-      fallback, don't-switch-model cache-cost warning) folded into the
-      maintainer's personal always-loaded rules; everything else was
-      already-duplicated threshold/reporting-contract text, deleted with
-      no replacement. Updated the two live cross-references in
-      `completion-gate/SKILL.md` (Scope boundary, delegating-a-check note)
-      and the README skills table. Details in
-      `docs/trigger-audit-notes.md`. Verified by `verifier` read-back.
-- [x] `handover` skill added (2026-09-08): user-invoked (mirrors
-      `mattpocock/skills`' own `handoff`, which targets the next agent turn
-      — this one targets the next human maintainer instead). Backfills
-      ADRs, checks README/CONTEXT.md against reality, records production
-      facts and the deploy path, writes a prioritized `docs/TODO.md` (never
-      the repo root, by explicit instruction after review). Scope boundary
-      declared against `completion-gate` (gate vs. this skill),
-      `domain-modeling` (ADR mechanics live there, this skill only decides
-      whether one is owed), and `git-helper` (this skill writes docs, never
-      commits them). Written with `writing-for-agents`' invocation and
-      information-hierarchy guidance. Verified by `verifier` read-back
-      (7/7 checks passed: frontmatter, 5-step process with completion
-      criteria, docs/-only file placement, scope boundary, no PII, README
-      table row, this TODO entry itself).
-- [x] `completion-gate`'s Scope boundary gained a pointer to `handover`
-      (2026-09-08): clarifies the two compose in sequence (completion-gate
-      runs every wrap-up regardless of size; `handover` is an additional
-      pass run only after completion-gate passes, never in place of it) —
-      deliberately left cadence (every wrap-up vs. milestone-only) as the
-      user's call rather than asserting one; `handover`'s own "When to
-      invoke" section gained the same neutral framing. Verified by
-      `verifier` read-back (8/8 checks passed alongside the code-review
-      entry below).
-- [x] `completion-gate`'s Code verification row and Scope boundary now
-      point to a code-review skill (2026-09-08), naming
-      `code-review-and-quality` (source: `addyosmani/agent-skills`, not
-      shipped by this collection) as the reference implementation for the
-      judgement-call cases in that row — with an explicit "none installed"
-      fallback to this skill's own fresh-context judgement, so the row
-      never hard-depends on a third-party skill being present. Verified by
-      `verifier` read-back (8/8 checks passed: neutral cadence wording x2,
-      code-review pointer + fallback, updated Code row, proportionality
-      clause intact, no contradictions, both TODO entries correctly
-      pending at read-back time, no PII).
-- [x] `writing-for-agents` audit of `completion-gate` and `handover`
-      (2026-09-09): found and fixed one real duplication — the Code row's
-      code-review fallback procedure was restated in the Scope boundary
-      bullet too; trimmed the bullet to a bare ownership pointer, kept the
-      procedure only in the Code row. Also reworded `handover`'s "unpushed
-      commits" check to name what it actually covers (this skill's own new
-      files, not a re-check of completion-gate's step 6) and tightened one
-      completion criterion to reuse the `maintainer-ready` leading word
-      instead of re-describing it. Same session: split this file — moved
-      Single Source of Truth / Inclusion Rules / Format into a new
-      `AGENTS.md` (the agent-facing rules, tool-agnostic); this file keeps
-      only the TODO log and Source Material, with a pointer at the top.
-      Verified by `verifier` read-back (9/9 checks passed: both fixed
-      duplications confirmed removed from their old spot and intact in
-      their new one, leading-word reuse, AGENTS.md holds all three moved
-      sections, CLAUDE.md no longer duplicates them and keeps its pointer
-      plus TODO/Source Material intact, no PII, no further duplication
-      found beyond the expected bidirectional completion-gate/handover
-      cross-reference).
-- [x] AGENTS.md/CLAUDE.md split reverted (2026-09-09), same day it landed.
-      `mattpocock/skills`' own `setup-matt-pocock-skills` documents the
-      opposite convention explicitly: "Never create `AGENTS.md` when
-      `CLAUDE.md` already exists (or vice versa); always edit the one
-      that's already there." Merged Single Source of Truth / Inclusion
-      Rules / Format back into this file and deleted `AGENTS.md`. Verified
-      by `verifier` read-back (7/7 checks passed: AGENTS.md gone, all five
-      sections present exactly once with no lost content, pointer text
-      removed, this TODO entry itself present, no duplication, no PII).
-- [x] `completion-gate`'s End-of-Session Wrap-Up restructured (2026-09-10):
-      closed a real gap another session hit — the checklist had no step
-      that actually asked whether to run `handover` between the
-      continuation-notes step and commit, so finishing continuation notes
-      reflexively rolled straight into commit. Added a step that requires
-      asking (not running) `handover` every time, with a recommendation and
-      reasoning attached (never a bare yes/no), and an explicit "Completing
-      [the prior step] is not permission to skip straight to committing"
-      line — a softer phrasing failed a prior read-back, so this one is
-      written as a direct prohibition. Separately, on review with the
-      maintainer: removed the commit-via-`git-helper` step and the
-      unpushed-commits check from the list entirely — both belong to the
-      outer wrap-up sequence (completion-gate → handover → git-helper), not
-      to this skill's own checklist, matching the Scope boundary's existing
-      commit-mechanics pointer. Added a new first step requiring code
-      verification (tests run, code-review triage, a security skill for
-      trust-boundary code) before any doc gets touched, since the checklist
-      previously jumped straight to docs with no code-verification gate.
-      Scope boundary gained a fifth bullet naming `security-and-hardening`
-      and `security-audit` as the out-of-collection owners of security
-      review — the Code row already covered tests/code-review but said
-      nothing about security. Edited via the `writing-for-agents` skill
-      (`mattpocock/skills`). Verified by `verifier` read-back (11/11 checks
-      passed: step count and gist, cross-step references at every renumber
-      point, the verbatim permission sentence, the ask-not-run requirement
-      for handover, no leftover `git add`/`git commit`/`git-helper`
-      strings, the security bullet's named skills — all consistent, no
-      stale references found).
-- [x] `handover`'s Scope boundary fixed two wrong attributions (2026-09-10,
-      same session as the `completion-gate` entry above): the ADR/`CONTEXT.md`
-      bullet claimed "this collection's family ships `domain-modeling`" and
-      the conversation-handoff bullet claimed "this collection's `handoff`"
-      — both false. Checked `~/.agents/.skill-lock.json`: both
-      `domain-modeling` and `handoff` install from `mattpocock/skills`, not
-      from this repo (`skills/` here only holds `completion-gate`,
-      `git-helper`, `handover`, the three `haos-*` skills, and
-      `python-coding-standards`). Rewrote both bullets to the same pattern
-      already used for the security bullet above (`your X skill, entirely —
-      this collection doesn't ship one (e.g. ...)`), naming
-      `mattpocock/skills` explicitly. The other two bullets in the same list
-      (`completion-gate`, `git-helper`) were already correct — this repo
-      really does ship those two. Verified by `verifier` read-back (7/7
-      checks passed: both corrected bullets quote-matched as NOT claiming
-      this collection ships them and naming `mattpocock/skills`, the two
-      correct "ships" bullets unchanged, no leftover "this collection's
-      family" phrasing, no contradiction between bullets).
-- [x] `completion-gate`'s step 5 (continuation notes / TODO index) gained a
-      mechanical check (2026-09-10, same session): the maintainer caught the
-      model claiming step 5 done by seeing one existing TODO entry, without
-      diffing against everything the session actually touched — the exact
-      staleness step 5's own ⚠️ already warned about. Added a concrete command
-      to check against (`git diff HEAD --stat` for the whole session) and a
-      ⚠️ recording the miss as it happened. Dogfooding that same check then
-      caught a second, real gotcha in the same minute: `git diff --stat`
-      (no `HEAD`) compares working tree to the index only, so a fully-staged
-      file (`skills/handover/SKILL.md`, staged by the IDE, not by the model)
-      showed zero diff and was nearly left out of the TODO update entirely —
-      `git status` alone did catch it, but the first drafted ⚠️ wrongly
-      claimed `git status` under-reports too and had to be corrected before
-      it shipped. Added a second ⚠️ pinned on `git diff --stat` specifically
-      (not `git status`), with the working-tree/index/last-commit mechanics
-      spelled out. Verified by `verifier` read-back, twice (once per ⚠️ add):
-      first pass 5/5 checks passed (command name, observed-in-session
-      framing, no stale cross-references); second pass 5/5 checks passed
-      (exact command quoted, confirmed no false claim about `git status`
-      anywhere in the file, the `git diff --stat` mechanics explained
-      correctly, all step cross-references still resolve).
-- [x] `completion-gate`'s step 5 trimmed (2026-09-10, same session): the
-      case-study narrative and the `git diff --stat` internals explanation
-      logged above were cut on the maintainer's call — the step now just
-      states the hard requirement ("you must have actually run `git diff
-      HEAD --stat` ... before this step counts as done") without the story
-      or the reasoning behind it. Verified by `verifier` read-back (5/5
-      checks passed: hard-requirement clause and command name confirmed
-      present, narrative/internals confirmed absent, no `git status`
-      mention anywhere, step numbering and all cross-references intact).
+The only live list. The per-change log — what each change did, why, and how
+it was verified — is `docs/history/todo-log.md`; read it before reworking a
+skill, to see what was already tried. When a change lands or an item closes,
+append its entry to that log and keep only the live residue here.
 
-- [x] `completion-gate` gained an authoring-standard clause (2026-09-15):
-      a change's artifact type may have a standard of its own (a Python
-      standards skill, a skill-writing skill), and nothing in the file said
-      whether following it counted as verification — so a round could pass the
-      gate having never been checked against the standard it was written under.
-      Landed as 13 lines appended to the artifact-type table, with the
-      wrap-up checklist untouched. Rules split mechanical (settle yourself)
-      from judgement (route to the table's judgement-call row, whichever way
-      you think it came out), anything unsortable counts as judgement, and
-      both "nothing governs this file" and "its standard already ran" carry
-      the same burden of evidence as any other finding. Verified by `verifier`
-      read-back (16/16 checks passed: placement inside the verification
-      section, every cross-reference resolved, no duplication against Core
-      Rule 1, wrap-up numbering confirmed untouched, 5 read-back questions
-      answered from the file alone).
-- [ ] **Do not re-attempt this as a wrap-up step** (recorded 2026-09-15, the
-      same session): the clause above was first built as a new step 4 in the
-      End-of-Session Wrap-Up, grew to 55 added lines over two rounds, and was
-      reverted in full. Three rounds of `deep-reviewer` established that the
-      failure was structural, not verbal — anything shaped as a step inherits
-      three costs. It has a *position*, so content written after it escapes it
-      (the continuation-notes step and anything a later pass writes). It needs
-      *re-entry routing*, which has to enumerate every earlier step and leaks
-      through whichever one it misses. It needs *rounds*, which then have to be
-      reconciled with Failure Counting. Round 2 closed two attack surfaces and
-      left four open; round 3 closed another and left three, two of which
-      predate the work. Attaching the rule to the artifact-type table instead
-      costs none of the three, because the table is consulted rather than
-      executed in sequence. That discarded draft — 261 lines in full, 55 of them
-      new — is not kept anywhere in the repo. Deliberately not written up as an
-      ADR: `docs/adr/` does not exist here yet and creating it is gated on a
-      separate docs-baseline decision, so this entry is the record.
-- [ ] Two gaps this session surfaced but did not close, both pre-existing:
-      the wrap-up has no step that runs the Docs-row read-back against a doc it
-      just wrote (step 3 only proves the edit landed, and deliberately anchors
-      its reader, so it cannot also ask the open question) — **closed
-      2026-09-24, see below**; and the Scope boundary hands security review to
-      an external skill without the "with none installed" fallback the Code row
-      gives. On a machine with no security skill, the wrap-up's first step
-      cannot be satisfied or downgraded — still open.
-- [x] `completion-gate`'s wrap-up step 1 widened from "every code change
-      passed its Code-row verification" to "every artifact this round produced
-      passed its own row in the table" (2026-09-24), closing the first gap
-      above: Core Rule 1 already said the Docs row has no size exemption, but
-      no wrap-up step ever triggered it, so a rules-file edit could pass the
-      whole checklist having only had step 3's narrow "did the edit land"
-      quotation check. Step 3 gained one sentence sending a doc edited in
-      step 2 back through the Docs row before step 4. Deliberately not a new
-      step, per the 2026-09-15 record above. Edited via `writing-for-agents`.
-      Verified by `verifier` read-back (10/10 checks passed: both edited
-      sentences quoted, all six wrap-up steps' cross-references resolve, the
-      Docs-row procedure stated in full exactly once, Core Rule 1's
-      no-size-exemption line unchanged, no PII in either diff, 3 read-back
-      questions answered from the file alone); the two non-existence claims
-      re-checked by grep on the main thread.
+Settled — reopen only on new evidence:
 
-- [x] `/setup-matt-pocock-skills` run on this repo (2026-09-15, same session):
-      wrote `docs/agents/issue-tracker.md` (GitHub Issues via the `gh` CLI,
-      PRs-as-request-surface left off), `docs/agents/triage-labels.md` (the
-      five canonical roles, label strings equal to their names), and
-      `docs/agents/domain.md` (single-context), plus an `## Agent skills`
-      section in this file pointing at all three. All three doc files are
-      verbatim copies of the skill's seed templates — no field needed
-      overriding, since every choice landed on a template default. Verified by
-      `verifier` read-back (24/24 checks passed: completeness, every
-      cross-reference resolved, the label table, the PR flag's value, section
-      placement between Format and TODO, and 4 read-back questions answered
-      from the files alone).
-- [x] Baseline-hook alignment, in `dotfiles-ai` not here (2026-09-15, same
-      session): running the setup skill surfaced that its `domain.md` puts
-      `CONTEXT.md` at the repo root while the local docs-baseline hook looked
-      only under `docs/`, so a repo that followed the skill would be reported
-      as missing a file it actually had. The same hook also had no lazy-ADR
-      exemption for `docs/adr/`, though it already had one for `CONTEXT.md`.
-      Fixed on the hook side rather than by editing this repo's docs, keeping
-      `docs/agents/*.md` identical to upstream: `doc-baseline-check.sh` now
-      accepts either `CONTEXT.md` location and skips `docs/adr/` when
-      `docs/agents/domain.md` exists (v1.2.0 → v1.3.0). Verified by running
-      the hook across four scenarios, not by reading it.
-- [ ] ADR placement, settled 2026-09-15: ADRs are not pre-created here. The
-      setup skill's `domain.md` states the position — `/domain-modeling`
-      creates `CONTEXT.md` and ADRs lazily, once a term or decision actually
-      resolves — and the baseline hook now matches it. An empty `docs/adr/`
-      was created and removed again in the same session; git never tracked it.
-      The design decision recorded two entries above stays in this TODO rather
-      than an ADR for that reason.
+1. `completion-gate`'s authoring-standard rule lives on the artifact-type
+   table, never as a wrap-up step: the step-shaped version failed
+   structurally across three `deep-reviewer` rounds (position, re-entry
+   routing, rounds). Log: 2026-09-15.
+2. `CONTEXT.md` and ADRs are created lazily by `/domain-modeling` once a
+   term or decision resolves; `docs/adr/` is not pre-created, and the local
+   docs-baseline hook accepts that. Log: 2026-09-15 (supersedes the
+   2026-08-19 "docs baseline missing" item).
+3. The PII read-back question sits only in `completion-gate`'s Docs row;
+   placeholder swaps in code files are covered by `git-helper` step 2b
+   scanning every staged file. Maintainer call, log: 2026-09-26.
 
-- [x] `completion-gate`'s Code row now requires the code review to run in a
-      fresh context (2026-09-20). Surfaced by a real session in another repo:
-      a 14-file rewrite got fifteen `deep-reviewer` rounds on one class and
-      that was taken as the Code row's code review, until the maintainer asked
-      which code-review skill had run — none had. A fresh-context `/code-review`
-      on the same diff then found two real crash paths outside that class. Two
-      distinct gaps: the row said "your code-review skill" without saying the
-      reviewer must be a fresh context, so a same-context checklist
-      (`code-review-and-quality`) could pass for it despite Core Rule 1; and
-      nothing said an adversarial second opinion (the judgement-call row) does
-      not substitute for the Code row, nor that it only reviews the scope it
-      was handed. Landed as a fresh-context requirement in the Code row plus a
-      ⚠️ recording the case, the Scope boundary's code-review examples
-      replaced with fresh-context ones (`/code-review`, or any review agent
-      dispatched with only the diff), and the authoring-standard clause
-      gaining `test-driven-development` and `code-review-and-quality` (as a
-      same-context checklist) as examples. Every skill name stays an `e.g.`
-      with the existing "with none installed" fallback untouched, per the
-      Inclusion Rules. The other session confirmed the failure mode on
-      request: it had loaded the skill via the Skill tool, read the Scope
-      boundary, and still filled the Code row with the adversarial review —
-      a substitution, not a missed pointer. A `writing-for-agents` pass then
-      cut one duplication (the same-context routing had landed in three
-      places; now the rule lives in the Code row and the name in the
-      authoring clause only) and unified the leading word to `same-context`.
-      Deliberately not added: a mechanical security trigger keyed on paths
-      like webui/auth/parser (project-specific, and the Scope boundary already
-      says this skill makes no security judgement of its own); a
-      delivery-message rule naming which row each check satisfied (not
-      approved); trimming the ⚠️'s numbers (left as written). The Scope
-      boundary's security bullet gained a built-in `/security-review` of the
-      pending diff as a before-merge example — deliberately without a
-      fresh-context claim: the official docs state its scope (changes on the
-      current branch) but not its execution model, unlike `/code-review`,
-      which is documented as a background subagent. Verified by
-      `verifier` read-back, three times: 10/10 after the first pass (one
-      check self-corrected mid-report), 8/8 after the trim, 7/7 after the
-      `/security-review` example, with the read-back questions answered from
-      the file alone each time.
+Open:
 
-- [x] `git-helper` gained a personal-data (PII) scan and `completion-gate`'s
-      Docs row a fixed read-back question (2026-09-26). Surfaced by a real
-      session in another repo: a note recording that a value had been
-      swapped for a placeholder is itself a leak, because it tells anyone
-      reading the history where the original lives. Core Rule 6 now
-      requires both scans with raw output shown; Step 2 split into 2a
-      (secrets, pattern unchanged) and 2b (PII: decimal-degree coordinates
-      plus origin-label words, added lines only; names and device names
-      checked by eye and said so in "Rules applied"). The mechanical scan
-      lives in `git-helper`, per `completion-gate`'s Scope boundary, which
-      already hands the secrets scan to the commit-workflow skill;
-      `completion-gate` only gained the question. README's `git-helper`
-      row updated to match. Verified by `verifier` read-back: `git-helper`
-      8/8, `completion-gate` 5/5, README 5/5.
-- [ ] Two open points from the same change: (1) the fixed question sits
-      only in the Docs row, so a placeholder swap inside a code file (a
-      test fixture) is not asked about there — left as is by explicit
-      maintainer call, since 2b scans every staged file regardless of type;
-      (2) 2b matches its own rule text, so any commit that edits text
-      quoting its pattern words (this skill's Step 2, a rules file stating
-      the same policy) stops for per-line confirmation — already hit while
-      landing this change. Revisit the pattern if confirmation
-      fatigue shows up in practice.
+4. `completion-gate`'s Scope boundary hands security review to an external
+   skill without the "with none installed" fallback the Code row has — on a
+   machine with no security skill, wrap-up step 1 can be neither satisfied
+   nor downgraded. Log: 2026-09-15.
+5. `git-helper` step 2b matches its own rule text, so a commit editing text
+   that quotes its pattern words stops for per-line confirmation; revisit
+   the pattern if confirmation fatigue shows up. Log: 2026-09-26.
+6. Candidate to distil: cross-project pitfalls like pinning wheel versions
+   on the old Mac (macOS 12 Intel). Log: 2026-07-03.
 
 ## Source Material
 
