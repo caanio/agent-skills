@@ -457,3 +457,36 @@ Entries run oldest first; new entries are appended at the end.
       `haos-addon-deploy` §0 vs §5 on who toggles Protection mode;
       `haos-cloud-backup` keeping `opts.json`; `web-stack-selector`'s
       "maintained" bar vs its own picks. Verified by `verifier` 9/9.
+- [x] Prompt audit second batch (the five maintainer calls) closed
+      2026-09-26. `git-helper` Core Rule 2 now names the analysis phase by
+      effect (leaves index and working tree untouched) and lists
+      `git log` / `git fetch` beside status/diff, since Steps 0 and 3
+      already ran them. `haos-cloud-backup` resolves the container name
+      once as `$C` in §2 (`^(app|addon)_19a172aa_rclone_backup$` plus an
+      empty guard, same shape as `haos-addon-deploy` § Scope) and reuses
+      it in §4 and §6; the ssh strings moved to double quotes so `$C`
+      expands locally. `haos-addon-deploy` §0 now says the user flips
+      Protection mode and an agent falls back to log-based verification,
+      matching §5. `haos-cloud-backup` §7 runs `chmod 600` on both temp
+      files inside the code block, before the POST, keeps `opts.json` as
+      the rollback copy while verifying, then deletes both. The check sat
+      in prose after the block in two earlier drafts; two fresh readers
+      each misplaced it, so it moved into the block. A name-based
+      `grep 'password|token|secret'` gate before the chmod was dropped:
+      a `password`-typed field named e.g. `api_key` slips past it, and an
+      unconditional chmod costs nothing. `web-stack-selector`'s
+      "maintained" bar widened from ~3 to ~6 months and moved into
+      `SKILL.md` as its only definition: at 3 months five picks failed
+      (tremor, SortableJS, pico, shadcn-ui-mcp-server, d3); at 6 months
+      only tremor (last push 2025-10-10) fails and is flagged in place,
+      wireui moved from excluded to "within the bar but not picked", and
+      the shadcn-ui-mcp-server "stale" note was dropped. Rejected:
+      tightening the picks (a fresh survey for libraries that are mature,
+      not abandoned). Edited via `writing-for-agents`. Resolver quoting and
+      regex tested locally in bash and zsh; the §7 block passes `bash -n`.
+      Verified by `verifier`: mechanical check 7/8 PASS (the one FAIL was
+      a 199-char prose line in `git-helper`, kept because that file writes
+      one line per bullet — 32 such lines at HEAD); an open read-back over
+      every touched passage answered all nine questions from the files;
+      the §7 order question passed on the third draft and again after the
+      grep gate was dropped. `deep-reviewer` skipped by maintainer call.

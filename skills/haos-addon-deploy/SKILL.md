@@ -66,8 +66,9 @@ versions. Substitute your own values; nothing here is host-specific.
     stdin, and every line after it is skipped.
   - The tell: a step's output is simply **missing**. Read a missing block as "didn't run",
     never as "passed", and re-run that step on its own to confirm.
-- ⚠️ **Disable Protection mode on the SSH add-on** (toggle on its info page), otherwise
-  you can't reach the Supervisor API.
+- ⚠️ **Protection mode on the SSH add-on must be off**, otherwise you can't reach the
+  Supervisor API. The user flips it on the add-on's info page; an agent asks the user
+  and, when it stays on, falls back to log-based verification (§5 explains why).
 - ⚠️ CLI names: use **`ha apps`** (`ha addons` is deprecated); to re-detect local add-ons
   use **`ha store reload`** (`ha apps reload` doesn't exist).
 - ⚠️ **Never run the same app on two machines at once** (workstation daemon + RPi add-on):

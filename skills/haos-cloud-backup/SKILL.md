@@ -61,11 +61,15 @@ Config lives at **`/homeassistant/rclone.conf`** (same folder as
   ```
 
   `chmod 600`. The refresh token self-renews on the device from then on — the
-  helper machine's rclone can be uninstalled. Verify from inside the container:
+  helper machine's rclone can be uninstalled. Verify from inside the container,
+  resolving its name once as `$C` (reused in §4 and §6) — the prefix
+  (`addon_` / `app_`) is set by the Supervisor version, so match both:
 
   ```bash
-  ssh ha 'sudo docker exec addon_19a172aa_rclone_backup \
-      rclone --config /homeassistant/rclone.conf about gdrive:'
+  C=$(ssh ha "sudo docker ps -a --format '{{.Names}}' \
+       | grep -E '^(app|addon)_19a172aa_rclone_backup$'") || true
+  [ -n "$C" ] || { echo "no rclone_backup container — add-on installed?" >&2; exit 1; }
+  ssh ha "sudo docker exec $C rclone --config /homeassistant/rclone.conf about gdrive:"
   ```
 
 - ⚠️ The Web UI only shows rclone remotes and live transfers. Jobs, schedules
@@ -157,7 +161,7 @@ rest. Named backups never match the pattern, so they survive forever.
 ```
 
 Before trusting any delete job, run its exact command manually with `--dry-run`
-inside the container (`sudo docker exec addon_19a172aa_rclone_backup rclone …`)
+inside the container (`sudo docker exec $C rclone …`, `$C` from §2)
 and read what it *would* delete. Google Drive deletes go to trash by default
 (30-day extra safety net); add `drive-use-trash: false` only if quota is tight.
 
@@ -178,7 +182,7 @@ Old backups often pile up (retention was never on). Rules:
 
 ```bash
 ssh ha 'bash -lc "ha apps logs 19a172aa_rclone_backup"'   # want: "scheduled jobs:" listing all
-ssh ha 'sudo docker exec addon_19a172aa_rclone_backup rclone --config /homeassistant/rclone.conf ls gdrive:HA-Backups'
+ssh ha "sudo docker exec $C rclone --config /homeassistant/rclone.conf ls gdrive:HA-Backups"   # $C from §2
 ```
 
 A 611 MB backup at `bwlimit 1.5M` takes ~7 minutes — if it finishes much faster,
@@ -201,6 +205,7 @@ d = json.load(open('opts.json'))['data']['options']
 d['dry_run'] = False
 json.dump({'options': d}, open('payload.json', 'w'), ensure_ascii=False)
 EOF
+chmod 600 opts.json payload.json   # may hold password-typed options in plaintext — see below
 ssh ha 'bash -lc "curl -sS -X POST -H \"Authorization: Bearer \$SUPERVISOR_TOKEN\" \
     -H \"Content-Type: application/json\" -d @- \
     http://supervisor/addons/19a172aa_rclone_backup/options"' < payload.json
@@ -211,6 +216,10 @@ ssh ha 'bash -lc "ha apps restart 19a172aa_rclone_backup"'
   non-login: an unescaped `$SUPERVISOR_TOKEN` expands there to empty and the
   API answers a misleading `401: Unauthorized` (the var must expand inside
   `bash -lc`, which loads the env).
-- Keep the pre-change `opts.json` as the rollback copy; verify afterwards with
-  `ha apps info --raw-json` (want `"dry_run": false`, jobs intact) and the log's
-  `scheduled jobs:` listing.
+- The `chmod 600` runs on every change because the Supervisor's REST `info`
+  endpoint returns `password`-typed options unmasked (`haos-addon-deploy` §4),
+  and a field's name need not say it is a secret.
+- After the block, keep the pre-change `opts.json` as the rollback copy while
+  you verify with `ha apps info --raw-json` (want `"dry_run": false`, jobs
+  intact) and the log's `scheduled jobs:` listing. Once both check out,
+  `rm -f opts.json payload.json`.

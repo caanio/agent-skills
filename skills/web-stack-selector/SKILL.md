@@ -5,11 +5,12 @@ description: "Pick the frontend library, CSS layer, JS utility, map or 2D/3D eng
 
 # web-stack-selector
 
-Version: 1.0.0 | Date: 2026-09-16
+Version: 1.1.0 | Date: 2026-09-26
 
-Every pick below **meets the bar**: >= 1,000 GitHub stars, a permissive
-license (MIT / BSD / ISC / Apache-2.0 / 0BSD), maintained.
-Anything that misses the bar is flagged where it appears. Star counts and
+Every pick below **meets the bar** unless flagged where it appears:
+>= 1,000 GitHub stars, a permissive license (MIT / BSD / ISC / Apache-2.0 /
+0BSD), maintained (a push within ~6 months of the survey date — mature
+libraries release slowly, so a quiet quarter is not abandonment). Star counts and
 last-commit dates live in `references/survey-2026-09-16.md`, a dated
 snapshot.
 
@@ -81,7 +82,7 @@ skeleton, **magicui** for feature Bento grids / marquees / border beams,
 | Scene | Primary | Alternative / notes | MCP |
 |---|---|---|---|
 | Admin dashboard, forms (Zod), data tables, dialogs, a11y | **shadcn-ui/ui** (Radix primitives underneath) | **refinedev/refine** or **marmelab/react-admin** when you want a full CRUD framework around the components | See Step 4 |
-| Charts inside a shadcn dashboard | **tremorlabs/tremor** (copy-paste v2) | uPlot/Chart.js still work in React | — |
+| Charts inside a shadcn dashboard | **tremorlabs/tremor** (copy-paste v2) — below the maintained bar, last push 2025-10-10 | uPlot/Chart.js still work in React | — |
 | SaaS landing page, pricing, Bento grid, marquee, number ticker, shimmer/beam buttons | **magicuidesign/magicui** | **motiondivision/motion** for custom animation | None found as of the survey date; say so when asked |
 | AI / futuristic hero: background beams, lamp, sparkles, 3D tilt cards, text-generate | **Aceternity UI** — paid registry, **no open-source repo, no star count** | **pmndrs/react-three-fiber** + **tsparticles** React wrapper for an open alternative | Community `aceternityui-mcp` is below the bar |
 | "Generate me a component from a prompt" | **21st-dev/magic-mcp** | — | Is itself an MCP |

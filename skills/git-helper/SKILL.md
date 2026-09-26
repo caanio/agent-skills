@@ -20,7 +20,7 @@ When the user wants to commit changes, generate a commit message (msg, message),
    - If `git diff --staged` is empty, do **not** error — instead list unstaged files (`git status`), propose which to add, and only run `git add <file>` after confirmation.
 
 2. **Separate analysis from execution**:
-   - Analysis phase: use only `git status`, `git diff` (unstaged), `git diff --staged` (staged).
+   - Analysis phase: use only commands that leave the index and working tree untouched — `git status`, `git diff` (unstaged), `git diff --staged` (staged), `git log` (Step 3), `git fetch` (Step 0).
    - Never chain `git add` with other commands (e.g. `git add . && git status`); run `git add` alone, confirmed files only.
 
 3. **Format**: Follow **Conventional Commits**.
