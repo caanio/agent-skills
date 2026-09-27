@@ -141,31 +141,44 @@ If any matches appear, **stop and list each hit** — proceed only after the use
   cap is allowed — but the draft must say so explicitly in the "Rules applied" line, e.g.
   `body 6 lines (2 independent why-reasons, see below)`. Silent overage without this flag
   is a rule violation, not a judgement call.
+- **Show the exact commands, byte for byte.** The draft is the literal block Step 5
+  will run, never the message alone: the full `git commit` heredoc (required for
+  multi-line messages) with every trailer your environment appends (e.g. a
+  `Co-Authored-By:` line), plus a `git push <remote> <branch>` line when the user
+  asked for a push. What the user approves is exactly what lands in the log and on
+  the remote.
 
 **Example output:**
 ```
-Based on the staged changes, here's the proposed commit message:
+Based on the staged changes, these are the exact commands I will run:
 
+git commit -m "$(cat <<'EOF'
 feat: Add automatic database backup
 
 Prevents data loss on unexpected shutdowns. Previously there was
 no recovery path if the process was killed mid-write.
 
+Co-Authored-By: <assistant> <noreply@example.com>
+EOF
+)"
+git push origin main
+
 Rules applied: type=feat · subject 34 chars · imperative mood ·
 why-only body (no how) · secrets scan clean · PII clean
 
-Shall I go ahead and commit?
+Reply "ok" to run both commands.
 ```
 
-### 5. Execute Commit
+### 5. Execute Commit (and Push)
 
-Only after the user replies "ok" or equivalent, run via the **Bash tool** using a heredoc (required for multi-line messages):
+Only after the user replies "ok" or equivalent, run the Step 4 block unchanged via
+the **Bash tool**, one command per call, in order:
 
-```bash
-git commit -m "$(cat <<'EOF'
-<subject line>
+1. The `git commit` heredoc exactly as shown.
+2. Only once the commit has succeeded, and only if the block shows it, the
+   `git push` line exactly as shown.
 
-<body — omit entirely if no body needed>
-EOF
-)"
-```
+One ok covers every command in the block. A command that would differ from the
+block in any character — a reworded line, an added trailer, a push the block did
+not show — needs a new draft and a new ok. A failed commit ends the run: report
+the error to the user.

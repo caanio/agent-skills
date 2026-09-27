@@ -101,6 +101,9 @@ Settled — reopen only on new evidence:
 9. `python-coding-standards` rule 7 declares a source encoding only when
    a file is not UTF-8 (PEP 3120 makes UTF-8 the default); an existing
    UTF-8 line stays. Maintainer call, log: 2026-09-27.
+10. `git-helper`'s Step 4 draft is the literal command block Step 5 runs,
+    trailers and any push line included; one ok covers the block, run as
+    separate calls in order. Maintainer call, log: 2026-09-27.
 
 Open — each awaits a maintainer call (log: 2026-09-26, prompt audit
 third pass):

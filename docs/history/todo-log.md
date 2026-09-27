@@ -578,3 +578,25 @@ Entries run oldest first; new entries are appended at the end.
       which the reader confirmed by finding no rule against it.
       Final read-back by `verifier`: title read as "declare only for a
       non-UTF-8 file", no double reading found, title and body agree.
+- [x] `git-helper` Steps 4–5 draft-equals-execution closed 2026-09-27
+      (maintainer call). The draft showed the commit message alone, and
+      the commit that ran carried a `Co-Authored-By:` trailer the
+      environment appended, so the approved text and the logged text
+      differed. Step 4 now shows the literal command block: the full
+      heredoc with every trailer, plus a push line when the user asked
+      for one. Step 5 runs that block unchanged, one command per call,
+      pushes only after the commit succeeds, and needs a new draft for
+      any differing character. One ok covers the whole block. Rejected:
+      one chained commit-and-push command (a local safety hook blocks
+      that chain, and removing the hook buys nothing the per-call run
+      lacks). Edited via `writing-for-agents`. Verified by `verifier`:
+      file intact (Core Rules 1–7, Steps 0–5, fences paired); open
+      read-back Q1–Q7 answered from the file (trailer shown in the
+      draft, two calls for commit plus push, failed commit pushes
+      nothing, a typo fix needs a new ok, no push unless asked), no
+      leftover message-only wording; `CLAUDE.md` Settled 10 matches.
+      A fresh-context `writing-for-agents` review then flagged Step 5
+      saying "push nothing" twice; the closing sentence now only says
+      to report the error. Final read-back: failed commit pushes
+      nothing, no push outside the block, no character changed, no
+      double reading in Step 5.
