@@ -104,13 +104,12 @@ Settled — reopen only on new evidence:
 10. `git-helper`'s Step 4 draft is the literal command block Step 5 runs,
     trailers and any push line included; one ok covers the block, run as
     separate calls in order. Maintainer call, log: 2026-09-27.
+11. `web-stack-selector` keeps `simple-datatables (LGPL)` as excluded;
+    its survey line takes the license from the repo's `LICENSE` file and
+    `package.json`, since the GitHub API reports `NOASSERTION`.
+    Maintainer call, log: 2026-09-27.
 
-Open — each awaits a maintainer call (log: 2026-09-26, prompt audit
-third pass):
-
-1. `web-stack-selector` lists `simple-datatables (LGPL)` as excluded with
-   no row in the survey file. Decide: add a survey row on the next
-   re-survey, or drop the name.
+Open: none.
 
 ## Source Material
 

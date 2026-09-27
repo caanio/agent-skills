@@ -600,3 +600,21 @@ Entries run oldest first; new entries are appended at the end.
       to report the error. Final read-back: failed commit pushes
       nothing, no push outside the block, no character changed, no
       double reading in Step 5.
+- [x] `web-stack-selector` simple-datatables exclusion closed 2026-09-27
+      (maintainer call: add the survey line now, not on the next
+      re-survey). `SKILL.md` Step 2 rule 4 flagged `simple-datatables
+      (LGPL)` → Tabulator with no survey line behind it. Checked via
+      `gh api` on 2026-09-27: `fiduswriter/simple-datatables`, 1,608
+      stars, last push 2026-07-30, not archived; the API license field is
+      `NOASSERTION`, while the `LICENSE` file is LGPL v3 and
+      `package.json` says `"license": "LGPL-3.0"`. The survey file
+      (1.1.1) now carries an "Excluded on license" line under UI
+      foundations and admin, noting its 2026-09-27 read date and why a
+      re-survey must read the `LICENSE` file rather than the API field.
+      Rejected: dropping the name (a common data-table pick, so the flag
+      earns its place); waiting for the re-survey (a verbatim API copy
+      would record `NOASSERTION` and leave the gap). Edited via
+      `writing-for-agents`. Verified by `verifier`: three files intact,
+      Settled 1–11 contiguous, live `gh api` values match the survey
+      line verbatim (1,608 / NOASSERTION / 2026-07-30), all five rule-4
+      exclusions have survey lines, read-back found no ambiguity.
