@@ -545,3 +545,36 @@ Entries run oldest first; new entries are appended at the end.
       language" clause is scoped to when history exists. Rejected: keep
       (not generic); ask before drafting (an extra round-trip the ok gate
       already covers). Edited via `writing-for-agents`.
+- [x] `python-coding-standards` rule 7 encoding line closed 2026-09-27
+      (maintainer call: invert the rule). Rule 7 required
+      `# -*- coding: utf-8 -*-` in every run `.py` file and called it
+      functional; the interpreter does parse it, but Python 3 already
+      decodes source as UTF-8 (PEP 3120), so a UTF-8 declaration changes
+      nothing. Commit `a687132` had moved the rule here from the global
+      rules file on that "Python still needs it" premise. Rule 7 now says
+      save as UTF-8 with no encoding line in the header, declare a
+      PEP 263 encoding (line 1 or 2) only for a file that must use another
+      encoding, and leave an existing UTF-8 line in place (removing it is
+      diff noise). Rejected: keep the wording (false premise in a public
+      skill); keep the rule as a "convention" (no reason survives); delete
+      rule 7 outright (leaves the habitual cookie unaddressed). Sources,
+      quoted verbatim by a subagent and spot-checked with `curl`: PEP 3120,
+      PEP 263, PEP 8 "Source File Encoding" (scoped to the core
+      distribution, so not cited in the skill), Ruff `UP009`. Edited via
+      `writing-for-agents`. Verified by `verifier`: file intact (rules
+      1–7, Testing, Design Docs, numbering); open read-back Q1–Q3
+      answered from the file (no UTF-8 line in a new file, keep an
+      existing one, non-UTF-8 declared on line 1 or 2), Q4 found no
+      conflict with rule 6; facts matched PEP 3120, PEP 263 and Ruff
+      `UP009`; no old wording left outside `docs/history/`.
+      A fresh-context review against `writing-for-agents` then flagged
+      "start the header at the shebang or module docstring" as ambiguous;
+      it also barred a license or version comment from line 1. Reworded
+      to "no encoding line in the header"; its proposed "nothing precedes
+      it" was rejected (it would bar a non-UTF-8 declaration on line 1).
+      The re-read-back then flagged the rule's title ("declared only when
+      a file differs": differs from what?); retitled "declared only for a
+      non-UTF-8 file". A license comment on line 1 is now unconstrained,
+      which the reader confirmed by finding no rule against it.
+      Final read-back by `verifier`: title read as "declare only for a
+      non-UTF-8 file", no double reading found, title and body agree.

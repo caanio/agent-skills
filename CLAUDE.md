@@ -62,7 +62,7 @@ See `docs/agents/triage-labels.md`.
 Single-context: `CONTEXT.md` at the root, ADRs under `docs/adr/`.
 See `docs/agents/domain.md`.
 
-## Open items (last updated 2026-09-26)
+## Open items (last updated 2026-09-27)
 
 The only live list. The per-change log — what each change did, why, and how
 it was verified — is `docs/history/todo-log.md`; read it before reworking a
@@ -98,14 +98,14 @@ Settled — reopen only on new evidence:
 8. `git-helper` Core Rule 7 falls back to the conversation's language
    when a repo has no history, and the draft says so; no hardcoded
    language in the public skill. Maintainer call, log: 2026-09-26.
+9. `python-coding-standards` rule 7 declares a source encoding only when
+   a file is not UTF-8 (PEP 3120 makes UTF-8 the default); an existing
+   UTF-8 line stays. Maintainer call, log: 2026-09-27.
 
 Open — each awaits a maintainer call (log: 2026-09-26, prompt audit
 third pass):
 
-1. `python-coding-standards` rule 7 calls the PEP 263 line functional;
-   Python 3 already decodes source as UTF-8 (PEP 3120). Decide: keep the
-   wording, or say the line is a convention.
-2. `web-stack-selector` lists `simple-datatables (LGPL)` as excluded with
+1. `web-stack-selector` lists `simple-datatables (LGPL)` as excluded with
    no row in the survey file. Decide: add a survey row on the next
    re-survey, or drop the name.
 

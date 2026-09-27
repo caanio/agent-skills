@@ -94,10 +94,12 @@ rules below apply to.
    install the rest; in a container, switch to a glibc base image (Debian)
    rather than pinning.
 
-7. **File header: PEP 263 encoding declaration.** Every `.py` file a user runs keeps the
-   `# -*- coding: utf-8 -*-` line in its header. Unlike a plain `encoding: utf-8` label in
-   a non-Python file's header (decorative — nothing reads it), this line is functional: the
-   interpreter parses it to decide how to decode the file.
+7. **Encoding: UTF-8, declared only for a non-UTF-8 file.** Save `.py` files as UTF-8,
+   with no encoding line in the header: Python 3 already decodes source as
+   UTF-8 (PEP 3120), so a `# -*- coding: utf-8 -*-` line changes nothing (Ruff flags it as
+   `UP009`). A PEP 263 declaration earns its place only in a file that must be saved in
+   another encoding, e.g. `# -*- coding: latin-1 -*-`, on line 1 or 2. An existing file
+   that already carries the UTF-8 line keeps it: removing it is diff noise, not a fix.
 
 ## Testing
 
