@@ -618,3 +618,20 @@ Entries run oldest first; new entries are appended at the end.
       Settled 1–11 contiguous, live `gh api` values match the survey
       line verbatim (1,608 / NOASSERTION / 2026-07-30), all five rule-4
       exclusions have survey lines, read-back found no ambiguity.
+- [x] Official-source research note landed 2026-09-30:
+      `docs/research/2026-09-30-official-claude-prompt-sources.md`
+      (1.1.0). Scope is guidance for model-read files only (rules
+      files, `SKILL.md`, agent definitions); end-user chat-prompting
+      tips are excluded by design. 27 entries from official domains
+      (platform/code docs, anthropic.com engineering, anthropics
+      GitHub), each tagged full-text or summary-only fetch, plus a
+      ranked "Top 5 actionable changes". Open conflict recorded, not
+      resolved: the Opus 5 page says to drop explicit verification and
+      "do not use subagents to verify", while the Fable 5 page favours
+      fresh-context verifiers; the Opus 5.5 / Fable 5.1 pages restate
+      neither. A follow-up `/claude-api prompt-audit` over this repo's
+      skills applied no edit here: the git-helper Rule 7 tag and
+      commit-body cap stay as they are, and one flag moved to Open
+      (`haos-https-tunnel` HTTP block). Verified by `verifier`:
+      header, five sections, entry fields, official-domain URLs,
+      read-back Q&A.

@@ -62,7 +62,7 @@ See `docs/agents/triage-labels.md`.
 Single-context: `CONTEXT.md` at the root, ADRs under `docs/adr/`.
 See `docs/agents/domain.md`.
 
-## Open items (last updated 2026-09-27)
+## Open items (last updated 2026-09-30)
 
 The only live list. The per-change log — what each change did, why, and how
 it was verified — is `docs/history/todo-log.md`; read it before reworking a
@@ -109,7 +109,14 @@ Settled — reopen only on new evidence:
     `package.json`, since the GitHub API reports `NOASSERTION`.
     Maintainer call, log: 2026-09-27.
 
-Open: none.
+Open:
+
+1. `haos-https-tunnel` §4 still tells the reader to add an `http:` block
+   to `configuration.yaml`; a private device record says HA 2026.8.1
+   dropped YAML HTTP config, so the edit no longer takes effect.
+   Not yet checked against HA release notes. Needs a maintainer call:
+   add a version branch, or confirm the record first. Flagged by
+   `/claude-api prompt-audit`, log: 2026-09-30.
 
 ## Source Material
 
