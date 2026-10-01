@@ -695,3 +695,32 @@ Entries run oldest first; new entries are appended at the end.
       `skills/` through the skill-authoring skills (`skill-creator`,
       `writing-for-agents`), one pass per skill with its changes
       logged. Scope and order undecided; no work started.
+- [x] Skill-authoring pass scoped 2026-10-01, answering the Open item
+      above: `docs/research/2026-10-01-skill-authoring-pass-plan.md`
+      (1.0.0). Findings: every skill already had `writing-for-agents`
+      applied, but scoped to the change in hand (the two logged
+      whole-file uses are `handover`'s 2026-09-08 creation and the
+      2026-09-09 audit of `completion-gate` and `handover`), so the new
+      value is the whole-file Pruning and hierarchy check;
+      `quick_validate.py` passes
+      7 of 8, flagging `handover`'s `argument-hint` and
+      `disable-model-invocation` as unknown keys (Claude Code frontmatter,
+      kept; whether Codex/Gemini ignore unknown keys is [unconfirmed]).
+      Decided: option A, pilot on `handover` (untouched since
+      2026-09-10, 108 lines, zero ⚠️), then the rest by ⚠️ count
+      ascending; `skill-creator` limited to validation plus description
+      optimization on completion-gate, the three HAOS skills and
+      web-stack-selector (`handover` is `disable-model-invocation`,
+      `git-helper` is asked-first by policy, `python-coding-standards`
+      had its pass 2026-08-19); the with/without-skill eval loop dropped
+      (HAOS skills need hardware, process skills are subjective). Guardrails
+      written into the plan: Settled 1–12 off-limits, ⚠️ paragraphs and
+      tested procedures not prunable, reviewer gets skill + criteria only.
+      Verification per pass fixed in plan §5. No skill edited. The
+      `CLAUDE.md` Open 1 rewrite edited via `writing-for-agents`:
+      pointer plus next step only, details left to the plan file.
+      Verified by `verifier` 8/8: header and §1–§6 intact, lines ≤ 80
+      chars, table counts and dates match `wc`/`grep`/log, validator
+      7 valid + handover unknown keys, Settled 1–12 contiguous, plan
+      path resolves, log diff insert-only, read-back 3/3;
+      the not-found claims re-checked by grep in the main session.

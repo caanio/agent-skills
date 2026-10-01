@@ -117,10 +117,12 @@ Settled — reopen only on new evidence:
 
 Open:
 
-1. Evaluate running every self-written skill in `skills/` through the
-   skill-authoring skills (`skill-creator`, `writing-for-agents`), one
-   pass per skill, logging what each pass changed. Added 2026-10-01;
-   scope and order not yet decided.
+1. Whole-file skill-authoring pass over every skill in `skills/`:
+   `writing-for-agents` on the body, `skill-creator` on frontmatter and
+   description triggering. Scope, guardrails, verification and order:
+   `docs/research/2026-10-01-skill-authoring-pass-plan.md`. Next: pilot
+   on `handover`; every pass ends in one log entry. Decided 2026-10-01;
+   no pass started.
 
 ## Source Material
 
