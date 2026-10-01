@@ -724,3 +724,50 @@ Entries run oldest first; new entries are appended at the end.
       7 valid + handover unknown keys, Settled 1–12 contiguous, plan
       path resolves, log diff insert-only, read-back 3/3;
       the not-found claims re-checked by grep in the main session.
+- [x] Skill-authoring pass pilot on `handover` (2026-10-01), per the plan
+      above. Spec lookup for plan §3 first: Codex (`parser.rs`, no
+      `deny_unknown_fields`) and Gemini (`skillLoader.ts`, reads only
+      `name`/`description`) both ignore unknown frontmatter keys, the
+      Agent Skills spec text says nothing about extras, so
+      `argument-hint` and `disable-model-invocation` stay and §3 is now
+      resolved from source. Whole-file `writing-for-agents` review by a
+      fresh-context `opus` reviewer given the skill, the reference and
+      the plan's guardrails only: 11 findings, 11 not-found levers.
+      Landed (maintainer's pick): F1 Scope boundary bullet 2 no longer
+      says "entirely / never how" while step 2 says "write it directly"
+      — one rule, fallback unchanged; F2 step 3 gains the
+      no-`CONTEXT.md` branch (lazy creation belongs to domain-modeling,
+      matching Settled 2) and routes `CONTEXT.md` edits to that skill;
+      F3 step 1's candidate list is exhaustive and tagged
+      (*architecture decision* / *top-level docs* / *production* /
+      *follow-up*), which step 2's Done when already presumed; F4 the
+      TODO-vs-issue-tracker question moves from "Also worth checking"
+      into step 5 as a *follow-up* consumer; F6 "Test/CI drift" bullet
+      deleted (ship-readiness is the gate's, per Scope bullet 1);
+      F8 step 4's "don't skip it on the assumption…" becomes the
+      positive "open that doc and compare it with this session's
+      change"; F9 the repo-root rule is stated once, positively, under
+      `## Process` (covers ADRs too; the 2026-09-08 "never the repo
+      root" decision kept in meaning); F10 only the cadence paragraph
+      (2026-09-08) deleted as a duplicate of `completion-gate`'s Scope
+      boundary — the three "When to invoke" bullets stay, because
+      `completion-gate` step 6's recommendation may read this file.
+      Rejected: F5 (merge the commit reminder into Scope bullet 3 —
+      keeps the 2026-09-09 wording at the end of the file), F7 (the
+      "Skip whatever didn't clear that bar" sentence), F11 (the two
+      maintainer-ready restatements), and the reviewer's whole-section
+      F10. Frontmatter untouched. Verified: `quick_validate.py` still
+      the same two unknown keys only; `grep -c '⚠️'` 0 → 0; `repo root`
+      once, `never at the repo root` 0; the three kept sentences
+      present verbatim; no line over 80 chars besides `description:`;
+      `completion-gate` Scope bullet and README row 50 still map to
+      steps 2–5; `verifier` read-back 9/9 (Q&A: missing `CONTEXT.md`
+      counts as done, step 4 opens and compares, no skill is named for
+      the write-it-directly case — by design); the not-found claims
+      re-checked by grep in the main session. Diff: 28+/28−, 108 lines
+      before and after. Plan bumped to 1.1.0 (status, §3, table row);
+      `CLAUDE.md` Open 1 now points at `git-helper`. Docs `verifier`
+      8/8: log diff insert-only +43, plan 1.1.0 with both loader paths
+      and commits in §3, Settled 1–12 contiguous, no added line over 80
+      chars, no PII; the not-found claims re-checked by grep in the main
+      session.

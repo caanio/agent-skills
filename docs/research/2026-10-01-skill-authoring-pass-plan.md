@@ -1,8 +1,9 @@
 # Skill-authoring pass over `skills/`: scope evaluation
 
-Version: 1.0.0 | Date: 2026-10-01 | Status: decided 2026-10-01 (option A;
+Version: 1.1.0 | Date: 2026-10-01 | Status: decided 2026-10-01 (option A;
 `skill-creator` = validate + description optimization on five skills,
-eval loop dropped); no pass started yet
+eval loop dropped); pilot on `handover` done 2026-10-01 (log entry);
+next `git-helper`
 
 Answers `CLAUDE.md` Open item 1 (added 2026-10-01): should every skill in
 `skills/` go through `skill-creator` and `writing-for-agents`, in what
@@ -21,7 +22,7 @@ one, and the two that did have been diff-edited since. The 2026-09-30
 |---|---|---|---|---|
 | completion-gate | 249 | 6 | 2026-10-01 | valid |
 | git-helper | 184 | 0 | 2026-09-27 | valid |
-| handover | 108 | 0 | 2026-09-10 | unknown keys (see §3) |
+| handover | 108 | 0 | 2026-10-01 (whole-file pass) | unknown keys (see §3) |
 | haos-addon-deploy | 396 | 27 | 2026-09-26 | valid |
 | haos-cloud-backup | 225 | 13 | 2026-09-26 | valid |
 | haos-https-tunnel | 143 | 7 | 2026-10-01 | valid |
@@ -67,9 +68,16 @@ Description optimization applies to at most five skills:
 `handover` carries `argument-hint` and `disable-model-invocation`, which
 `quick_validate.py` lists as unknown keys. Both are Claude Code frontmatter
 and are what makes the skill user-invoked, so removing them is not an
-option. Whether the Codex and Gemini loaders reject or ignore unknown
-keys is [unconfirmed]; that is a spec lookup to do before any edit, and
-"ignore" means no change.
+option. Both other loaders ignore unknown keys, so the two stay (checked
+2026-10-01 against source, not docs — neither loader's docs say anything
+about extra keys): Codex `codex-rs/skills/src/parser.rs` deserialises
+only `name`, `description` and `metadata` with no `deny_unknown_fields`
+(main at 444da310, release rust-v0.159.3); Gemini
+`packages/core/src/skills/skillLoader.ts` destructures only `name` and
+`description` from the parsed YAML (main at c6bccb7e, release v0.62.0).
+The Agent Skills spec text lists allowed keys and says nothing about
+extras; the strictness is the validators' (`quick_validate.py`,
+skills-ref `validator.py`), so the finding stays as a known exit 1.
 
 ## 4. Guardrails for a whole-file pass
 

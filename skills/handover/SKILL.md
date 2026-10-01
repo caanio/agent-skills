@@ -19,9 +19,10 @@ it in production.
   gate (this collection ships one: `completion-gate`). Run this skill after
   that gate passes, not instead of it.
 - *The mechanics of writing an ADR or maintaining `CONTEXT.md`* → your
-  domain-modeling skill, entirely — this collection doesn't ship one (e.g.
-  `mattpocock/skills`' `domain-modeling`). This skill only decides *whether*
-  one is owed and *when*, never how.
+  domain-modeling skill — this collection doesn't ship one (e.g.
+  `mattpocock/skills`' `domain-modeling`). This skill decides *whether*
+  one is owed and *when*; steps 2–3 hand the writing to that skill, or
+  do it directly when none is installed.
 - *Committing what this skill produces* → your commit-workflow skill (this
   collection ships `git-helper`). This skill writes docs; it does not stage
   or commit them.
@@ -40,19 +41,20 @@ it in production.
 - After any change that touches production configuration, infrastructure,
   or how the project gets deployed.
 
-Some run this after every wrap-up instead of reserving it for milestones —
-each step below already resolves to "not warranted" when it doesn't apply,
-so that cadence costs nothing extra on a small change. Either is valid; this
-skill doesn't assume which.
-
 ## Process
 
+Every new file this skill creates goes under `docs/`; the repo root keeps
+only the files already there.
+
 1. **Review the session for anything a maintainer needs that isn't in the
-   diff.** Decisions made, alternatives rejected and why, constraints
-   discovered along the way — not just which lines changed. Build a short
-   candidate list against steps 2–4 below before touching any file.
-   *Done when*: you have that list, or you've concluded there's nothing
-   beyond the diff worth carrying forward.
+   diff**: decisions made, alternatives rejected and why, constraints
+   discovered along the way. List each candidate before touching any file,
+   tagged with where it lands: *architecture decision* (step 2),
+   *top-level docs* (step 3), *production* (step 4) or *follow-up*
+   (step 5).
+   *Done when*: every decision, rejected alternative and discovered
+   constraint from the session is on the list with a tag, or you've
+   concluded there's nothing beyond the diff worth carrying forward.
 
 2. **Backfill architecture decisions.** For each candidate from step 1 that
    changes *how* the system is built or *why*, not just *what* changed, and
@@ -65,27 +67,30 @@ skill doesn't assume which.
 3. **Check the top-level docs against reality.** Read `README.md` and
    `CONTEXT.md` (or `CONTEXT-MAP.md` if this repo has more than one
    context) and ask of each: does this still describe the system
-   accurately after this session? Edit only what's now wrong or missing —
-   don't re-transcribe what already holds.
-   *Done when*: both files are checked, and each was either edited or
-   explicitly confirmed still accurate.
+   accurately after this session? Edit only what's now wrong or missing;
+   `CONTEXT.md` edits go through your domain-modeling skill when one is
+   installed.
+   *Done when*: each of these files that exists was either edited or
+   explicitly confirmed still accurate — or `CONTEXT.md` does not exist
+   in this repo (your domain-modeling skill creates it lazily, not this
+   step).
 
 4. **Record production facts and the deploy path.** If this session touched
    anything that runs in production — config, infrastructure, a runtime
    dependency, a deploy step — write down what's now true about the
    production environment, and the exact steps to deploy this change
    (update the project's existing deployment doc if one exists; start one
-   under `docs/` if it doesn't — never at the repo root). No other step
-   here covers this: don't skip it on the assumption someone already wrote
-   it down without checking.
+   under `docs/` if it doesn't). Open that doc and compare it with this
+   session's change before calling it current.
    *Done when*: the deployment doc reflects this session's change, or
    you've confirmed nothing production-facing happened.
 
-5. **Write the handover TODO.** Produce or update `docs/TODO.md` (never at
-   the repo root — keep the root to the files that already live there):
+5. **Write the handover TODO.** Produce or update `docs/TODO.md`:
    what's done, what's next, and the priority order across what's left —
    written for a reader with none of this session's context. Point at the
-   ADRs and docs above rather than restating them.
+   ADRs and docs above rather than restating them. For each *follow-up*
+   candidate from step 1, decide whether it belongs in this project's
+   issue tracker as well as `docs/TODO.md`.
    *Done when*: `docs/TODO.md` is maintainer-ready on its own — a reader
    with no access to this conversation can tell what to do next and in
    what order.
@@ -101,8 +106,3 @@ Not gated steps — a maintainer-readiness sweep most sessions miss:
   to the repo but never stage or commit (see Scope boundary) — an ADR or
   `docs/TODO.md` left uncommitted, or committed but unpushed, is invisible
   to the maintainer you're handing this to.
-- **Test/CI drift.** Does the test suite still exercise the behavior this
-  session changed, or does it only prove the old behavior still works?
-- **Open follow-up work.** Anything step 1 surfaced that isn't a doc
-  update — does it belong in this project's issue tracker instead of only
-  in `TODO.md`?
