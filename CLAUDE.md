@@ -62,7 +62,7 @@ See `docs/agents/triage-labels.md`.
 Single-context: `CONTEXT.md` at the root, ADRs under `docs/adr/`.
 See `docs/agents/domain.md`.
 
-## Open items (last updated 2026-09-30)
+## Open items (last updated 2026-10-01)
 
 The only live list. The per-change log — what each change did, why, and how
 it was verified — is `docs/history/todo-log.md`; read it before reworking a
@@ -108,15 +108,19 @@ Settled — reopen only on new evidence:
     its survey line takes the license from the repo's `LICENSE` file and
     `package.json`, since the GitHub API reports `NOASSERTION`.
     Maintainer call, log: 2026-09-27.
+12. `haos-https-tunnel` §4 branches on Core version at 2026.8: the UI
+    path (Settings → System → Network, a user hand-off) above it, the
+    `configuration.yaml` block below it. Confirmed against the official
+    `http` integration page and the 2026.8 release post; the 2027.2
+    cut-off date has only a community source and stays out.
+    Maintainer call, log: 2026-10-01.
 
 Open:
 
-1. `haos-https-tunnel` §4 still tells the reader to add an `http:` block
-   to `configuration.yaml`; a private device record says HA 2026.8.1
-   dropped YAML HTTP config, so the edit no longer takes effect.
-   Not yet checked against HA release notes. Needs a maintainer call:
-   add a version branch, or confirm the record first. Flagged by
-   `/claude-api prompt-audit`, log: 2026-09-30.
+1. Evaluate running every self-written skill in `skills/` through the
+   skill-authoring skills (`skill-creator`, `writing-for-agents`), one
+   pass per skill, logging what each pass changed. Added 2026-10-01;
+   scope and order not yet decided.
 
 ## Source Material
 

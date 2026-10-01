@@ -662,3 +662,36 @@ Entries run oldest first; new entries are appended at the end.
       stand-in unchanged versus HEAD, lines ≤ 80 chars, 3 read-back
       questions answered from the file alone); the not-found claims
       re-checked by grep in the main session.
+- [x] `haos-https-tunnel` §4 split on Core version 2026-10-01, closing
+      the 2026-09-30 Open item. The private device record (YAML `http:`
+      block ignored after the 2026-08-15 upgrade to Core 2026.8.1) was
+      checked against the official `http` integration page and the
+      2026.8 release post: the block is imported into `.storage/http`
+      on the first start after upgrading, managed under Settings →
+      System → Network from then on, and a repair "HTTP YAML
+      configuration is ignored after migration" fires if it stays in
+      the file. §4 now carries two branches, boundary 2026.8 (the
+      change shipped in the .0 release, so .1 would misdescribe .0
+      boxes): ≥ 2026.8 is a user hand-off to the UI (Trust
+      X-Forwarded-For, Trusted proxies `172.30.33.0/24`, Enable IP
+      banning, Login attempts before ban 3; saving restarts HA), with
+      ⚠️ only on the observed YAML-ignored pitfall; < 2026.8 keeps the
+      YAML block and its three bullets byte-identical. The §1 hand-off
+      bullet now lists two user steps, the header dates the ≥ 2026.8
+      observation, and §7 names the settings without YAML keys. Left
+      out: the 2027.2 cut-off (community source only; the official page
+      has no such date) and any `.storage/http` edit over SSH (no
+      official route). Whether a fresh ≥ 2026.8 install imports a YAML
+      block is undocumented, so the skill sends every ≥ 2026.8 box to
+      the UI. Rejected: UI-only rewrite (drops the 2026-07-10 tested
+      path); YAML-first with a note (leaves ≥ 2026.8 readers a dead
+      step). Edited via `writing-for-agents`. Verified by `verifier`
+      9/9: frontmatter and sections 0–7 intact, two branch headings at
+      "2026.8", YAML bullets unchanged versus HEAD, ⚠️ only at the two
+      §4 pitfalls, `grep -c 2027` = 0, cross-references resolve, diff
+      confined to the four touched spots, read-back 3/3; the
+      not-found claims re-checked by grep in the main session.
+- [x] Open item added 2026-10-01: evaluate running every skill in
+      `skills/` through the skill-authoring skills (`skill-creator`,
+      `writing-for-agents`), one pass per skill with its changes
+      logged. Scope and order undecided; no work started.

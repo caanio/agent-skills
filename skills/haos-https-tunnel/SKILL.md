@@ -8,7 +8,9 @@ description: Give a Home Assistant OS (HAOS) instance a real HTTPS URL — insid
 Give a HAOS box a public `https://ha.<domain>` that works from anywhere, without opening
 router ports or installing anything on client devices. Battle-tested 2026-07-10 on a
 Raspberry Pi 4 (HAOS 18.1, Core 2026.6.4) with the **brenner-tobias/cloudflared** add-on
-v7.0.9. Every pitfall below was hit for real; ⚠️ marks them.
+v7.0.9; the ≥ 2026.8 pitfall in §4 was observed on the same box after its 2026-08-15
+upgrade to Core 2026.8.1, and that branch's UI steps follow the official `http`
+integration page. Every pitfall below was hit for real; ⚠️ marks them.
 `ha` = SSH alias into the Advanced SSH & Web Terminal add-on (see `haos-addon-deploy` §8
 for SSH setup; Protection mode must be off).
 
@@ -32,8 +34,9 @@ Rejected alternatives (don't re-suggest without new facts):
   `dig +short NS <domain>` → should return `*.ns.cloudflare.com` names.
 - SSH access to the HAOS box per `haos-addon-deploy` §0/§8 (⚠️ non-interactive `ha` CLI
   calls need `ssh ha 'bash -lc "…"'`, otherwise `unauthorized`).
-- ⚠️ You (the agent) can do everything below **except one step**: the Cloudflare login
-  authorisation (§5) is the user's — plan the hand-off.
+- ⚠️ You (the agent) can do everything below **except the user's steps**: the Cloudflare
+  login authorisation (§5), and on Core ≥ 2026.8 the proxy settings in the UI (§4) —
+  plan the hand-offs.
 
 ## 2. Install the cloudflared add-on
 
@@ -63,10 +66,24 @@ echo '{"options":{"external_hostname":"ha.<domain>","additional_hosts":[]}}' \
 (for a dashboard-managed tunnel), `additional_hosts` (expose more services later),
 `catch_all_service` — are not needed for the basic HA case.
 
-## 4. Trust the proxy in configuration.yaml (before first start)
+## 4. Trust the proxy (before first start)
 
 Tunnel traffic reaches HA as reverse-proxied requests; HA rejects them (or logs the
-proxy's IP for everything, breaking `ip_ban_enabled`) unless the proxy subnet is trusted:
+proxy's IP for everything, breaking IP banning) unless the proxy subnet is trusted.
+Where the setting lives depends on the Core version (`ssh ha 'bash -lc "ha core info"'`):
+
+**Core ≥ 2026.8 — UI, user hand-off.** The HTTP server is configured under
+**Settings → System → Network**; saving there restarts HA. Ask the user to set:
+Trust X-Forwarded-For **on**; Trusted proxies `172.30.33.0/24` (Supervisor docker
+subnet, where add-ons live); Enable IP banning **on** (public endpoint now — keep it
+on); Login attempts before ban `3`. Use the UI on every ≥ 2026.8 box, fresh installs
+included — the docs describe YAML import only as a one-time upgrade step.
+- ⚠️ A box upgraded across 2026.8 imported its old `http:` block into `.storage/http`
+  on first start and ignores the YAML from then on (repair: "HTTP YAML configuration
+  is ignored after migration"). Editing `configuration.yaml` changes nothing; the UI
+  holds the live values. Observed 2026-08-15 on Core 2026.8.1.
+
+**Core < 2026.8 — `configuration.yaml`.**
 
 ```yaml
 http:
@@ -83,8 +100,10 @@ http:
 - High-risk config edit: back up first (`sudo cp configuration.yaml
   configuration.yaml.bak-YYYYMMDD`), then edit, then **`ha core check`** before
   `ha core restart`. Don't skip the check — a broken yaml keeps HA from booting.
-- Local plain-HTTP access (`http://<lan-ip>:8123`) keeps working — unlike native SSL,
-  nothing is forced. HA App: set the new URL as **external**, keep the LAN URL internal.
+
+Either branch: local plain-HTTP access (`http://<lan-ip>:8123`) keeps working — unlike
+native SSL, nothing is forced. HA App: set the new URL as **external**, keep the LAN
+URL internal.
 
 ## 5. Start and authorise (user hand-off)
 
@@ -117,7 +136,7 @@ curl -s -o /dev/null -w "%{http_code} %{time_total}s\n" https://ha.<domain>/
 ## 7. Post-setup (tell the user)
 
 - **Enable 2FA** on HA accounts — the login page is now on the public internet.
-  `ip_ban_enabled` + `login_attempts_threshold` (§4) are the second line, not a substitute.
+  IP banning + the login-attempt threshold (§4) are the second line, not a substitute.
 - **HA App**: external URL → `https://ha.<domain>`; internal URL → keep the LAN address.
 - **Take a full HA backup now** (config just changed) and pull it off the box —
   `scp ha:/backup/<file>.tar` beats the web download. Don't git-track `/config`
