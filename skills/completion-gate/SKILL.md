@@ -22,8 +22,10 @@ compared with shipping something broken and finding out later.
   Code row below is the one place that says what to do when none is installed.
 - *Security review of code crossing a trust boundary* → your security skill,
   entirely — this collection doesn't ship one (e.g. `security-and-hardening`
-  while writing it; `security-audit`, or a built-in `/security-review` of the
-  pending diff, at a milestone or before merge). With none you can run
+  while writing it; a built-in `/security-review` of the pending diff after
+  every code change; `security-audit` as a focused review when the change
+  crosses a trust boundary, and in full before a first production deploy).
+  With none you can run
   yourself, you must at minimum hand a fresh context the diff and ask where
   it takes anything from outside the program's control, and what that can
   make the code do or expose. That is a stand-in, not the review: paste its

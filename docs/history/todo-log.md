@@ -635,3 +635,30 @@ Entries run oldest first; new entries are appended at the end.
       (`haos-https-tunnel` HTTP block). Verified by `verifier`:
       header, five sections, entry fields, official-domain URLs,
       read-back Q&A.
+- [x] `completion-gate`'s Scope boundary security example re-aligned
+      2026-10-01 to the maintainer's own rules, which had split the three
+      security skills into tiers. The old "at a milestone or before
+      merge" never fired in practice: merges are rare and a milestone is
+      hard to judge. The example now reads: `security-and-hardening`
+      while writing; `/security-review` of the pending diff after every
+      code change; `security-audit` as a focused review when the change
+      crosses a trust boundary, and in full before a first production
+      deploy. Still an `e.g.`; the stand-in, downgrade and wrap-up step 1
+      pointer are unchanged. A first draft carried the rules' full
+      objective trigger list (7 lines); a fresh-context
+      `writing-for-agents` review flagged it as sprawl that buried the
+      stand-in, and the maintainer chose this 4-line version. Not taken
+      from that review: dropping "after every code change" (an agent does
+      not run `/security-review` unprompted, so the clause is not a no-op) and
+      leaning on the reader's global config (a skill stands on its own).
+      Deliberately left out: any execution-model claim for
+      `/security-review` (fresh context, sub-tasks) and its exclusion
+      list, for the same reason as the 2026-09-20 entry above (the
+      built-in command's internals are [unconfirmed]); the missing
+      `origin/HEAD` recovery, which is per-machine procedure. Edited via
+      `writing-for-agents`. Verified by `verifier` read-back 7/7
+      (each skill tied to its timing, no milestone/merge wording, no
+      execution or exclusion claim, no personal-config references,
+      stand-in unchanged versus HEAD, lines ≤ 80 chars, 3 read-back
+      questions answered from the file alone); the not-found claims
+      re-checked by grep in the main session.
