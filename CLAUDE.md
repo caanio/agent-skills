@@ -120,9 +120,10 @@ Open:
 1. Whole-file skill-authoring pass over every skill in `skills/`:
    `writing-for-agents` on the body, `skill-creator` on frontmatter and
    description triggering. Scope, guardrails, verification and order:
-   `docs/research/2026-10-01-skill-authoring-pass-plan.md`. Pilot on
-   `handover` landed 2026-10-01 (log). Next: `git-helper`, then the
-   rest by ⚠️ count ascending; every pass ends in one log entry.
+   `docs/research/2026-10-01-skill-authoring-pass-plan.md`. Landed:
+   `handover` (pilot) and `git-helper`, both 2026-10-01 (log). Next:
+   `python-coding-standards`, then the rest by ⚠️ count ascending;
+   every pass ends in one log entry.
 
 ## Source Material
 

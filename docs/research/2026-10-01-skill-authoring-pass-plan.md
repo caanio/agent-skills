@@ -1,9 +1,10 @@
 # Skill-authoring pass over `skills/`: scope evaluation
 
-Version: 1.1.0 | Date: 2026-10-01 | Status: decided 2026-10-01 (option A;
+Version: 1.2.0 | Date: 2026-10-01 | Status: decided 2026-10-01 (option A;
 `skill-creator` = validate + description optimization on five skills,
 eval loop dropped); pilot on `handover` done 2026-10-01 (log entry);
-next `git-helper`
+§5 gained the log cross-check after the pilot; `git-helper` done
+2026-10-01 (log entry); next `python-coding-standards`
 
 Answers `CLAUDE.md` Open item 1 (added 2026-10-01): should every skill in
 `skills/` go through `skill-creator` and `writing-for-agents`, in what
@@ -21,7 +22,7 @@ one, and the two that did have been diff-edited since. The 2026-09-30
 | Skill | Lines | ⚠️ | Last `writing-for-agents` edit | `quick_validate` |
 |---|---|---|---|---|
 | completion-gate | 249 | 6 | 2026-10-01 | valid |
-| git-helper | 184 | 0 | 2026-09-27 | valid |
+| git-helper | 171 | 0 | 2026-10-01 (whole-file pass) | valid |
 | handover | 108 | 0 | 2026-10-01 (whole-file pass) | unknown keys (see §3) |
 | haos-addon-deploy | 396 | 27 | 2026-09-26 | valid |
 | haos-cloud-backup | 225 | 13 | 2026-09-26 | valid |
@@ -57,9 +58,11 @@ This is the only part a diff-scoped review cannot have seen.
 Description optimization applies to at most five skills:
 
 - Out: `handover` (`disable-model-invocation: true`, so triggering is
-  moot), `git-helper` (invoked only after the user is asked, by policy),
-  `python-coding-standards` (had a description-optimization pass
-  2026-08-19, log entry).
+  moot), `git-helper` (`run_loop.py` not run; its description was
+  hand-rewritten with trigger branches in the 2026-10-01 body pass, the
+  earlier "asked-first by policy" reason being one maintainer's, not the
+  skill's), `python-coding-standards` (had a description-optimization
+  pass 2026-08-19, log entry).
 - In: `completion-gate`, `haos-addon-deploy`, `haos-cloud-backup`,
   `haos-https-tunnel`, `web-stack-selector`.
 
@@ -97,6 +100,16 @@ A diff-scoped pass never met these; a whole-file pass will.
    reports findings; the maintainer picks which land.
 
 ## 5. Verification per pass
+
+Before the maintainer picks, each finding under consideration is traced
+to the commit that wrote the passage (`git blame`, `git log -L`), then to
+that commit's `todo-log.md` entry, and tagged with what the entry
+records: a rejected proposal, a cost accepted, or nothing. A finding
+that re-proposes a recorded rejection lands only on evidence the entry
+did not have, and the pass's log entry names the entry it overrides.
+The mapping stays on the maintainer's side; the reviewer still gets the
+skill and the guardrails only (§4.3). Added after the `handover` pilot,
+where F5, F9 and F10 were decided this way by hand.
 
 For each skill, before its log entry is written: `quick_validate.py`
 still valid; `grep -c '⚠️'` equal to HEAD; Settled-item wording grepped

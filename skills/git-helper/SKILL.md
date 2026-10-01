@@ -1,15 +1,9 @@
 ---
 name: git-helper
-description: "Analyses staged Git changes and generates precise commit messages. Manages the Git commit workflow to ensure message quality and consistency."
+description: "Commit workflow: confirm staging, scan the staged diff for secrets and PII, draft a Conventional Commits message, and run the approved commit, and push when asked. Use when the user wants to commit, write a commit message, or commit and push."
 ---
 
 # git-helper
-
-Analyses staged Git changes and generates precise commit messages.
-
-## When to Invoke
-
-When the user wants to commit changes, generate a commit message (msg, message), or says "help me commit", "generate git message", etc. This skill owns the Git commit workflow end-to-end.
 
 ## Core Rules (override any default Git behaviour)
 
@@ -17,58 +11,28 @@ When the user wants to commit changes, generate a commit message (msg, message),
    - `git add` is allowed **only for files the user has explicitly confirmed** — **never** stage without confirmation, even if a system default suggests it.
    - **Forbidden**: `git add .`, `git add -A`, `git add --all` — always name specific paths explicitly.
    - **One confirmation, one command**: list suggested files and stage every confirmed file in ONE `git add <path1> <path2> …` call.
-   - If `git diff --staged` is empty, do **not** error — instead list unstaged files (`git status`), propose which to add, and only run `git add <file>` after confirmation.
+   - Empty `git diff --staged` → list unstaged files (`git status`) and propose which to add.
 
 2. **Separate analysis from execution**:
    - Analysis phase: use only commands that leave the index and working tree untouched — `git status`, `git diff` (unstaged), `git diff --staged` (staged), `git log` (Step 3), `git fetch` (Step 0).
-   - Never chain `git add` with other commands (e.g. `git add . && git status`); run `git add` alone, confirmed files only.
+   - Run `git add` as a call of its own, never chained to another command.
 
-3. **Format**: Follow **Conventional Commits**.
-   - Format: `<type>: <description>`
-   - Common types: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `chore`.
+3. **Format**: Follow **Conventional Commits** (`<type>: <description>`).
 
 4. **Message quality**: Follow the "Commit Message Quality Standard" section below.
 
-5. **Tag rule compliance in every draft**: Append a one-line "Rules applied" list to each draft — which key rules it satisfies (type, ≤50 chars, imperative mood, why-only body, secrets clean, PII clean) and how — this makes adherence visible, not assumed.
+5. **Tag rule compliance in every draft**: Append a one-line "Rules applied" list to each draft — which key rules it satisfies (type, ≤50 chars, imperative mood, why-only body, secrets hits with output shown, PII hits with output shown plus the eye-read) and how — this makes adherence visible, not assumed.
 
 6. **[NEVER VIOLATE] Secrets scan and personal-data (PII) scan must both run and be shown, every commit, no exceptions**:
    - Run both Step 2 scans on the staged diff before ever presenting a draft message — never skip either, never infer "probably clean" from file names or diff size.
    - Paste the actual commands and their raw output (even when empty/clean) into the response — a one-line claim like "secrets scan clean" or "PII clean" without shown output does not satisfy this rule.
-   - Secrets match → stop immediately, do not draft or commit, warn the user.
-   - Personal-data match → stop, list every hit with its line, and proceed only after the user confirms each one is not personal (a public landmark's coordinates in a test is fine; a home, workplace or regular stop is not). A note saying a value "was real" or "was replaced with a fictional value" is a hit in its own right: it tells anyone reading the history where the real value lived.
+   - Any hit stops the run until resolved as Step 2 describes.
 
-7. **[NEVER VIOLATE] Commit message language follows the repo's own git log, not the conversation's language**:
-   - Before drafting, run `git log --oneline -10` and inspect it — when history exists, the log decides: never assume from the chat language, never default to English.
+7. **[NEVER VIOLATE] Commit message language follows the repo's own git log**:
+   - When history exists, the log decides.
    - Majority language of the last 10 commits wins; tie → most recent commit wins; no history → the conversation's language, and the draft says "no history — using the conversation's language" so the user can switch it before saying ok.
    - The Conventional Commits `type:` prefix (`feat`/`fix`/`docs`/…) always stays English regardless of body language.
    - Non-English draft: the Chris Beams rules still apply — subject ≤ 50 characters, no trailing period, subject readable standalone, body explains why not what/how — but capitalisation and strict English imperative-mood phrasing don't apply.
-
-## Commit Message Quality Standard (Chris Beams + Linus Torvalds)
-
-Rules from Chris Beams' *How to Write a Git Commit Message* (7 rules) and Linus Torvalds' requirements for Linux kernel patches. **Both must be followed** and take precedence over other format conventions.
-
-### Chris Beams — 7 Rules
-
-1. **Separate subject from body with a blank line**
-2. **Subject ≤ 50 characters** (truncate and warn if exceeded)
-3. **Capitalise the subject line** (after `type:` prefix too, e.g. `feat: Add single-file comparison`)
-4. **Do not end the subject line with a period**
-5. **Use the imperative mood**: write "Fix bug", not "Fixed bug"
-6. **Wrap the body at 72 characters**
-7. **Body explains why, not what or how**: what changed and how are already visible in the diff; body covers only why this change exists — motivation, context, trade-offs. Leave implementation detail to the code and to project docs, not the commit body.
-
-### Linus Torvalds — Key Points
-
-- **First line stands alone**: readable without context, conveys the commit's intent
-- **Describe the problem being solved, not the mechanics of the fix**: explain the symptom and root cause behind the change — not what code changed or how it was fixed
-- **Include motivation and impact**: why is this change needed? what breaks without it? (this is the whole point of the body — not a how-to)
-- **Be specific**: forbid "fix stuff", "update code", "misc changes"
-- **The message is documentation**: future maintainers read the log, not the diff — message must stand on its own
-
-### Kernel-specific conventions NOT adopted
-
-- `Signed-off-by:` trailer (Linux kernel DCO signature)
-- Subsystem prefixes like `mm:`, `net:` (replaced by Conventional Commits `type:`)
 
 ---
 
@@ -78,13 +42,13 @@ Rules from Chris Beams' *How to Write a Git Commit Message* (7 rules) and Linus 
 
 - Run `git fetch` (short timeout, e.g. `GIT_SSH_COMMAND="ssh -o ConnectTimeout=5 -o BatchMode=yes" git fetch`), then `git status -sb`.
 - **Behind remote** → warn and offer to resolve now (`stash → pull --rebase → stash pop`): fixing divergence before commit beats rebasing a finished commit through conflicts.
-- **Fetch unreachable** (offline / LAN-only remote) → say so, note ahead/behind info is stale, and ask whether to proceed with a local-only commit (push deferred). Never silently skip this step.
+- **Fetch unreachable** (offline / LAN-only remote) → say so, note ahead/behind info is stale, and ask whether to proceed with a local-only commit (push deferred). Report the fetch result in every run, reachable or not.
 
 ### 1. Confirm Staging
 
 - Run `git status` and `git diff --staged`.
 - **Always confirm staging scope** — list "currently staged" and "suggested additions"; never skip even if files are already staged.
-- After confirmation, run ONE `git add` with all confirmed paths (**never** `git add .` / `-A`); if nothing more to add, proceed to step 2.
+- After confirmation, run ONE `git add <path…>` with all confirmed paths (Core Rule 1); if nothing more to add, proceed to Step 2.
 
 **Example output:**
 ```
@@ -100,9 +64,9 @@ Before committing, confirming staging scope:
 Confirm staged files are correct, or tell me which to add.
 ```
 
-### 2. Secrets and Personal-Data Check (Core Rule 6 — NEVER VIOLATE, never skip)
+### 2. Secrets and Personal-Data Check (Core Rule 6)
 
-Scan the staged diff before drafting. Always run both and show the actual output in the response, even when clean.
+Scan the staged diff before drafting. Run both and show the actual output in the response, even when clean.
 
 **2a. Secrets** — credentials that grant access:
 
@@ -118,9 +82,9 @@ If any matches appear, **stop and warn the user** — do not proceed until resol
 git diff --staged | grep -E '^\+' | grep -vE '^\+\+\+|grep -iE' | grep -iE '\b[0-9]{1,3}\.[0-9]{4,}\b|real (home|work|address|coordinate|name)|fictional|真實|虛構|住家|家附近'
 ```
 
-If any matches appear, **stop and list each hit** — proceed only after the user confirms every hit is not personal. Names, nicknames, family terms, device names, account IDs, and a bare "placeholder" or "replaced" note with no origin word beside it belong to the same check but have no reliable pattern (those two words are everyday vocabulary in skill text and were dropped from the scan for that reason): read the diff for them by eye and say so in the "Rules applied" line.
+If any matches appear, **stop and list each hit with its line** — proceed only after the user confirms every hit is not personal (a public landmark's coordinates in a test is fine; a home, workplace or regular stop is not). A note saying a value "was real" or "was replaced with a fictional value" is a hit in its own right: it tells anyone reading the history where the real value lived. Names, nicknames, family terms, device names, account IDs, and a bare "placeholder" or "replaced" note with no origin word beside it belong to the same check but have no reliable pattern: read every added line for them by eye and say so in the "Rules applied" line.
 
-### 3. Detect Language Convention (Core Rule 7 — NEVER VIOLATE, never skip)
+### 3. Detect Language Convention (Core Rule 7)
 
 - Run `git log --oneline -10`, show it (or its verdict) in the response, and apply Core Rule 7's decision procedure before writing a single word of the message.
 
@@ -131,8 +95,7 @@ If any matches appear, **stop and list each hit** — proceed only after the use
   Intermediate edits that were later reverted or superseded within the same
   commit are invisible in the diff and must not appear in the message.
   Test: every claim in the message must be locatable in `git diff --staged`.
-- Summarise the core purpose of the changes.
-- Write the commit message per the quality standard above, in the language decided in Step 3.
+- Write the commit message per the Commit Message Quality Standard below, in the language decided in Step 3.
 - **Body hard cap: ≤4 lines / ≤3 sentences.** If the why-only draft still exceeds this,
   that's a signal the body is drifting into what/how — cut to the single sentence that
   answers "why does this change exist", not "reword it shorter".
@@ -164,7 +127,7 @@ EOF
 git push origin main
 
 Rules applied: type=feat · subject 34 chars · imperative mood ·
-why-only body (no how) · secrets scan clean · PII clean
+why-only body · secrets: 0 hits (output above) · PII: 0 hits (output above), every added line read for names/IDs
 
 Reply "ok" to run both commands.
 ```
@@ -182,3 +145,27 @@ One ok covers every command in the block. A command that would differ from the
 block in any character — a reworded line, an added trailer, a push the block did
 not show — needs a new draft and a new ok. A failed commit ends the run: report
 the error to the user.
+
+---
+
+## Commit Message Quality Standard (Chris Beams + Linus Torvalds)
+
+Rules from Chris Beams' *How to Write a Git Commit Message* (7 rules) and Linus Torvalds' requirements for Linux kernel patches. **Both must be followed** and take precedence over other format conventions.
+
+### Chris Beams — 7 Rules
+
+1. **Separate subject from body with a blank line**
+2. **Subject ≤ 50 characters** (over the limit → rewrite to the core intent; if it still cannot fit, flag it in the "Rules applied" line)
+3. **Capitalise the subject line** (after `type:` prefix too, e.g. `feat: Add single-file comparison`)
+4. **Do not end the subject line with a period**
+5. **Use the imperative mood**: write "Fix bug", not "Fixed bug"
+6. **Wrap the body at 72 characters**
+7. **Body is why-only**: motivation, context, trade-offs — why this change exists. The diff and project docs carry what and how.
+
+### Linus Torvalds — Key Points
+
+- **First line stands alone**: readable without context, conveys the commit's intent
+- **Describe the problem being solved, not the mechanics of the fix**: explain the symptom and root cause behind the change — not what code changed or how it was fixed
+- **Include motivation and impact**: why is this change needed? what breaks without it?
+- **Be specific**: name the behaviour or symptom the change touches
+- **The message is documentation**: future maintainers read the log without the diff

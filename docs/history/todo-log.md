@@ -771,3 +771,69 @@ Entries run oldest first; new entries are appended at the end.
       and commits in §3, Settled 1–12 contiguous, no added line over 80
       chars, no PII; the not-found claims re-checked by grep in the main
       session.
+- [x] Skill-authoring pass on `git-helper` (2026-10-01), second pass per
+      the plan. Plan §5 first gained the log cross-check the `handover`
+      pilot did by hand (plan 1.2.0): each finding under consideration is
+      traced via `git blame` to its commit and that commit's log entry
+      and tagged with any recorded rejection; a re-proposal lands only on
+      new evidence; the mapping stays maintainer-side. Whole-file
+      `writing-for-agents` review by a fresh-context `opus` reviewer
+      given the skill, the reference and the guardrails plus frozen
+      numbering (Core Rules 1–7 and Steps 0–5 are named from outside the
+      repo): 20 findings, 6 levers not found. Cross-check: the 2026-07
+      commits have no log entries, so their commit bodies served; four
+      bore on findings. Landed (maintainer's pick, 17): F1 the
+      description carries the trigger branches and says "push when
+      asked", matching Step 4 (hand-written, no `run_loop`; a departure
+      from plan §2's exclusion of `git-helper`,
+      which rested on one maintainer's ask-first policy, not the skill);
+      F2 line 8 and "When to Invoke" deleted (the description carries
+      them); F3 the Commit Message Quality Standard moved after Step 5 so
+      Steps 0–5 lead, Step 4 points "below"; F4 PII hit handling (the
+      landmark test, the origin-label sentence) moved from Core Rule 6
+      into Step 2b, Rule 6 keeping the mandate plus "Any hit stops the
+      run until resolved as Step 2 describes"; F6 the Step 4 example's
+      "Rules applied" line no longer models the bare "secrets scan clean
+      · PII clean" claim Rule 6 forbids (a15efab promoted Rule 6 for
+      exactly that gap) and shows the eye-read; Rule 5's list and 2b's
+      "every added line" match it; F7 a subject over 50 is rewritten to
+      the core intent and flagged if it still cannot fit (was
+      "truncate"); F8 Beams 7 is "Body is why-only" and the Linus
+      motivation bullet lost "(not a how-to)"; F9 Rule 7's title no
+      longer contradicts its own no-history fallback, its first bullet is
+      "When history exists, the log decides" (Settled 8 line unchanged);
+      F10–F13 positive phrasing for the empty-staged branch, the chaining
+      bullet (the third `git add .` copy gone), Step 0's skip guard and
+      "Be specific"; F14 Steps 1–3 no longer restate Core Rules 1/6/7
+      (6aa8e4e set the principle: each step lives only in Workflow), the
+      Step 2/3 headings keep "(Core Rule 6)" / "(Core Rule 7)" without
+      the repeated tag; F15 "Kernel-specific conventions NOT adopted"
+      deleted (it conflicted with Step 4's "every trailer your
+      environment appends"); F16 "message is documentation" keeps only
+      its rationale; F17 2b's change-history parenthetical deleted (the
+      2026-09-26 entry holds it); F18 Rule 3's type list deleted; F19
+      "Summarise the core purpose" deleted. Rejected: F5 (a push-failure
+      branch plus two done-state commands in Step 5: new behaviour, not
+      pruning, and Settled 10 makes the Step 4 block what Step 5 runs);
+      F20 (Rule 6's inference ban: ba1fff0 kept it salient on purpose,
+      and it already pairs with the positive sentence); F8's line 63
+      (the "not what code changed" clause was 7a8c66e's fix for a
+      read-back that took "describe the problem" as a what-instruction).
+      Cost accepted: 2b's moved origin-label sentence is an added line,
+      so the landing commit stops once for per-line PII confirmation
+      (2026-09-26 precedent). Verified: `quick_validate.py` valid;
+      `grep -c '⚠️'` 0 → 0; `[NEVER VIOLATE]` on Rules 1, 6, 7 only
+      (5 → 3 occurrences, the two heading repeats); both scan command
+      lines byte-identical versus HEAD; the Settled 8 and 10 sentences
+      present verbatim; lines over 80 chars 51 → 46; README row and the
+      `completion-gate` reference still map (neither names a step
+      number); the global rules name step 2b, Core Rule 7 and Steps 4–5,
+      all unchanged in number; `verifier` 10/10 (its one FAIL was the
+      criterion's literal-heading wording; the headings carry the same
+      parenthetical suffixes as HEAD) with read-back 5/5 (landmark test
+      at 2b, over-50 subject rewritten, `git log --oneline -10` named
+      once at Step 3, push failure not covered — by design, no-history
+      draft says so); the not-found claims re-checked by grep in the
+      main session. Diff: 40+/53−, 184 → 171 lines. Plan 1.2.0 (§5 step,
+      status, table row); `CLAUDE.md` Open 1 now points at
+      `python-coding-standards`.
