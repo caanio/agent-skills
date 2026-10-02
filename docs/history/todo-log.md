@@ -1121,3 +1121,48 @@ Entries run oldest first; new entries are appended at the end.
       every pointer resolved by the read-back). Diff: 31+/54−,
       249 → 226 lines. Plan 1.6.0 (status, table row); `CLAUDE.md` Open
       1 now records the body pass and points at the description run.
+- [x] `completion-gate` description run (2026-10-02), the stage plan §2
+      schedules after the body pass; closed with HEAD standing, no
+      `SKILL.md` edit. Eval set: 20 queries (10/10), four Traditional
+      Chinese one-liners, seven should-not in pool siblings' territory,
+      reviewed in `eval_review_completion-gate.html` and used as
+      drafted. Harness: the three §2 fixes reapplied on a scratch copy
+      (diff identical hunk for hunk to the recorded one), a fresh pool
+      of 51 skills without `completion-gate`, probe listing 43 with it
+      absent. Four descriptions × two configurations (isolated / 43
+      competitors), `opus`, 3 runs, 10 workers, `--timeout 90`, eight
+      runs in all. HEAD 19/20 and 19/20 (1.00 / 0.10), its one miss a
+      3/3 false trigger on a delegated-subagent failure; D1–D7
+      hand-applied 19/20 and 19/20 (0.90 / 0.00, 0.87 / 0.00), its one
+      miss a 0/3 on the Traditional Chinese own-work deploy failure. Two
+      hybrids run on the maintainer's first pick (option A of three: A
+      the two hybrids, B `run_loop.py`, C close on the first four): HEAD
+      + D5 only 18/20 twice (loses the deploy query 0/3, still fires 3/3
+      on the delegated one); D1–D7 with D6 restored 18/20 twice (deploy
+      still 0/3, delegated back to 2/3). Decided (maintainer's second
+      pick, option A of three: A HEAD stands, B 10-run re-measure of the
+      mixed cells, C `run_loop.py`): D5 refuted — its clause is what the
+      three failing texts share, 0/18 on the own-work query it was
+      written to keep, and it buys nothing on the delegated one; D6
+      double-edged — the table-of-contents sentence drives most of the
+      delegated false trigger and holds the delivery-message query at
+      3/3 under competitors, so it carries two branch triggers, not pure
+      context load; D1–D4 and D7 untested alone, still candidates. The
+      delegated-failure label was written with D5 in hand and is
+      arguable (the failure table's second row says "escalate to a
+      stronger model"); relabelled, HEAD is 20/20 and the verdict does
+      not move. `run_loop.py` not started: the hybrids answer the
+      attribution its proposals would re-ask, and its hold-out can park
+      the one failing query on the test side. Full record, eval set, the
+      four texts, harness notes:
+      `docs/research/2026-10-02-completion-gate-trigger-eval.md`.
+      Verified: `SKILL.md` byte-identical to HEAD (`git status` clean
+      for `skills/`); json block of the note re-parsed, 20 items, 10
+      true; the four texts in the note byte-equal to the scratch
+      baselines; `verifier` read-back first round M1–M6 6/6, Q1–Q7 6/7
+      with three findings fixed (one competitor-config rate in this
+      entry, the two option menus named as first and second pick, the
+      pool change spelled out in the note's §2); second round on the
+      three fixed passages Q1–Q4 and M1–M2 6/6. Plan 1.7.0 (status,
+      table row, §2 In list); `CLAUDE.md` Open 1 now records both
+      `completion-gate` passes and points at `haos-https-tunnel`.

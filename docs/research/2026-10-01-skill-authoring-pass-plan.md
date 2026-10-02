@@ -1,6 +1,6 @@
 # Skill-authoring pass over `skills/`: scope evaluation
 
-Version: 1.6.0 | Date: 2026-10-02 | Status: decided 2026-10-01 (option A;
+Version: 1.7.0 | Date: 2026-10-02 | Status: decided 2026-10-01 (option A;
 `skill-creator` = validate + description optimization on five skills,
 eval loop dropped); pilot on `handover` done 2026-10-01 (log entry);
 §5 gained the log cross-check after the pilot; `git-helper` done
@@ -9,8 +9,9 @@ eval loop dropped); pilot on `handover` done 2026-10-01 (log entry);
 2026-10-02 (log entries; HEAD stood, harness fixes recorded in
 `2026-10-02-web-stack-selector-trigger-eval.md` §2); `completion-gate`
 body pass done 2026-10-02 (log entry; 15 of 17 landed, one 2026-09-26
-placement overridden); next its description run, then
-`haos-https-tunnel`
+placement overridden) and description run done 2026-10-02 (log entry;
+HEAD stood, D5 refuted, D6 double-edged, in
+`2026-10-02-completion-gate-trigger-eval.md`); next `haos-https-tunnel`
 
 Answers `CLAUDE.md` Open item 1 (added 2026-10-01): should every skill in
 `skills/` go through `skill-creator` and `writing-for-agents`, in what
@@ -27,7 +28,7 @@ one, and the two that did have been diff-edited since. The 2026-09-30
 
 | Skill | Lines | ⚠️ | Last `writing-for-agents` edit | `quick_validate` |
 |---|---|---|---|---|
-| completion-gate | 226 | 6 | 2026-10-02 (whole-file pass) | valid |
+| completion-gate | 226 | 6 | 2026-10-02 (whole-file pass; description run same day) | valid |
 | git-helper | 171 | 0 | 2026-10-01 (whole-file pass) | valid |
 | handover | 108 | 0 | 2026-10-01 (whole-file pass) | unknown keys (see §3) |
 | haos-addon-deploy | 396 | 27 | 2026-09-26 | valid |
@@ -69,8 +70,9 @@ Description optimization applies to at most five skills:
   earlier "asked-first by policy" reason being one maintainer's, not the
   skill's), `python-coding-standards` (had a description-optimization
   pass 2026-08-19, log entry).
-- In: `completion-gate`, `haos-addon-deploy`, `haos-cloud-backup`,
-  `haos-https-tunnel`, `web-stack-selector` (done 2026-10-02).
+- In: `completion-gate` (done 2026-10-02), `haos-addon-deploy`,
+  `haos-cloud-backup`, `haos-https-tunnel`, `web-stack-selector` (done
+  2026-10-02).
 
 Before each run, apply the three harness fixes recorded in
 `2026-10-02-web-stack-selector-trigger-eval.md` §2 on a scratch copy of the
