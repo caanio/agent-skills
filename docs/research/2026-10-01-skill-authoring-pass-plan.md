@@ -1,10 +1,11 @@
 # Skill-authoring pass over `skills/`: scope evaluation
 
-Version: 1.2.0 | Date: 2026-10-01 | Status: decided 2026-10-01 (option A;
+Version: 1.3.0 | Date: 2026-10-02 | Status: decided 2026-10-01 (option A;
 `skill-creator` = validate + description optimization on five skills,
 eval loop dropped); pilot on `handover` done 2026-10-01 (log entry);
 §5 gained the log cross-check after the pilot; `git-helper` done
-2026-10-01 (log entry); next `python-coding-standards`
+2026-10-01 (log entry); `python-coding-standards` done 2026-10-02
+(log entry); next `web-stack-selector`
 
 Answers `CLAUDE.md` Open item 1 (added 2026-10-01): should every skill in
 `skills/` go through `skill-creator` and `writing-for-agents`, in what
@@ -27,7 +28,7 @@ one, and the two that did have been diff-edited since. The 2026-09-30
 | haos-addon-deploy | 396 | 27 | 2026-09-26 | valid |
 | haos-cloud-backup | 225 | 13 | 2026-09-26 | valid |
 | haos-https-tunnel | 143 | 7 | 2026-10-01 | valid |
-| python-coding-standards | 149 | 1 | 2026-09-27 | valid |
+| python-coding-standards | 133 | 1 | 2026-10-02 (whole-file pass) | valid |
 | web-stack-selector | 147 | 1 | 2026-09-27 | valid |
 
 Counts measured 2026-10-01 with `wc -l`, `grep -c '⚠️'` and

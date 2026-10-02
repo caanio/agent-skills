@@ -62,7 +62,7 @@ See `docs/agents/triage-labels.md`.
 Single-context: `CONTEXT.md` at the root, ADRs under `docs/adr/`.
 See `docs/agents/domain.md`.
 
-## Open items (last updated 2026-10-01)
+## Open items (last updated 2026-10-02)
 
 The only live list. The per-change log — what each change did, why, and how
 it was verified — is `docs/history/todo-log.md`; read it before reworking a
@@ -121,8 +121,9 @@ Open:
    `writing-for-agents` on the body, `skill-creator` on frontmatter and
    description triggering. Scope, guardrails, verification and order:
    `docs/research/2026-10-01-skill-authoring-pass-plan.md`. Landed:
-   `handover` (pilot) and `git-helper`, both 2026-10-01 (log). Next:
-   `python-coding-standards`, then the rest by ⚠️ count ascending;
+   `handover` (pilot) and `git-helper` (both 2026-10-01) and
+   `python-coding-standards` (2026-10-02), all in the log. Next:
+   `web-stack-selector`, then the rest by ⚠️ count ascending;
    every pass ends in one log entry.
 
 ## Source Material

@@ -5,49 +5,38 @@ description: "Use before writing or editing any Python code — scripts, functio
 
 # python-coding-standards
 
-Defaults for writing and editing Python, so every file in a project reads
-consistently regardless of which session wrote it. None of this applies to
-a snippet written purely to illustrate a concept, with no runnable entry
-point, that nobody is going to execute — e.g. a one-off example in prose
-showing what a decorator looks like. If you can't tell whether something
-has a runnable entry point, assume it does. Everything else — including a
-demo script, a one-off, or an example saved to a file — is real code the
-rules below apply to.
-
-## When to Invoke
-
-- About to create or edit a `.py` file, or write Python code the user is
-  going to run — except code covered by the illustrative-example exemption
-  above.
+Standards for writing and editing Python, so every file in a project reads
+consistently regardless of which session wrote it. Every piece of runnable
+Python — a demo script, a one-off, an example saved to a file, or code left
+in the chat to copy-paste and run — is real code the rules below apply to.
+The one exemption is a snippet written purely to illustrate a concept in
+prose, with no runnable entry point (e.g. what a decorator looks like); if
+you can't tell whether something has a runnable entry point, assume it does.
 
 ## Core Rules
 
 1. **[NEVER VIOLATE] Functions the user is going to run get complete type
-   hints.** Every parameter and the return type — whether the code ends up
-   in a file or stays in the chat as something to copy-paste and execute;
-   a one-off script is still real code. When editing an existing file, this
-   applies to the function you're adding or touching — don't backfill type
-   hints across the rest of the file unless asked.
+   hints.** Every parameter and the return type. When editing an existing
+   file, this applies to the function you're adding or touching; the rest
+   of the file keeps its signatures as they are unless asked.
 
 2. **[NEVER VIOLATE] No global variables.** Use instance attributes,
    closures, or dependency injection instead. The smell this rule targets
    is a module-level or class-level name that gets *mutated* after it's
    defined — whether one function touches it (the `global` keyword is the
-   textbook case) or several. A constant — module-level or class-level,
-   scalar or a dict/list/tuple that's never reassigned or mutated after
-   definition (`MAX_RETRIES = 3`, `DEFAULT_HEADERS = {...}`) — is not a
-   global *variable* and is fine, and so is a module-level
-   `logger = logging.getLogger(__name__)`.
+   textbook case) or several. A name never reassigned or mutated, scalar or
+   container (`MAX_RETRIES = 3`, `DEFAULT_HEADERS = {...}`), is a constant
+   and fine, and so is a module-level `logger = logging.getLogger(__name__)`.
 
 3. **Use `logging`, never `print()`, for anything diagnostic.** `print()`
    is acceptable only for a CLI tool's actual user-facing output — the
    thing the program exists to print, not a debug trace left behind. A
    standalone script calls
    `logging.basicConfig(level=logging.INFO, format=...)` once at its entry
-   point (`if __name__ == "__main__":`) — without an explicit `level=`, the
+   point (`if __name__ == "__main__":`); without an explicit `level=`, the
    root logger defaults to WARNING and `logger.info` silently produces no
-   output — a module meant to be imported never calls `basicConfig` itself,
-   that's the importer's call.
+   output. A module meant to be imported leaves `basicConfig` to its
+   importer.
 
 4. **Wrap in try/except, and log the failure, any I/O that can fail for
    reasons your own code doesn't control:** HTTP calls, DB connections,
@@ -58,9 +47,7 @@ rules below apply to.
 
 5. **Comment the WHY, not the WHAT.** Only add a comment when it explains
    something the code itself can't — a hidden constraint, a non-obvious
-   trade-off, a workaround for a specific bug. A well-named function or
-   variable already says what it does; restating that in a comment is
-   noise that goes stale the moment the code changes.
+   trade-off, a workaround for a specific bug.
 
 6. **Tooling: `.venv` + `requirements.txt`, PEP 8, Black.** Pin every dependency
    in `requirements.txt` with PEP 440's compatible-release operator
@@ -113,17 +100,14 @@ rules below apply to.
   the implementation.
 - No test infra, but the code lives in an existing project (a repo, a
   package — somewhere with a future) → set up `pytest` rather than
-  inventing a bespoke runner. It's the de facto standard, so any future
-  session or agent already knows how to run it.
+  inventing a bespoke runner.
 - No test infra, and the code really is a standalone one-off with no
   project to land in → at minimum, write a runnable probe: a short
   standalone snippet that feeds the new code a known input and checks the
-  actual output against what you expect, not just that it ran without
-  crashing. The probe satisfies this rule, it isn't an exemption from it.
-- Project already has its own hand-rolled test/probe setup → don't
-  silently replace it with `pytest`. Weigh whether the switch is worth the
-  churn, and if it looks like a real improvement, suggest it to the user
-  instead of doing it unprompted.
+  actual output against what you expect.
+- Project already has its own hand-rolled test/probe setup → write the
+  test in it. If switching to `pytest` looks worth the churn, suggest it
+  to the user.
 - A test that passes doesn't prove it *catches* anything — verify it by
   breaking the code it's supposed to guard and confirming the test goes
   red, then restore the fix. A common way to write an accidental tautology:

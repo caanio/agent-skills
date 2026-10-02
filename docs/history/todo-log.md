@@ -837,3 +837,67 @@ Entries run oldest first; new entries are appended at the end.
       main session. Diff: 40+/53−, 184 → 171 lines. Plan 1.2.0 (§5 step,
       status, table row); `CLAUDE.md` Open 1 now points at
       `python-coding-standards`.
+- [x] Skill-authoring pass on `python-coding-standards` (2026-10-02),
+      third pass per the plan. Cross-check map first (plan §5): nine
+      blame commits; `12edec6` (PEP 440 pins, 2026-08-29) and `fe866b4`
+      (pytest pitfalls, 2026-08-30) have no log entry, so their commit
+      bodies served; the 2026-08-19 entry records four `deep-reviewer`
+      rounds with no detail. Whole-file `writing-for-agents` review by a
+      fresh-context `opus` reviewer given the skill, the reference, the
+      guardrails, Settled 4/6/9 verbatim and frozen Core Rules 1–7
+      (named from the global rules file): 26 findings (20 body, 6
+      description), 11 levers found, 6 not found. Landed (maintainer's
+      pick, 12): F1 intro opens "Standards for" (was "Defaults for",
+      which primed overridable against three `[NEVER VIOLATE]` rules);
+      F2 the scope paragraph states the applies-to case first and the
+      illustrative-snippet exemption second, "assume it does" kept; F3
+      the chat copy-paste case moves from rule 1 into that paragraph,
+      so the whole real-code test sits under one heading; F4 "When to
+      Invoke" deleted (the description carries it; `git-helper` F2
+      precedent); F5 rule 1's "don't backfill" is "the rest of the file
+      keeps its signatures as they are unless asked"; F6 rule 2's
+      constant clause no longer restates the smell definition, both
+      examples and the `logger` case kept; F7 rule 3's three dash-joined
+      clauses split, "leaves `basicConfig` to its importer"; F9 rule 5's
+      third sentence (the WHAT half spelled out again) deleted; F14 the
+      "de facto standard" rationale deleted; F15 "not just that it ran
+      without crashing" deleted from bullet 4 (the frozen bullet 1
+      carries it); F16 "The probe satisfies this rule…" deleted (bullet
+      1's "applies to a probe just as much" carries it); F17 the
+      hand-rolled-setup bullet is "write the test in it. If switching
+      to `pytest` looks worth the churn, suggest it to the user".
+      Rejected: F8 (stdout/stderr aside), F12 (`^=` rejected by pip),
+      F19 (`_doc/` example) — each reads as a reader-confusion or
+      incident fix the log never detailed, and no-op status is
+      model-relative, unproven without a run; F10 (add "format with
+      Black": new behaviour, `git-helper` F5 precedent) and F18 (widen
+      the run-it check to every entry point: same reason); F11 (fold
+      `==`/`>=` into the `~=` sentence: `12edec6`'s body names `==` as
+      the rejected alternative on purpose, and `pip freeze` makes it the
+      default); F13 (drop Ruff `UP009`: the 2026-09-27 entry lists it
+      among the verified sources, so it is the in-file trace); F20
+      (delete Design Docs: founding scope in `c652c79`'s body and the
+      README row). Description F21–F26 not applied: plan §2 keeps this
+      skill out of description optimisation because the 2026-08-19
+      `run_loop` pass already tuned the string, and a hand edit would
+      override eval-tuned text without re-running the eval; the six
+      findings (front-load the leading word, the "Applies whether…"
+      sentence re-renames branch A, three synonyms for the
+      quick-script case, the rule list is identity, four examples of
+      one exclusion, "non-Python languages" is a no-op) are kept in this
+      entry for the day `run_loop` is re-run. Verified:
+      `quick_validate.py` valid; `grep -c '⚠️'` 1 → 1; `[NEVER VIOLATE]`
+      3 → 3 (rules 1, 2, Testing bullet 1); Core Rules 1–7 headings in
+      order; the ⚠️ fenced command, error string and rule 7's "existing
+      … UTF-8 line keeps it" sentence present; description line
+      byte-identical to HEAD; eight hunks, none in rules 4, 6, 7,
+      Testing bullets 1–2 or 6–8, or Design Docs; lines over 80 chars
+      6 → 6 (description and rule 7, all pre-existing); README row 54
+      still maps (every named topic present); `verifier` 8/8 with
+      read-back 7/7 (chat code is real code, other signatures stay,
+      never-mutated container is a constant, importer calls
+      `basicConfig`, hand-rolled setup is used, probe is the minimum and
+      the `[NEVER VIOLATE]` bullet binds it, unsure means the rules
+      apply); the not-found claims re-checked by grep in the main
+      session. Diff: 22+/38−, 149 → 133 lines. Plan 1.3.0 (status,
+      table row); `CLAUDE.md` Open 1 now points at `web-stack-selector`.
