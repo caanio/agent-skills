@@ -121,10 +121,12 @@ Open:
    `writing-for-agents` on the body, `skill-creator` on frontmatter and
    description triggering. Scope, guardrails, verification and order:
    `docs/research/2026-10-01-skill-authoring-pass-plan.md`. Landed:
-   `handover` (pilot) and `git-helper` (both 2026-10-01) and
-   `python-coding-standards` (2026-10-02), all in the log. Next:
-   `web-stack-selector`, then the rest by ⚠️ count ascending;
-   every pass ends in one log entry.
+   `handover` (pilot) and `git-helper` (both 2026-10-01),
+   `python-coding-standards` and the `web-stack-selector` body pass
+   (both 2026-10-02), all in the log. Next: `web-stack-selector`'s
+   description run (`run_loop.py`, plan §2; D2–D5 in its log entry are
+   the candidate edits), then `completion-gate` and the rest by ⚠️
+   count ascending; every pass ends in one log entry.
 
 ## Source Material
 

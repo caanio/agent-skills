@@ -901,3 +901,86 @@ Entries run oldest first; new entries are appended at the end.
       apply); the not-found claims re-checked by grep in the main
       session. Diff: 22+/38−, 149 → 133 lines. Plan 1.3.0 (status,
       table row); `CLAUDE.md` Open 1 now points at `web-stack-selector`.
+- [x] Skill-authoring pass on `web-stack-selector` (2026-10-02), fourth
+      pass per the plan. Cross-check map first (plan §5): 140 of 147
+      lines from the founding `e6d7558` (no log entry, commit body
+      serves), 6 from `bf803ea` (the bar paragraph and the tremor flag,
+      2026-09-26 entry: rejected "tightening the picks"), the
+      description from `0aad280`, a revert with no body and no log
+      entry of `4e033f3`, which had widened the description 67 minutes
+      earlier on live-test evidence (a Traditional Chinese "which
+      package for a Flask map" question never fired the skill); the
+      survey's `26e0651` entry rejects dropping the simple-datatables
+      name or waiting for the re-survey. Whole-file `writing-for-agents`
+      review by a fresh-context `opus` reviewer given the skill, the
+      survey, the guardrails, Settled 5/11 verbatim and a frozen list
+      (the ⚠️ paragraph, the five rule-4 exclusions, the bar definition,
+      the tremor flag, every survey-backed number): 26 body findings, 5
+      description, 12 levers found, 6 not found, plus a 45-row body ↔
+      survey consistency table; every not-found and consistency claim
+      re-grepped in the main session. Landed (maintainer's pick, 21 of
+      26, in two tiers). Consistency: F1 "last-commit" → "last-push"
+      (the survey column); F5 the Vue row says the survey holds no
+      Vue pick that meets the bar (it held only a 189-star port); F6
+      Step 2 is done when constraints 1, 2, 3 and 5 have a yes/no and
+      rule 4 applies on every run; F9 ECharts is removed on low-power
+      targets (the survey note), no longer tied to "about 3D"; F11
+      `robsontenorio/mary` slug added beside mary-ui; F15 dayjs "(2 KB)"
+      dropped, the one size the survey did not back; F16 the magicui
+      MCP cell says "No official public MCP found", the survey's own
+      width; F17 "shadcn / magicui / aceternity" so "those three" has
+      three; F23 Figma MCP (15,864 / MIT / 2026-09-15, within the bar)
+      moved out of the below-bar sentence into its own paragraph, no
+      Step 4 row (minimal shape; the 2026-09-26 bar review never counted
+      it as a pick); F24 axe-core flagged in place "(MPL-2.0, outside
+      the permissive list)", as the intro promises for a pick outside
+      the bar; F26 the alternative rule leaves Done when for
+      the Step 3 head and now also fires on the alternative's own
+      condition (donut → Chart.js, CRUD → refine, editor → fabric.js)
+      and speaks notes. Pruning and routing: F2 the citation rule sits
+      beside the `references/` pointer, Done when keeps "carries its
+      source and date"; F4 row C wins over row A's PHP signals and
+      "routes on to A or B"; F7 "removed" at both Step 2 removal sites,
+      the token Done when checks; F10 rule 4 points at the intro's
+      permissive list; F13 section headers drop the Step 1 signal
+      parentheticals; F14 "; both replace GSAP" dropped (rule 4 is the
+      source); F18 "Sections D and E are framework-agnostic" at the
+      Step 3 head, Section C's row deleted; F20 the Google Maps JS API
+      row gets a positive route (supercluster, deck.gl), no loading
+      method asserted since the survey records none; F22 the shadcn
+      MCP row says what the server does and "Any non-React stack"; F25
+      the inverse "every removed candidate names the constraint" clause
+      dropped. Rejected: F3 (delete the BaaS and AI-generation survey
+      sections) and F19 (delete survey Note cells) — disclosed
+      reference costs no context load and the snapshot is a record; F8
+      (Tailwind note → pointer: six words beside the pick); F12 (split
+      Sections A/B/C into three files: 35 lines, and a PHP run would
+      read two of them); F21 (pixi note as a no-op: model-relative,
+      unproven without a run). Description: D1 "any backend" → "any
+      stack" landed by hand (React is not a backend); D2–D5 (duplicate
+      MCP trigger, the negated exclusion sentence, the enumeration, the
+      three Step 2 constraint branches) are carried as candidate edits
+      into the `run_loop.py` stage, which plan §2 schedules for this
+      skill and which is still open: `run_eval.py` fires each query via
+      `claude -p --model`, ~20 user-reviewed queries × 3 runs × up to 6
+      rounds ≈ 360 checks; the eval set must carry Traditional Chinese
+      one-line queries of the `4e033f3` kind; the model for the run is
+      a maintainer call (`skill-creator` says the session model;
+      `30-ops.md §12` gate ① does not hold). Verified:
+      `quick_validate.py` valid (run with the pyenv 3.13 interpreter,
+      the default `python3` lacks PyYAML); `grep -c '⚠️'` 1 → 1, the
+      paragraph unchanged; Settled 5 and 11 sentences and the tremor
+      flag present verbatim; six rule-4 arrows; all 46 bold slugs in the
+      survey; Section D/E tables untouched except the Google Maps row;
+      description differs from HEAD at one word; rule-4 lines 51–52
+      rewrapped for F10, content unchanged; 21 hunks; lines over
+      80 chars 42 → 41; `verifier` 8/8 with read-back 9/9 (row C wins,
+      rule 4 needs no yes/no, ECharts removed, D/E reach Section A,
+      source and date beside a star count, donut speaks Chart.js, Figma
+      within the bar, axe-core flagged, Google Maps clusters with
+      supercluster); the first read-back's Q7 showed the Figma sentence
+      still read as below the bar inside that paragraph, so it became
+      its own paragraph and Q7 was re-asked (PASS). Diff: 38+/33−,
+      147 → 152 lines. Plan 1.4.0 (status, table row); `CLAUDE.md`
+      Open 1 now records the body pass and points at the description
+      run, then `completion-gate`.
