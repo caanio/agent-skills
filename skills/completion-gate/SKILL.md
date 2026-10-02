@@ -5,16 +5,15 @@ description: "Decides whether work may be called done. Use before saying a task 
 
 # completion-gate
 
-The gate between "I think it works" and "it is done". Everything below is cheap
-compared with shipping something broken and finding out later.
+The gate between "I think it works" and "it is done".
 
 **Scope boundary** — these compose in sequence, they do not compete:
 - *Whether something counts as done* → here.
-- *How to farm a check out to a subagent* (thresholds, prompt structure,
-  anti-anchoring, tier choice) → your own delegation rules, wherever they live.
+- *How to farm a check out to a subagent* (thresholds, prompt structure) →
+  your own delegation rules, wherever they live.
 - *The mechanics of committing* (staging, secrets scan, message wording) →
   your commit-workflow skill, entirely. This skill only governs what must
-  happen **before** a commit; it never replaces the commit workflow itself.
+  happen **before** a commit.
 - *The mechanics of a thorough code review* (a multi-axis check, severity
   labels, a real checklist) → your code-review skill, entirely — this
   collection doesn't ship one (e.g. a built-in `/code-review` that forks a
@@ -25,32 +24,13 @@ compared with shipping something broken and finding out later.
   while writing it; a built-in `/security-review` of the pending diff after
   every code change; `security-audit` as a focused review when the change
   crosses a trust boundary, and in full before a first production deploy).
-  With none you can run
-  yourself, you must at minimum hand a fresh context the diff and ask where
-  it takes anything from outside the program's control, and what that can
-  make the code do or expose. That is a stand-in, not the review: paste its
-  output under part 2 of the delivery message without calling it a security
-  review or a pass, and list the security review under part 3 as not done.
-  No fresh context either → the downgrade below, naming the security review
-  as the gate that did not run. The Code row below governs tests and
-  code-review triage only; it makes no security judgement of its own.
+  The security row below is the one place that says what to do when none is
+  installed.
 - *A deeper maintainer-handover pass* (backfilling ADRs, checking
   README/CONTEXT.md against reality, recording production facts and the
   deploy path, a prioritized TODO) → the `handover` skill. Run it only
-  after this gate passes, never in place of it — how often you reach for
-  it (every wrap-up, or only at milestone/handoff moments) is your call,
-  not this skill's.
-
-## When to Invoke
-
-- About to say **done / finished / complete / ready / it works / fixed**.
-- About to write **verified / PASS / tested / confirmed** as a claim about your
-  own deliverable.
-- Wrapping up a session, or about to commit.
-- About to draft a yes/no confirmation question ("commit this?", "proceed?",
-  "apply this?") for a change that touches a destructive operation, a trust
-  boundary, or unattended automation.
-- **After any failure**, not just a repeated one.
+  after this gate passes, never in place of it; wrap-up step 6 says when
+  to ask.
 
 ## Core Rules
 
@@ -64,8 +44,10 @@ compared with shipping something broken and finding out later.
    - **Anything requiring judgement** — "is this documentation clear?", "does
      this design hold?", "is this test actually testing the right thing?",
      "is this finding real?" — goes to a **fresh context that was not told your
-     reasoning**. Your own answer here is worth very little; you already believe
-     you were right, which is why you wrote it that way.
+     reasoning**: hand it the artifact and the acceptance criteria only, never
+     your defence of the work. A reviewer who has read your argument reviews
+     your argument. Your own answer here is worth very little; you already
+     believe you were right, which is why you wrote it that way.
 
    The trap this rule exists to close: running a green test suite and concluding
    the *task* is done. Green means the assertions you chose passed. Whether they
@@ -73,8 +55,8 @@ compared with shipping something broken and finding out later.
    *How much* independent judgement a given change deserves is proportional to
    its risk — the Code row below draws that line. This rule fixes *who sets the
    standard*, not *how much review every change gets*: you may not quietly lower
-   the bar for your own work, but a one-character **code** fix does not summon a
-   panel. That proportionality is specific to code. The Docs row and the wrap-up
+   the bar for your own work. That proportionality is specific to code. The
+   Docs row and the wrap-up
    read-back have no size exemption — a one-line edit to a rules file still gets
    read back, because the failure there is silent.
 
@@ -106,14 +88,12 @@ compared with shipping something broken and finding out later.
    touching anything, you do not yet understand the task. Go gather information
    instead of starting.
 
-5. **Report honestly, including the gaps.** Staying quiet about what you skipped
-   destroys trust faster than the gap itself ever would.
-
 ## What Counts as Verification, by Artifact Type
 
 | Artifact | Legitimate verification |
 |---|---|
 | Code | Run the tests or actually execute it — yourself. Compiling is not behaving. Then, **when the tests are new, or the change touches anything in the judgement-call row below**, hand it to a code review that runs in a **fresh context** (see Scope boundary) — a same-context review checklist is an authoring aid, not this check: you would be grading your own work (Core Rule 1); with none installed, at minimum have a fresh context judge whether those tests cover what the task actually asked for. A typo fix does not need a reviewer; a new module's first test suite does. ⚠️ An adversarial second opinion is the judgement-call row's check, not this one's, and it reviews only the scope you handed it. Observed: fifteen rounds of adversarial review on one class, taken as the code review of a 14-file diff; a fresh-context review of the same diff then found two real crash paths outside that class in five minutes. |
+| Security review of code crossing a trust boundary | Your security skill (see Scope boundary). With none you can run yourself, you must at minimum hand a fresh context the diff and ask where it takes anything from outside the program's control, and what that can make the code do or expose. That is a stand-in, not the review: paste its output under part 2 of the delivery message without calling it a security review or a pass, and list the security review under part 3 as not done. No fresh context either → the downgrade below, naming the security review as the gate that did not run. The Code row governs tests and code-review triage only; it makes no security judgement of its own. |
 | Docs, rules, config | Give the file to a fresh context and have it **answer questions using only that file** — and the questions must target the passages your change touched, or the gate is theatre. Wrong answers are a finding about the file, not about the reader. When the change swapped a personal value (PII: a name, an address, a home or workplace coordinate) for a placeholder, one question is fixed: *does anything in the file, its header or the changelog say the value was real or was replaced?* A yes is a finding — a placeholder is silent about its origin. The mechanical scan for this lives in your commit-workflow skill, not here. |
 | A hard judgement call (architecture trade-off, elusive bug, trust-boundary design, data migration, technology choice) | An independent adversarial second opinion. When it disagrees, analyse the disagreement — do not pick whichever answer you preferred. |
 | A destructive or irreversible operation | **Out of scope for this skill.** Confirm the blast radius before, read back the effect after, and follow whatever high-risk procedure you operate under. Only add the adversarial review if the operation is *also* a hard judgement call, or if you cannot tell whether it is. |
@@ -137,10 +117,6 @@ Choose the **cheapest reviewer that is actually qualified** — a cheap model
 doing mechanical read-back beats an expensive model doing nothing. You economise
 on the unit price of verification, never on its existence.
 
-When delegating any of the above, hand the reviewer the artifact and the
-acceptance criteria only — never your reasoning or your defence of the work.
-A reviewer who has read your argument reviews your argument.
-
 ## When No Subagent Is Available
 
 Some environments cannot spawn agents at all; some runs are additionally
@@ -157,8 +133,9 @@ Then find the independent judgement:
    ask for a one-off exemption and record that you got it. "No subagents" is not
    the same as "no independent reader", and conflating the two is how an
    interactive session talks itself into self-certifying.
-2. **Only when there is genuinely nobody to ask**: mark the output **"unverified
-   draft"** and name exactly which judgement-level gate did not run, and why.
+2. **Only when there is genuinely nobody to ask — the *downgrade***: mark the
+   output **"unverified draft"** and name exactly which judgement-level gate
+   did not run, and why.
    Where a rule elsewhere says "ask the user" and there is no user, take this
    same path rather than proceeding as if the question had been answered.
 
@@ -189,19 +166,20 @@ before editing it a third time. Recorded repeatedly in practice, not a
 theoretical worry: it is the most expensive loop to stay stuck in, and from the
 inside it always looks like bad luck.
 
-## End-of-Session Wrap-Up (order matters, do not reorder)
+## End-of-Session Wrap-Up (run in this order)
 
 1. **First, confirm every artifact this round has produced — code, docs,
    rules, config — has actually passed its own row in the table above.**
    For code: tests run yourself, code-review triage if the tests are new or
    the change is a judgement call, a security skill if it crosses a trust
-   boundary — or, with none you can run, the Scope boundary's stand-in. For
+   boundary — or, with none you can run, the security row's stand-in. For
    docs, rules and config: the Docs row's read-back, with no size exemption
    (Core Rule 1). Docs describe verified behaviour, not aspirational
    behaviour: writing them before this holds means step 2 documents something
    that may still be broken.
-2. **Update the substantive docs first.** Walk the diff and ask of each doc:
-   "does this describe behaviour or a decision my change just invalidated?"
+2. **Update the substantive docs first.** Walk the diff and ask of each doc
+   the repo tracks: "does this describe behaviour or a decision my change
+   just invalidated?"
    If yes, update it. If unsure, list the candidates and ask — never skip
    silently. Do not re-transcribe what the code already states.
 3. **Prove step 2 actually happened.** If you edited any doc, hand the changed
@@ -218,13 +196,12 @@ inside it always looks like bad luck.
    ⚠️ Without this check, step 2 degrades into claiming an update that was never
    made — observed in practice, not hypothetical.
 4. **Decide out loud whether this also needs the adversarial second opinion**
-   from the judgement-call row above (architecture trade-off, elusive bug,
-   trust-boundary design, migration, tech choice — or a rules/config file
-   whose failure mode is silent). State a recommendation — run it or skip it —
+   from the judgement-call row above, or for a rules/config file whose
+   failure mode is silent. State a recommendation — run it or skip it —
    with your reasoning, every time step 3 finishes, whether it passed or had
-   to escalate. Running it is optional and proportional to risk, same as Core
-   Rule 1; skipping it is a choice you record, not a default you fall into
-   silently. Steps 5–6 proceed either way — this step only blocks one thing:
+   to escalate. Running it is optional and proportional to risk; skipping it
+   is a choice you record, not a default you fall into silently. Steps 5–6
+   proceed either way — this step only blocks one thing:
    you may not write **verified / PASS** as a claim about the change until the
    second opinion you decided to run has actually come back.
 5. **Then** update the continuation notes / TODO index. You must have actually
@@ -241,9 +218,9 @@ inside it always looks like bad luck.
 6. **Then ask — out loud, every time — whether to run `handover`.** This is a
    real question to the user, not a decision you make alone: attach your own
    recommendation — run it now or skip it — and your reasoning, never a bare
-   yes/no. How often `handover` actually runs is the user's call (see Scope
-   boundary); whether you asked this time is not. Completing step 5 is not
-   permission to skip straight to committing.
+   yes/no. How often `handover` actually runs is the user's call; whether you
+   asked this time is not. Completing step 5 is not permission to skip
+   straight to committing.
    ⚠️ Observed in practice: finishing step 5 reflexively rolls straight into
    commit, skipping this question entirely — that is exactly the gap this
    step closes.

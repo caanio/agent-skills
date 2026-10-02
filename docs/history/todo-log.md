@@ -1027,3 +1027,97 @@ Entries run oldest first; new entries are appended at the end.
       Q1–Q4 PASS and no full model ID anywhere. Plan 1.5.0 (status,
       table row, harness pointer in §2);
       `CLAUDE.md` Open 1 now points at `completion-gate`.
+- [x] Skill-authoring pass on `completion-gate` (2026-10-02), fifth pass
+      per the plan. Cross-check map first (plan §5): twelve blame
+      commits; 140 of 249 lines from the founding `59fcf47` (no log
+      entry, commit body serves), the rest from eleven logged edits
+      between 2026-08-21 and 2026-10-01, each tagged with what its entry
+      records (rejections: the step-6 softer phrasing, trimming the Code
+      row's ⚠️ numbers, restating the stand-in reporting rule in step 1,
+      dropping "after every code change"; costs accepted: cadence left as
+      the user's call, the stand-in placed in the Scope bullet, step 1's
+      pointer so a literal reader can pass it). Whole-file
+      `writing-for-agents` review by a fresh-context `opus` reviewer given
+      the skill, the two reference files, plan §4–§5, Settled 1 and 3
+      verbatim and a frozen list (the six ⚠️, the three `[NEVER VIOLATE]`
+      tags, the authoring clause on the table, the Docs-row PII question,
+      `git diff HEAD --stat`, the four-line security example): 17 body
+      findings, 7 description, 12 levers found, 5 not found; the
+      reviewer caught the frozen list's off-by-one (the security example
+      is lines 24–27, not 25–28) and froze 24–28. Every line number and
+      quote re-grepped in the main session; the five not-found levers
+      accepted (no `disable-model-invocation`, so invocation, router and
+      split-by-invocation do not apply; no environment lookup restated).
+      Landed (maintainer's pick, 15 of 17, two tiers). Tier 1: F2 Scope
+      bullet 2 no longer hands anti-anchoring and tier choice outside
+      (the file owns both); F6 "When to Invoke" deleted (the description
+      carries all five branches; `python-coding-standards` F4 precedent);
+      F7 the hand-the-artifact-only rule single-sourced into Core Rule 1,
+      the standalone paragraph after the table deleted; F10 "the
+      *downgrade*" named where it is defined (no-subagent step 2), so the
+      three pointers to it have an anchor; F12 the wrap-up heading reads
+      "(run in this order)"; F16 step 4 drops "same as Core Rule 1",
+      which limits proportionality to code while step 4 applies it to
+      rules/config too. Tier 2: F1 the intro's cost sentence deleted
+      (meaning lives in "You economise on the unit price"); F3 "it never
+      replaces the commit workflow itself" dropped; F4 the no-security-
+      skill stand-in moved from the Scope bullet into a table row ("Security
+      review of code crossing a trust boundary", so "the security row"
+      reuses a label word like every other row pointer) after the Code
+      row, the bullet keeping
+      the frozen example plus a pointer mirroring the code-review
+      bullet's, step 1 now naming "the security row's stand-in" — this
+      overrides the 2026-09-26 placement on evidence that entry did not
+      weigh: the Code row's own fallback is in the table, so the mirror
+      argument supports the row; the "Code row … makes no security
+      judgement of its own" sentence kept as the row's last line, since
+      the 2026-09-20 entry leans on it; F5 handover cadence
+      single-sourced in step 6, the Scope bullet keeping "Run it only
+      after this gate passes, never in place of it; wrap-up step 6 says
+      when to ask" (`handover`'s 2026-10-01 F10 deleted its own copy as a
+      duplicate of this bullet; the surviving source is step 6); F8 "but
+      a one-character code fix does not summon a panel" dropped (the Code
+      row's typo-fix sentence draws the line); F9 Core Rule 5 deleted
+      (delivery part 3 binds it); F14 step 2 walks "each doc the repo
+      tracks"; F15 step 4 points at the judgement-call row instead of
+      re-listing its members, "a rules/config file whose failure mode is
+      silent" kept; F17 partial: "(see Scope boundary)" dropped from step
+      6 after F5. Rejected: F11 (wrap-up to a sibling `WRAP-UP.md`: the
+      reviewer's own verdict was last-to-land, six back-references, and
+      the step-6 ⚠️ records the sequence being skipped while inline);
+      F13 (delete step 1's "For code … (Core Rule 1)" span: re-proposes
+      the 2026-09-10 code list, the 2026-09-24 no-size-exemption clause
+      added because no step triggered it, and the 2026-09-26 literal-
+      reader pointer, with no new evidence); F17's main part (delete
+      "Completing step 5 is not permission to skip straight to
+      committing" and "never a bare yes/no": 2026-09-10 kept the direct
+      prohibition after a softer phrasing failed read-back, and the ⚠️ is
+      a record, not the rule). Description D1–D7 not applied: plan §2
+      schedules this skill's `run_loop.py` stage next, and all seven
+      (five synonyms for the done branch, three tokens for Core Rule 3,
+      "calling it a day", "picking work back up tomorrow" — tagged a
+      factual error by the reviewer, read here as an ambiguous wrap-up
+      phrase rather than a claim the body contradicts —, "after any
+      failure" unscoped to own work, the table-of-contents sentence,
+      "Decides whether work may be called done" not front-loaded) go in
+      as candidate texts; D6 is the largest context-load saving. Verified:
+      `quick_validate.py` valid; `grep -c '⚠️'` 6 → 6; `[NEVER VIOLATE]`
+      3 → 3; security example lines 24–27 byte-identical to HEAD; `git
+      diff HEAD --stat`, the step-6 prohibition, "never a bare yes/no"
+      and the PII question each present once; description byte-identical
+      to HEAD; authoring clause still directly after the table (five
+      rows); 17 hunks, none in the ⚠️ paragraphs; lines over 80 chars
+      10 → 11 (the new table row); `verifier` M1–M6 6/6 and read-back 10/10
+      (stand-in and its reporting from the security row, Code row makes no
+      security judgement, artifact and criteria only, cadence is the user's
+      call in step 6, the downgrade defined in no-subagent step 2,
+      rules/config file in step 4, docs the repo tracks, "run in this order",
+      the typo-fix line, gaps in part 3), contradictions none found;
+      `handover`'s Scope bullet re-grepped (it points at the gate, not at
+      the cadence rule, so F5 strands no pointer); no live `Core Rule 5`
+      / `When to Invoke` reference outside `docs/trigger-audit-notes.md`'s
+      2026-08-21 record; `deep-reviewer` second opinion on F4's
+      relocation skipped on the maintainer's call (verbatim text moved,
+      every pointer resolved by the read-back). Diff: 31+/54−,
+      249 → 226 lines. Plan 1.6.0 (status, table row); `CLAUDE.md` Open
+      1 now records the body pass and points at the description run.

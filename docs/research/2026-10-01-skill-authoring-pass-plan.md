@@ -1,13 +1,16 @@
 # Skill-authoring pass over `skills/`: scope evaluation
 
-Version: 1.5.0 | Date: 2026-10-02 | Status: decided 2026-10-01 (option A;
+Version: 1.6.0 | Date: 2026-10-02 | Status: decided 2026-10-01 (option A;
 `skill-creator` = validate + description optimization on five skills,
 eval loop dropped); pilot on `handover` done 2026-10-01 (log entry);
 §5 gained the log cross-check after the pilot; `git-helper` done
 2026-10-01 (log entry); `python-coding-standards` done 2026-10-02
 (log entry); `web-stack-selector` body pass and description run both done
 2026-10-02 (log entries; HEAD stood, harness fixes recorded in
-`2026-10-02-web-stack-selector-trigger-eval.md` §2); next `completion-gate`
+`2026-10-02-web-stack-selector-trigger-eval.md` §2); `completion-gate`
+body pass done 2026-10-02 (log entry; 15 of 17 landed, one 2026-09-26
+placement overridden); next its description run, then
+`haos-https-tunnel`
 
 Answers `CLAUDE.md` Open item 1 (added 2026-10-01): should every skill in
 `skills/` go through `skill-creator` and `writing-for-agents`, in what
@@ -24,7 +27,7 @@ one, and the two that did have been diff-edited since. The 2026-09-30
 
 | Skill | Lines | ⚠️ | Last `writing-for-agents` edit | `quick_validate` |
 |---|---|---|---|---|
-| completion-gate | 249 | 6 | 2026-10-01 | valid |
+| completion-gate | 226 | 6 | 2026-10-02 (whole-file pass) | valid |
 | git-helper | 171 | 0 | 2026-10-01 (whole-file pass) | valid |
 | handover | 108 | 0 | 2026-10-01 (whole-file pass) | unknown keys (see §3) |
 | haos-addon-deploy | 396 | 27 | 2026-09-26 | valid |
