@@ -984,3 +984,46 @@ Entries run oldest first; new entries are appended at the end.
       147 → 152 lines. Plan 1.4.0 (status, table row); `CLAUDE.md`
       Open 1 now records the body pass and points at the description
       run, then `completion-gate`.
+- [x] `web-stack-selector` description run (2026-10-02), the `run_loop.py`
+      stage plan §2 scheduled after the body pass; closed with HEAD
+      standing, no `SKILL.md` edit. Eval set: 20 queries (10/10),
+      four of them Traditional Chinese one-liners including the
+      `4e033f3` Flask-map question, reviewed in `eval_review.html` and
+      exported unchanged. Three descriptions scored with `run_eval.py`
+      (3 runs per query, `opus`, 10 workers, `--timeout 90`), each in
+      two configurations: isolated (`--setting-sources project`, no
+      other skill listed) and with competitors (51 skills linked in,
+      43 listed by `claude -p`).
+      HEAD 20/20 and 20/20 (mean rate 1.00 / 0.00); D2–D5 hand-applied
+      20/20 and 20/20, identical; the reverted `4e033f3` widened text
+      20/20 and 19/20, firing 3/3 on the should-not React Native map
+      question under competitors. `run_loop.py` not started: it exits
+      on iteration 1 when every train query passes (`all_passed`), so
+      a run from HEAD returns HEAD. Decided (maintainer, option A of
+      three: A close on these numbers, B a diagnostic `sonnet` run, C a
+      harder set): D2–D5 stay candidates (plan §4.4, no evidence);
+      the `0aad280` revert now has a number. The 2026-09-16 live miss
+      is unreproduced under these conditions (the same question hits
+      3/3 under HEAD in both configurations and in two single probes),
+      not "fixed": the harness is a fresh `claude -p` without the
+      global rules, a command-file stand-in, `opus`. Three defects in
+      the installed `skill-creator` scripts, each confirmed by a probe
+      and fixed on a scratch copy only (install directory untouched):
+      workers share one `.claude/commands/` so a `claude -p` picks a
+      sibling's suffix and counts as a miss (first HEAD run 10/20
+      before the fix, every should-trigger at 0/3 or 1/3); the
+      project root resolves to `~` through a real `~/.claude`; the
+      installed real skill is listed beside the test command and
+      absorbs the trigger. Full record, scratch diff, run script, eval
+      set and the candidate texts:
+      `docs/research/2026-10-02-web-stack-selector-trigger-eval.md`,
+      the harness fixes the remaining four runs need again. Verified:
+      `SKILL.md` byte-identical to HEAD (`git status` clean for
+      `skills/`); json block of the note re-parsed, 20 items, 10 true;
+      `verifier` read-back on the note 5/6 with Q1–Q5 PASS, the two
+      findings fixed (json closing fence on its own line; "no body"
+      → git's own "This reverts commit" line, checked with `od`);
+      second `verifier` round on the four touched files 5/5 with
+      Q1–Q4 PASS and no full model ID anywhere. Plan 1.5.0 (status,
+      table row, harness pointer in §2);
+      `CLAUDE.md` Open 1 now points at `completion-gate`.

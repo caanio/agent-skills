@@ -1,12 +1,13 @@
 # Skill-authoring pass over `skills/`: scope evaluation
 
-Version: 1.4.0 | Date: 2026-10-02 | Status: decided 2026-10-01 (option A;
+Version: 1.5.0 | Date: 2026-10-02 | Status: decided 2026-10-01 (option A;
 `skill-creator` = validate + description optimization on five skills,
 eval loop dropped); pilot on `handover` done 2026-10-01 (log entry);
 §5 gained the log cross-check after the pilot; `git-helper` done
 2026-10-01 (log entry); `python-coding-standards` done 2026-10-02
-(log entry); `web-stack-selector` body pass done 2026-10-02 (log entry),
-its description run (§2) still open; next that run, then `completion-gate`
+(log entry); `web-stack-selector` body pass and description run both done
+2026-10-02 (log entries; HEAD stood, harness fixes recorded in
+`2026-10-02-web-stack-selector-trigger-eval.md` §2); next `completion-gate`
 
 Answers `CLAUDE.md` Open item 1 (added 2026-10-01): should every skill in
 `skills/` go through `skill-creator` and `writing-for-agents`, in what
@@ -30,7 +31,7 @@ one, and the two that did have been diff-edited since. The 2026-09-30
 | haos-cloud-backup | 225 | 13 | 2026-09-26 | valid |
 | haos-https-tunnel | 143 | 7 | 2026-10-01 | valid |
 | python-coding-standards | 133 | 1 | 2026-10-02 (whole-file pass) | valid |
-| web-stack-selector | 152 | 1 | 2026-10-02 (whole-file pass) | valid |
+| web-stack-selector | 152 | 1 | 2026-10-02 (whole-file pass; description run same day) | valid |
 
 Counts measured 2026-10-01 with `wc -l`, `grep -c '⚠️'` and
 `skill-creator/scripts/quick_validate.py` (read-only). Dates come from
@@ -66,7 +67,12 @@ Description optimization applies to at most five skills:
   skill's), `python-coding-standards` (had a description-optimization
   pass 2026-08-19, log entry).
 - In: `completion-gate`, `haos-addon-deploy`, `haos-cloud-backup`,
-  `haos-https-tunnel`, `web-stack-selector`.
+  `haos-https-tunnel`, `web-stack-selector` (done 2026-10-02).
+
+Before each run, apply the three harness fixes recorded in
+`2026-10-02-web-stack-selector-trigger-eval.md` §2 on a scratch copy of the
+scripts: per-call project roots, a scratch root with its own `.claude/`,
+and `--setting-sources project` plus a competitor pool.
 
 ## 3. The one validator finding
 

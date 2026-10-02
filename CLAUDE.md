@@ -122,11 +122,12 @@ Open:
    description triggering. Scope, guardrails, verification and order:
    `docs/research/2026-10-01-skill-authoring-pass-plan.md`. Landed:
    `handover` (pilot) and `git-helper` (both 2026-10-01),
-   `python-coding-standards` and the `web-stack-selector` body pass
-   (both 2026-10-02), all in the log. Next: `web-stack-selector`'s
-   description run (`run_loop.py`, plan §2; D2–D5 in its log entry are
-   the candidate edits), then `completion-gate` and the rest by ⚠️
-   count ascending; every pass ends in one log entry.
+   `python-coding-standards` and `web-stack-selector` (body pass and
+   description run, both 2026-10-02), all in the log. Next:
+   `completion-gate` (body pass, then its description run with the
+   harness fixes in `docs/research/2026-10-02-web-stack-selector-trigger-eval.md`
+   §2), then the rest by ⚠️ count ascending; every pass ends in one
+   log entry.
 
 ## Source Material
 
