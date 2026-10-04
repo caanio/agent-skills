@@ -1,6 +1,6 @@
 # Skill-authoring pass over `skills/`: scope evaluation
 
-Version: 1.8.0 | Date: 2026-10-04 | Status: decided 2026-10-01 (option A;
+Version: 1.8.1 | Date: 2026-10-04 | Status: decided 2026-10-01 (option A;
 `skill-creator` = validate + description optimization on five skills,
 eval loop dropped); pilot on `handover` done 2026-10-01 (log entry);
 §5 gained the log cross-check after the pilot; `git-helper` done
@@ -79,7 +79,11 @@ Description optimization applies to at most five skills:
 Before each run, apply the three harness fixes recorded in
 `2026-10-02-web-stack-selector-trigger-eval.md` §2 on a scratch copy of the
 scripts: per-call project roots, a scratch root with its own `.claude/`,
-and `--setting-sources project` plus a competitor pool.
+and `--setting-sources project` plus a competitor pool. The scripts need
+PyYAML, which no system or pyenv interpreter here ships; give them a scratch
+venv rather than installing into an interpreter:
+`python3 -m venv <scratch>/venv && <scratch>/venv/bin/pip install pyyaml`
+(2026-10-04: `quick_validate.py` ran this way).
 
 ## 3. The one validator finding
 
