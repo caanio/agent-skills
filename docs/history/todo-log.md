@@ -1276,3 +1276,37 @@ Entries run oldest first; new entries are appended at the end.
       own per-query table. Plan 1.9.0 (status, table row,
       §2 In list); `CLAUDE.md` Open 1 now records the description run
       and points at `haos-cloud-backup`.
+- [x] `web-stack-selector` Section F, Vue / Nuxt (2026-10-04). Asked
+      whether Vue / React / Vite / TypeScript belong in the skill:
+      React already has Section B; Vite and TypeScript are build and
+      language choices, not per-scene libraries, already read as a
+      Step 1 signal and as Step 2 constraint 2, so they stay out
+      (maintainer call). The old "Vue / Nuxt: uncovered, no Vue pick
+      meets the bar" row reflected the 2026-09-16 survey's scope, which
+      never covered the Vue ecosystem. New snapshot
+      `references/survey-2026-10-04-vue.md` (GitHub API, 2026-10-04,
+      `sonnet` subagent): 21 named candidates, 17 within the bar (search
+      hits such as `vbenjs/vue-vben-admin` counted apart); no uPlot,
+      MapLibre, Leaflet or SortableJS Vue wrapper within it, so Section F
+      mounts those directly; no Vue CRUD framework on the refine model.
+      Old snapshot's Aceternity row said the Vue port `inspira-ui` had
+      189 stars; `unovue/inspira-ui` reads 5,015 (API: created 2024-08-30,
+      not a fork), so the row now points at the new snapshot. `SKILL.md`
+      1.2.0 → 1.3.0: Step 1 row F, Step 2 constraints 2 and 3 name the
+      Vue picks they remove, Section C routes Inertia + Vue to F,
+      Section F (six scenes), Step 4 adds the PrimeVue and Nuxt UI
+      MCPs and sends Vuetify's below-bar MCP to Context7. Verified: the
+      four below-bar rows and the three non-existence claims (uPlot /
+      MapLibre wrappers, vuejs-org MCP) re-read via the API in the main
+      session, one within-bar row spot-checked; `verifier` read-back 7/7
+      PASS (picks vs bar, numbers vs raw survey, cross-references, no
+      leftover "uncovered" claim, table shape, read-back Q&A, versions),
+      its no-leftover claim re-grepped; its Q&A ambiguity on low-power
+      Vue charts fixed by naming uPlot in the Section F chart row; second
+      `verifier` read-back 5/5 PASS on that row, this entry and the
+      `CLAUDE.md` item. Open: the description still names only
+      React among SPA stacks; adding Vue / Nuxt triggers needs a
+      description run. `deep-reviewer` second opinion on the picks
+      considered and skipped (maintainer call): every pick passes the
+      bar mechanically, the edit is text-only, and the description run
+      exercises Section F again. README row now names Vue/Nuxt.

@@ -5,14 +5,15 @@ description: "Pick the frontend library, CSS layer, JS utility, map or 2D/3D eng
 
 # web-stack-selector
 
-Version: 1.2.0 | Date: 2026-10-02
+Version: 1.3.0 | Date: 2026-10-04
 
 Every pick below **meets the bar** unless flagged where it appears:
 >= 1,000 GitHub stars, a permissive license (MIT / BSD / ISC / Apache-2.0 /
 0BSD), maintained (a push within ~6 months of the survey date — mature
 libraries release slowly, so a quiet quarter is not abandonment). Star counts and
-last-push dates live in `references/survey-2026-09-16.md`, a dated
-snapshot: quote a star count from it with the snapshot date beside it, or
+last-push dates live in dated snapshots, `references/survey-2026-09-16.md`
+and, for Vue, `references/survey-2026-10-04-vue.md`: quote a star count
+from one with its snapshot date beside it, or
 from a fresh API read when the user needs today's number.
 
 ## Step 1 — Identify the stack (ask one question if unclear)
@@ -21,8 +22,8 @@ from a fresh API read when the user needs today's number.
 |---|---|---|
 | **A. Vanilla / server-rendered** | Flask + Jinja, Django templates, PHP Blade/Twig, Livewire, htmx, "no npm", "no build step" | Section A |
 | **B. React** | Next.js, Vite + React, Laravel Inertia + React, "use shadcn" | Section B |
-| **C. PHP full-stack** | Laravel or Symfony project (wins over the PHP signals in row A) | Section C, which routes on to A or B |
-| Vue / Nuxt | Uncovered; say so and use Section A libraries (framework-agnostic). The survey holds no Vue-specific pick that meets the bar | — |
+| **C. PHP full-stack** | Laravel or Symfony project (wins over the PHP signals in row A) | Section C, which routes on to A, B or F |
+| **F. Vue** | Nuxt, Vite + Vue, Laravel Inertia + Vue, `.vue` files | Section F |
 
 ## Step 2 — Hard constraints (check before any pick)
 
@@ -42,13 +43,14 @@ for this project; constraint 4 applies on every run:
    is open. A dead new button means "check the CSP header first".
 2. **No build step** (no Node in the deploy pipeline) → pick single-file
    UMD / IIFE / ESM bundles. Tailwind stays only via its standalone CLI;
-   daisyUI, shadcn, magicui, aceternity and React Three Fiber need a
-   bundler and are removed.
+   daisyUI, shadcn, magicui, aceternity, React Three Fiber, shadcn-vue,
+   inspira-ui and Nuxt UI need a bundler and are removed.
 3. **Low-power target** (Raspberry Pi, cheap VPS, many concurrent tabs) →
    prefer the lighter option in each row: uPlot over Chart.js, Leaflet
    over MapLibre / OpenLayers. Heavy visuals (particles, beams, 3D) live in
-   the **hero block**, one Canvas per page; ECharts (~1 MB) is removed, and
-   full 3D engines stay only when the page is *about* 3D.
+   the **hero block**, one Canvas per page; ECharts (~1 MB, vue-echarts
+   included) is removed, and full 3D engines stay only when the page is
+   *about* 3D.
 4. **License bar** (the intro's permissive list). When one of these comes
    up, flag it and offer the permissive neighbour: react-bits (MIT + Commons
    Clause) → anime.js / motion; GSAP (custom, non-OSI) → anime.js;
@@ -101,6 +103,7 @@ skeleton, **magicui** for feature Bento grids / marquees / border beams,
 | Admin panel fast, minimal JS | **filamentphp/filament** (built on **livewire/livewire**, Tailwind) | Filament's own table/form/widget system replaces Section A picks for the admin area |
 | Interactive pages without writing JS | **livewire/livewire** alone (Laravel) / **symfony/ux** Live Components (Symfony) | Section A libraries for charts, maps, icons |
 | You want shadcn / magicui / aceternity on a PHP backend | **inertiajs/inertia** + React | Then follow Section B; on PHP those three reach the page only through Inertia |
+| Vue on a PHP backend | **inertiajs/inertia** + Vue | Then follow Section F |
 | CSS baseline | **tailwindlabs/tailwindcss** (v4 standalone CLI needs no Node) | Keep **twbs/bootstrap** where it already runs |
 
 ### Section D — Maps
@@ -126,6 +129,20 @@ skeleton, **magicui** for feature Bento grids / marquees / border beams,
 | 2D interactive editor (drag, select, transform) | **konvajs/konva** | **fabricjs/fabric.js** when it is an image/graphics editor |
 | Data-viz primitives | **d3/d3** | Primitives you compose, rather than ready-made charts |
 
+### Section F — Vue / Nuxt
+
+Layered use on one page, as in Section B: **shadcn-vue** for every control
+and layout skeleton, **inspira-ui** for the hero and marketing blocks.
+
+| Scene | Primary | Alternative / notes | MCP |
+|---|---|---|---|
+| Admin dashboard, forms, data tables, dialogs, a11y | **unovue/shadcn-vue** (reka-ui primitives underneath) + **TanStack/table** (`@tanstack/vue-table`) for tables | One full kit instead: **primefaces/primevue**, **element-plus/element-plus**, **tusen-ai/naive-ui** or **vuetifyjs/vuetify**; on Nuxt, **nuxt/ui**; **vbenjs/vue-vben-admin** as a whole admin template. No Vue CRUD framework meets the bar | PrimeVue and Nuxt UI, see Step 4 |
+| Charts | **apertureless/vue-chartjs** | **ecomfe/vue-echarts** for chart types Chart.js lacks; on a low-power target, **leeoniya/uPlot** mounted directly (no Vue wrapper is within the bar) | — |
+| Landing page, Bento grid, marquee, AI / futuristic hero (the *magicui* and *aceternity* scenes) | **unovue/inspira-ui** | **motiondivision/motion-vue** for custom animation | — |
+| Composables (storage, media queries, intersection, debounce) | **vueuse/vueuse** | — | — |
+| 3D scenes | **Tresjs/tres** | three.js directly (Section E) | — |
+| Drag-and-drop, maps | Every Vue wrapper is below the bar: mount **SortableJS/Sortable**, **Leaflet/Leaflet** or **maplibre/maplibre-gl-js** directly in `onMounted` | — | — |
+
 ## Step 4 — MCP servers worth installing (into the coding agent)
 
 | MCP | Use it for | Skip when |
@@ -135,9 +152,11 @@ skeleton, **magicui** for feature Bento grids / marquees / border beams,
 | **ChromeDevTools/chrome-devtools-mcp** | Console (CSP blocks show up here), performance traces on heavy map/3D pages, screenshots of light/dark themes | You already run playwright-mcp — pick one |
 | **microsoft/playwright-mcp** | Scripted end-to-end clicks through dialogs and forms | Same as above |
 | **Jpisnice/shadcn-ui-mcp-server** | shadcn component lookup (Section B) | Any non-React stack |
+| **`@primevue/mcp`** / **Nuxt UI MCP** | Component lookup for that kit (Section F); both are official and ship inside the kit's own repo | The project uses a different kit |
 
 Below the bar as of the survey date, so route these needs elsewhere:
-Google Maps (every MCP, official included) → Context7 for the docs; a11y
+Google Maps (every MCP, official included) and Vuetify (`vuetifyjs/mcp`)
+→ Context7 for the docs; a11y
 MCPs → `dequelabs/axe-core` (MPL-2.0, outside the permissive list) inside
 Playwright tests.
 

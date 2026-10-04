@@ -131,6 +131,10 @@ Open:
    description run with the harness fixes in
    `docs/research/2026-10-02-web-stack-selector-trigger-eval.md` §2;
    every pass ends in one log entry.
+2. `web-stack-selector` description run for Vue / Nuxt: Section F
+   landed 2026-10-04 (log entry), but the description names React as
+   the only SPA stack. Add Vue / Nuxt triggers, then score them with the
+   same harness as Open 1.
 
 ## Source Material
 

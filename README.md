@@ -53,7 +53,7 @@ Codex / Gemini: one folder per skill under `skills/`, each containing a
 | [haos-cloud-backup](skills/haos-cloud-backup/SKILL.md) | Ship HAOS backups to cloud storage with rclone: upload bandwidth cap (bwlimit) and GFS-style daily/weekly/monthly retention |
 | [matt-code-review](skills/matt-code-review/SKILL.md) | Verbatim snapshot of `mattpocock/skills` `code-review` (MIT, pinned to commit `d81f3a1`), renamed so Claude Code's bundled `/code-review` stays reachable: two-axis review (Standards / Spec) of the diff since a fixed point, both axes in parallel sub-agents; needs that repo's `/setup-matt-pocock-skills` run once in the target project |
 | [python-coding-standards](skills/python-coding-standards/SKILL.md) | Personal Python defaults: type hints, no globals, `logging` over `print()`, wrapping any I/O in try/except, commenting the why not the what, `.venv`/requirements.txt/PEP 8/Black, preferring pytest for real tests, where design docs go |
-| [web-stack-selector](skills/web-stack-selector/SKILL.md) | Pick the frontend library, CSS layer, map/2D/3D engine and matching MCP for a page: routes by stack (vanilla/server-rendered, React, PHP Laravel/Symfony) then by scene, checks CSP / no-build / low-power / license constraints; star snapshot in `references/` |
+| [web-stack-selector](skills/web-stack-selector/SKILL.md) | Pick the frontend library, CSS layer, map/2D/3D engine and matching MCP for a page: routes by stack (vanilla/server-rendered, React, Vue/Nuxt, PHP Laravel/Symfony) then by scene, checks CSP / no-build / low-power / license constraints; dated star snapshots in `references/` |
 
 ## Conventions
 
