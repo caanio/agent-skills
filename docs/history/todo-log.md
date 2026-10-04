@@ -1229,3 +1229,50 @@ Entries run oldest first; new entries are appended at the end.
       back). Diff: 14+/17−, 143 → 140 lines. Plan 1.8.0 (status, table
       row); `CLAUDE.md` Open 1 now records the body pass and points at
       the description run.
+- [x] `haos-https-tunnel` description run (2026-10-04), the one plan §2
+      schedules after the body pass; the first description change this
+      pass has made. Harness: scratch copy of `skill-creator`'s scripts
+      with the three recorded fixes reapplied (diff identical hunk for
+      hunk to the recorded one), scratch venv (Python 3.14, PyYAML
+      6.0.3; the recorded pyenv 3.13 interpreter is gone from this
+      machine), pool of 37 links excluding `haos-https-tunnel`, probe
+      listed 47 entries with the real skill absent and both HAOS
+      siblings present. Eval set 10/10, four zh-TW should queries split
+      two with the description's own phrases and two without, so D3's
+      synonym cut had a measurement; ten near-miss should-nots covering
+      both HAOS siblings, Tailscale, Nabu Casa, plain Cloudflare DNS,
+      HA on Docker and HA Core; reviewed in `eval_review.html`, used as
+      drafted. Four texts × two configurations (isolated, 37
+      competitors), `opus`, 3 runs per query: HEAD, D1–D4, HEAD + D3
+      only, D1 + D2 + D4, all 19/20 in both; the one shared failure is
+      Q19 (`cloudflared` QUIC fallback on a Proxmox VM, should-not), 21
+      of 24 runs firing across the four texts, "for a HAOS box" or not,
+      so the hook is `cloudflared` itself and no clause in the set moves
+      it; stays open, a scoping negation untested. D3 safe: the no-phrase
+      zh-TW queries 3/3 on every text, the verbatim-phrase ones 3/3 on
+      D1–D4 without them; closes the body pass's F12 leftover ("HA App"
+      in the description). Landed: D1–D4 (maintainer's pick, option A of
+      three: A D1–D4, B HEAD stands on the tie precedent, C D1 + D2 + D4
+      keeping the phrases), on length alone: accuracy tied, 555 → 319
+      always-loaded characters. The 6-runs-per-query confirmatory re-run
+      offered and declined (resolution 1/3 → 1/6, decision unchanged).
+      `run_loop.py` not started: HEAD's one failure is a should-not every
+      candidate shares. Frontmatter wraps the description in double
+      quotes: D1's "(HAOS): give" is invalid as a bare YAML value
+      (`quick_validate.py` "mapping values are not allowed here"); the
+      harness's block-scalar stand-in could not see it; six repo skills
+      already quote. README table line unchanged: it was its own summary,
+      never a copy of the description. Full record, eval set, the four
+      texts, harness notes:
+      `docs/research/2026-10-04-haos-https-tunnel-trigger-eval.md`.
+      Verified: `quick_validate.py` valid; `grep -c '⚠️'` 7 → 7; `git
+      diff` on `SKILL.md` confined to line 3; the landed text parsed
+      back from the frontmatter byte-equal to the scored `d1-d4.txt`;
+      json block of the note re-parsed, 20 items, 10 true; the four
+      texts in the note byte-equal to the scratch baselines; `verifier`
+      read-back M1–M7 7/7 (all eight table cells and the mixed-cell
+      sentence recomputed from the raw json) and Q1–Q6 6/6; its
+      no-other-mixed-cell claim re-checked against the main session's
+      own per-query table. Plan 1.9.0 (status, table row,
+      §2 In list); `CLAUDE.md` Open 1 now records the description run
+      and points at `haos-cloud-backup`.

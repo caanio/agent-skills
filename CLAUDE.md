@@ -125,10 +125,10 @@ Open:
    `python-coding-standards`, `web-stack-selector` and `completion-gate`
    (body pass and description run, all 2026-10-02; D1–D4 and D7 wait as
    candidate texts, D5 refuted, D6 double-edged), `haos-https-tunnel`
-   (body pass 2026-10-04; D1–D5 wait as candidate texts), all in the
-   log. Next: the `haos-https-tunnel` description run, then
-   `haos-cloud-backup` and `haos-addon-deploy`, each description run
-   with the harness fixes in
+   (body pass and description run, both 2026-10-04; D1–D4 landed, the
+   first description change of the pass), all in the log. Next:
+   `haos-cloud-backup`, then `haos-addon-deploy`, each body pass then
+   description run with the harness fixes in
    `docs/research/2026-10-02-web-stack-selector-trigger-eval.md` §2;
    every pass ends in one log entry.
 

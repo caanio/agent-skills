@@ -1,6 +1,6 @@
 ---
 name: haos-https-tunnel
-description: Give a Home Assistant OS (HAOS) instance a real HTTPS URL — inside and outside the LAN — via a Cloudflare Tunnel (cloudflared add-on), with no port forwarding and no device-side install. Use when the user wants HTTPS / remote access / external access for Home Assistant, mentions cloudflared, Cloudflare Tunnel, HA App 外部連線, HA 走 https, or asks how to reach HA from outside without exposing their home IP. Also consult it before ever suggesting DuckDNS, port forwarding, or HA-native SSL for a HAOS box — this route beats those on safety and side effects.
+description: "Cloudflare Tunnel (cloudflared add-on) HTTPS for Home Assistant OS (HAOS): give a HAOS instance a real HTTPS URL. Use when the user wants HTTPS or remote access for Home Assistant, or mentions cloudflared or Cloudflare Tunnel. Also consult it before suggesting DuckDNS, port forwarding, or HA-native SSL for a HAOS box."
 ---
 
 # HAOS HTTPS via Cloudflare Tunnel

@@ -1,6 +1,6 @@
 # Skill-authoring pass over `skills/`: scope evaluation
 
-Version: 1.8.1 | Date: 2026-10-04 | Status: decided 2026-10-01 (option A;
+Version: 1.9.0 | Date: 2026-10-04 | Status: decided 2026-10-01 (option A;
 `skill-creator` = validate + description optimization on five skills,
 eval loop dropped); pilot on `handover` done 2026-10-01 (log entry);
 §5 gained the log cross-check after the pilot; `git-helper` done
@@ -13,7 +13,9 @@ placement overridden) and description run done 2026-10-02 (log entry;
 HEAD stood, D5 refuted, D6 double-edged, in
 `2026-10-02-completion-gate-trigger-eval.md`); `haos-https-tunnel` body
 pass done 2026-10-04 (log entry; 11 of 13 landed, F6 as a variant on the
-sister skill's tested check, D1–D5 parked); next its description run
+sister skill's tested check, D1–D5 parked) and description run done
+2026-10-04 (log entry; D1–D4 landed on length, four texts tied 19/20, in
+`2026-10-04-haos-https-tunnel-trigger-eval.md`); next `haos-cloud-backup`
 
 Answers `CLAUDE.md` Open item 1 (added 2026-10-01): should every skill in
 `skills/` go through `skill-creator` and `writing-for-agents`, in what
@@ -35,7 +37,7 @@ one, and the two that did have been diff-edited since. The 2026-09-30
 | handover | 108 | 0 | 2026-10-01 (whole-file pass) | unknown keys (see §3) |
 | haos-addon-deploy | 396 | 27 | 2026-09-26 | valid |
 | haos-cloud-backup | 225 | 13 | 2026-09-26 | valid |
-| haos-https-tunnel | 140 | 7 | 2026-10-04 (whole-file pass) | valid |
+| haos-https-tunnel | 140 | 7 | 2026-10-04 (whole-file pass; description run same day) | valid |
 | python-coding-standards | 133 | 1 | 2026-10-02 (whole-file pass) | valid |
 | web-stack-selector | 152 | 1 | 2026-10-02 (whole-file pass; description run same day) | valid |
 
@@ -73,8 +75,8 @@ Description optimization applies to at most five skills:
   skill's), `python-coding-standards` (had a description-optimization
   pass 2026-08-19, log entry).
 - In: `completion-gate` (done 2026-10-02), `haos-addon-deploy`,
-  `haos-cloud-backup`, `haos-https-tunnel`, `web-stack-selector` (done
-  2026-10-02).
+  `haos-cloud-backup`, `haos-https-tunnel` (done 2026-10-04),
+  `web-stack-selector` (done 2026-10-02).
 
 Before each run, apply the three harness fixes recorded in
 `2026-10-02-web-stack-selector-trigger-eval.md` §2 on a scratch copy of the
