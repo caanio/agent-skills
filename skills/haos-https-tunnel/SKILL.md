@@ -8,11 +8,8 @@ description: Give a Home Assistant OS (HAOS) instance a real HTTPS URL — insid
 Give a HAOS box a public `https://ha.<domain>` that works from anywhere, without opening
 router ports or installing anything on client devices. Battle-tested 2026-07-10 on a
 Raspberry Pi 4 (HAOS 18.1, Core 2026.6.4) with the **brenner-tobias/cloudflared** add-on
-v7.0.9; the ≥ 2026.8 pitfall in §4 was observed on the same box after its 2026-08-15
-upgrade to Core 2026.8.1, and that branch's UI steps follow the official `http`
+v7.0.9; §4's ≥ 2026.8 UI steps follow the official `http`
 integration page. Every pitfall below was hit for real; ⚠️ marks them.
-`ha` = SSH alias into the Advanced SSH & Web Terminal add-on (see `haos-addon-deploy` §8
-for SSH setup; Protection mode must be off).
 
 ## 0. Why this route (and what was rejected)
 
@@ -20,7 +17,7 @@ Tunnel = the RPi opens an **outbound** long-lived connection to Cloudflare; DNS 
 CNAME to `cfargotunnel.com`, never your home IP. No inbound port, dynamic IP is a
 non-event, TLS terminates at Cloudflare against a tunnel token.
 
-Rejected alternatives (don't re-suggest without new facts):
+Rejected alternatives (re-suggest one only on new facts):
 - **HA-native SSL** (`http: ssl_certificate`): forces HTTPS globally — local
   `http://<ip>:8123` stops working and everything gets slower. Real-world regret.
 - **DuckDNS + port-forward 443**: exposes the home IP and an inbound port to the internet.
@@ -34,6 +31,7 @@ Rejected alternatives (don't re-suggest without new facts):
   `dig +short NS <domain>` → should return `*.ns.cloudflare.com` names.
 - SSH access to the HAOS box per `haos-addon-deploy` §0/§8 (⚠️ non-interactive `ha` CLI
   calls need `ssh ha 'bash -lc "…"'`, otherwise `unauthorized`).
+- `ha` = SSH alias into the Advanced SSH & Web Terminal add-on, Protection mode off.
 - ⚠️ You (the agent) can do everything below **except the user's steps**: the Cloudflare
   login authorisation (§5), and on Core ≥ 2026.8 the proxy settings in the UI (§4) —
   plan the hand-offs.
@@ -62,9 +60,9 @@ echo '{"options":{"external_hostname":"ha.<domain>","additional_hosts":[]}}' \
             http://supervisor/addons/9074a9fa_cloudflared/options"'
 ```
 
-(Or the add-on's Configuration tab in the HA UI.) Other options — `tunnel_token`
-(for a dashboard-managed tunnel), `additional_hosts` (expose more services later),
-`catch_all_service` — are not needed for the basic HA case.
+(Or the add-on's Configuration tab in the HA UI.) Leave `tunnel_token` unset: §5's login
+flow creates the tunnel. Done when the same curl as a plain `GET` on
+`…/addons/9074a9fa_cloudflared/info` shows `external_hostname` set (`haos-addon-deploy` §4).
 
 ## 4. Trust the proxy (before first start)
 
@@ -77,7 +75,8 @@ Where the setting lives depends on the Core version (`ssh ha 'bash -lc "ha core 
 Trust X-Forwarded-For **on**; Trusted proxies `172.30.33.0/24` (Supervisor docker
 subnet, where add-ons live); Enable IP banning **on** (public endpoint now — keep it
 on); Login attempts before ban `3`. Use the UI on every ≥ 2026.8 box, fresh installs
-included — the docs describe YAML import only as a one-time upgrade step.
+included — the docs describe YAML import only as a one-time upgrade step. Done when the
+user confirms the four values saved and HA is back after its restart.
 - ⚠️ A box upgraded across 2026.8 imported its old `http:` block into `.storage/http`
   on first start and ignores the YAML from then on (repair: "HTTP YAML configuration
   is ignored after migration"). Editing `configuration.yaml` changes nothing; the UI
@@ -101,10 +100,6 @@ http:
   configuration.yaml.bak-YYYYMMDD`), then edit, then **`ha core check`** before
   `ha core restart`. Don't skip the check — a broken yaml keeps HA from booting.
 
-Either branch: local plain-HTTP access (`http://<lan-ip>:8123`) keeps working — unlike
-native SSL, nothing is forced. HA App: set the new URL as **external**, keep the LAN
-URL internal.
-
 ## 5. Start and authorise (user hand-off)
 
 ```bash
@@ -116,7 +111,8 @@ First start with no `tunnel_token`: the log prints
 `Please open the following URL and log in with your Cloudflare account:` followed by a
 `https://dash.cloudflare.com/argotunnel?...` link. **Hand this URL to the user** — they
 log in, pick the zone, authorise. cloudflared then downloads the cert, creates the
-tunnel, and **creates the DNS CNAME itself** — no manual DNS work.
+tunnel, and **creates the DNS CNAME itself**. Step done when the user reports the
+authorisation; §6 confirms it.
 
 ## 6. Verify
 
@@ -137,7 +133,8 @@ curl -s -o /dev/null -w "%{http_code} %{time_total}s\n" https://ha.<domain>/
 
 - **Enable 2FA** on HA accounts — the login page is now on the public internet.
   IP banning + the login-attempt threshold (§4) are the second line, not a substitute.
-- **HA App**: external URL → `https://ha.<domain>`; internal URL → keep the LAN address.
+- **Companion app**: external URL → `https://ha.<domain>`; internal URL → the LAN
+  address, which keeps working (`http://<lan-ip>:8123`).
 - **Take a full HA backup now** (config just changed) and pull it off the box —
-  `scp ha:/backup/<file>.tar` beats the web download. Don't git-track `/config`
-  wholesale: `.storage/` holds auth tokens and `secrets.yaml` is a secret.
+  `scp ha:/backup/<file>.tar` beats the web download. If the user versions `/config`,
+  exclude `.storage/` (auth tokens) and `secrets.yaml`.

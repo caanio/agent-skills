@@ -62,7 +62,7 @@ See `docs/agents/triage-labels.md`.
 Single-context: `CONTEXT.md` at the root, ADRs under `docs/adr/`.
 See `docs/agents/domain.md`.
 
-## Open items (last updated 2026-10-02)
+## Open items (last updated 2026-10-04)
 
 The only live list. The per-change log — what each change did, why, and how
 it was verified — is `docs/history/todo-log.md`; read it before reworking a
@@ -124,9 +124,11 @@ Open:
    `handover` (pilot) and `git-helper` (both 2026-10-01),
    `python-coding-standards`, `web-stack-selector` and `completion-gate`
    (body pass and description run, all 2026-10-02; D1–D4 and D7 wait as
-   candidate texts, D5 refuted, D6 double-edged), all in the log. Next:
-   the rest by ⚠️ count ascending (`haos-https-tunnel` first), each
-   description run with the harness fixes in
+   candidate texts, D5 refuted, D6 double-edged), `haos-https-tunnel`
+   (body pass 2026-10-04; D1–D5 wait as candidate texts), all in the
+   log. Next: the `haos-https-tunnel` description run, then
+   `haos-cloud-backup` and `haos-addon-deploy`, each description run
+   with the harness fixes in
    `docs/research/2026-10-02-web-stack-selector-trigger-eval.md` §2;
    every pass ends in one log entry.
 

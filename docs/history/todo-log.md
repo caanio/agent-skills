@@ -1166,3 +1166,66 @@ Entries run oldest first; new entries are appended at the end.
       three fixed passages Q1–Q4 and M1–M2 6/6. Plan 1.7.0 (status,
       table row, §2 In list); `CLAUDE.md` Open 1 now records both
       `completion-gate` passes and points at `haos-https-tunnel`.
+- [x] Skill-authoring pass on `haos-https-tunnel` (2026-10-04), sixth pass
+      per the plan, first of the HAOS three. Cross-check map first (plan
+      §5): three blame commits; 115 of 143 lines from the founding
+      `abec32d` (no log entry, commit body serves: store-add trap,
+      trusted_proxies, auth hand-off, QUIC fallback, backup hygiene), 27
+      from the 2026-10-01 §4 split (entry records two rejections, UI-only
+      and YAML-first-with-a-note, and two deliberate omissions, 2027.2 and
+      `.storage/http` over SSH), one placeholder line from 2026-09-26.
+      Whole-file `writing-for-agents` review by a fresh-context `opus`
+      reviewer given the skill, the two reference files, plan §4–§5, the
+      repo's inclusion rules, Settled 12 verbatim and a frozen list (the
+      seven ⚠️ passages, the five fenced blocks, the §4 YAML bullets, the
+      `<iata>01` placeholder, §2's number as `haos-cloud-backup`'s
+      inbound target, the ~90-char wrap): 13 body findings, 5
+      description, 8 levers found, 7 not found; two candidates withdrawn
+      by the reviewer on scope. Every line number and quote re-grepped in
+      the main session; the not-found claims re-checked (no disclosure
+      candidate, no buried steps, versions dated but uncontradicted).
+      Landed (maintainer's pick, option A of four: A tiers 1+2, B tier 1
+      only, C tiers 1+2 plus F3, D nothing), 11 of 13: F2 the `ha` alias
+      and Protection-mode-off moved from the header into a §1 bullet
+      beside the SSH pointer; F4 "re-suggest one only on new facts"; F7
+      §3's other-options sentence replaced by "Leave `tunnel_token`
+      unset: §5's login flow creates the tunnel"; F8, F10 done signals
+      for the two user hand-offs (UI values saved and HA back; user
+      reports the authorisation, §6 confirms); F9 the "Either branch"
+      paragraph deleted, its LAN-URL fact folded into §7; F12 "HA App" →
+      "Companion app" in the body (this file's `ha apps` means add-ons;
+      the description's "HA App 外部連線" waits for the description run);
+      F1 the header drops the observation date the §4 ⚠️ already
+      carries; F11 "— no manual DNS work" dropped; F13 the git-track
+      sentence reworded positive ("If the user versions `/config`,
+      exclude `.storage/` (auth tokens) and `secrets.yaml`"), keeping
+      the founding commit's hygiene point. F6 landed as a variant: the
+      reviewer's `"result": "ok"` done signal was unconfirmed, so §3's
+      criterion is the re-`GET info` check `haos-addon-deploy` §4 already
+      tests, "shows `external_hostname` set". Rejected: F3 (delete §0's
+      tunnel-mechanics paragraph: it is the positive the four rejections
+      contrast against, so deleting it leaves §0 as pure negation); F5
+      (delete "Real-world regret.": the in-file practice-hit marker the
+      inclusion rules ask for on bold, non-⚠️ advice). Description D1–D5
+      not applied: plan §2 schedules this skill's description run next,
+      so all five (front-load "Cloudflare Tunnel (cloudflared add-on)",
+      drop the two body-carried clauses, collapse the synonym list to
+      three branches, drop "beats those on safety and side effects",
+      length ~555 → ~300 chars) go in as candidate texts. Verified:
+      `quick_validate.py` valid (scratch venv, this machine has no
+      PyYAML); `grep -c '⚠️'` 7 → 7; the five fenced blocks, the five ⚠️
+      bullets, the §4 YAML bullets and the header's ⚠️ sentence
+      byte-identical to HEAD; two §4 branch headings at "2026.8" in
+      order, `grep -c 2027` = 0; description byte-identical to HEAD;
+      "HA App" only on line 3; `haos-cloud-backup`'s pointer still lands
+      on §2; outbound pointers to `haos-addon-deploy` §0/§8 and §4
+      resolve; 8 hunks, none in a frozen passage; lines over 80 chars
+      47 → 47; `verifier` read-back M1–M7 7/7 and Q1–Q8 8/8 (alias and
+      Protection mode in §1, `tunnel_token` unset, the three done
+      signals, LAN URL in §7, the four rejections and their re-suggest
+      rule); the not-found claims re-checked by grep in the main
+      session; `deep-reviewer` second opinion skipped on the
+      maintainer's call (no frozen passage touched, every edit read
+      back). Diff: 14+/17−, 143 → 140 lines. Plan 1.8.0 (status, table
+      row); `CLAUDE.md` Open 1 now records the body pass and points at
+      the description run.
