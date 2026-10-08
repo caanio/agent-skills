@@ -18,9 +18,10 @@ Battle-tested 2026-07-11 on a Raspberry Pi 4 (HAOS 18.1, Core 2026.6.4) with
   request as not-planned (issue #366). If upload speed matters, rclone is the
   only game in town: `--bwlimit` takes **MBytes/s** (`1.5M` = 12 Mbit/s — a
   sensible cap is ~30% of the measured uplink).
-- rclone has no built-in grandfather-father-son retention, but HA backup
-  filenames embed the date (`Automatic_backup_<ver>_YYYY-MM-DD_HH.MM_<id>.tar`),
-  so date-anchored filters emulate it (§4).
+- rclone has no built-in grandfather-father-son retention, but the add-on
+  renames each backup to embed its date
+  (`Automatic_backup_<ver>_YYYY-MM-DD_HH.MM_<id>.tar`, §3), so date-anchored
+  filters emulate it (§4).
 - Schedule uploads right after HA's automatic backup time (default ~05:00 →
   upload 05:30): off-peak, and each day moves only one new file.
 
@@ -35,7 +36,7 @@ Single-add-on repo; installed slug is `19a172aa_rclone_backup` (hash is fixed by
 the repo URL). ⚠️ `ha store add`, not `add-repository` — see `haos-https-tunnel`
 §2 for the silent-wrong-subcommand trap.
 
-## 2. Cloud auth (rclone.conf) — do this BEFORE configuring jobs
+## 2. Cloud auth (rclone.conf)
 
 ⚠️ **Chicken-and-egg**: the add-on validates every job's remote at startup and
 **halts FATAL** if `rclone.conf` is missing or the remote isn't defined yet. Keep
@@ -43,7 +44,8 @@ the repo URL). ⚠️ `ha store add`, not `add-repository` — see `haos-https-t
 confusing).
 
 Config lives at **`/homeassistant/rclone.conf`** (same folder as
-`configuration.yaml`; the path is the add-on's `config_path` default). Two ways in:
+`configuration.yaml`; the path is the add-on's `config_path` default). Two ways in,
+then two caveats that bite once jobs exist:
 
 - **Web UI route**: start the add-on (empty jobs) → Open Web UI. ⚠️ The login
   page is cosmetic — the GUI runs with `--rc-no-auth`; keep the prefilled URL,
@@ -82,7 +84,12 @@ Config lives at **`/homeassistant/rclone.conf`** (same folder as
   the `?` characters in date filters (`*_????-??-01_*`) are rclone
   single-character glob wildcards, not mojibake — users report both as broken.
 
+Either route is done when the `about gdrive:` check above prints the remote's
+usage instead of an error; only then add jobs (§3).
+
 ## 3. Jobs (upload + prune)
+
+Jobs go in the add-on's options — both routes in §7.
 
 Field notes that cost real debugging time:
 
@@ -97,14 +104,15 @@ Field notes that cost real debugging time:
   stores backups as `<slug>.tar` (8 hex chars, unreadable). The add-on renames
   files in `/backup` **in place** to `{name}_{date}_{slug}.tar` (the
   `renamed/unrenamed N backups` log lines; first run also renames pre-existing
-  backups) — the `+ Automatic_backup_*` filters above match these renamed
-  names, and local/remote filenames stay identical. Harmless to HA: the
+  backups) — the `+ Automatic_backup_*` filters below and in §4 match these
+  renamed names, and local/remote filenames stay identical. Harmless to HA: the
   Supervisor identifies backups by tar metadata, not filename, so restore is
   unaffected; the trailing slug still maps back to the HA backup ID.
-- **Global `dry_run: true` = free rehearsal, but remember to flip it off.**
+- **Start with top-level `dry_run: true` (beside `jobs:`) as a free rehearsal.**
   Recommended flow: leave it on through the first scheduled day, read the
   `Skipped ... as --dry-run is set` lines as validation that every job selects
-  exactly the right files, then set `dry_run: false` and restart. ⚠️ While it's
+  exactly the right files, then set `dry_run: false` (§7 over SSH) and
+  restart. ⚠️ While it's
   on, **nothing uploads or deletes at all**, yet every job logs "finished" and
   the log looks healthy at a glance — easy to forget for weeks.
 
@@ -162,12 +170,15 @@ rest. Named backups never match the pattern, so they survive forever.
 
 Before trusting any delete job, run its exact command manually with `--dry-run`
 inside the container (`sudo docker exec $C rclone …`, `$C` from §2)
-and read what it *would* delete. Google Drive deletes go to trash by default
+— pass the same `--config` as §2 — and confirm every file it *would* delete
+is one that job means to drop (inside its age window, off any anchor date that
+job protects, `Automatic_backup_*` where it filters on that); any other file
+means the filter is wrong. Google Drive deletes go to trash by default
 (30-day extra safety net); add `drive-use-trash: false` only if quota is tight.
 
 ## 5. Cleaning up an existing backlog
 
-Old backups often pile up (retention was never on). Rules:
+When `/backup` already holds a backlog from before retention was on:
 
 - ⚠️ **Delete through the Supervisor, not `rm`**: `ha backups remove <slug>` —
   raw `rm` leaves the Supervisor's backup list stale.
@@ -184,6 +195,10 @@ Old backups often pile up (retention was never on). Rules:
 ssh ha 'bash -lc "ha apps logs 19a172aa_rclone_backup"'   # want: "scheduled jobs:" listing all
 ssh ha "sudo docker exec $C rclone --config /homeassistant/rclone.conf ls gdrive:HA-Backups"   # $C from §2
 ```
+
+The `scheduled jobs:` listing should name all six jobs from §3 and §4. While
+`dry_run: true` is on, the `ls` shows nothing the jobs uploaded; re-run it after
+the flip (§7).
 
 A 611 MB backup at `bwlimit 1.5M` takes ~7 minutes — if it finishes much faster,
 the cap isn't being applied (check the flag reached the command in the job log).

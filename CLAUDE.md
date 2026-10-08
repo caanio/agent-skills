@@ -62,7 +62,7 @@ See `docs/agents/triage-labels.md`.
 Single-context: `CONTEXT.md` at the root, ADRs under `docs/adr/`.
 See `docs/agents/domain.md`.
 
-## Open items (last updated 2026-10-04)
+## Open items (last updated 2026-10-08)
 
 The only live list. The per-change log — what each change did, why, and how
 it was verified — is `docs/history/todo-log.md`; read it before reworking a
@@ -126,15 +126,26 @@ Open:
    (body pass and description run, all 2026-10-02; D1–D4 and D7 wait as
    candidate texts, D5 refuted, D6 double-edged), `haos-https-tunnel`
    (body pass and description run, both 2026-10-04; D1–D4 landed, the
-   first description change of the pass), all in the log. Next:
-   `haos-cloud-backup`, then `haos-addon-deploy`, each body pass then
-   description run with the harness fixes in
+   first description change of the pass), `haos-cloud-backup` (body
+   pass 2026-10-08; D1–D4 wait as candidate texts), all in the log.
+   Next: `haos-cloud-backup`'s description run, then `haos-addon-deploy`'s
+   body pass and description run, each with the harness fixes in
    `docs/research/2026-10-02-web-stack-selector-trigger-eval.md` §2;
    every pass ends in one log entry.
 2. `web-stack-selector` description run for Vue / Nuxt: Section F
    landed 2026-10-04 (log entry), but the description names React as
    the only SPA stack. Add Vue / Nuxt triggers, then score them with the
    same harness as Open 1.
+3. `haos-cloud-backup`: add-on update backups may pile up on the
+   remote. §3's copy job uploads all of `/backup`, but every remote
+   delete job filters on `Automatic_backup_*`; if those files are named
+   otherwise [unconfirmed], nothing thins them. Check the filenames on
+   real hardware, then decide whether a remote delete job covers them.
+   Log: 2026-10-08.
+4. `haos-cloud-backup` line 12 takes the `ha` alias and the `bash -lc`
+   rule from `haos-addon-deploy` §0/§8. If the skills CLI can install
+   one skill alone [unconfirmed], that pointer has no target and the
+   skill does not stand on its own. Check the CLI first. Log: 2026-10-08.
 
 ## Source Material
 

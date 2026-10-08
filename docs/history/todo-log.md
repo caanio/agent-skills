@@ -1332,3 +1332,61 @@ Entries run oldest first; new entries are appended at the end.
       says what resolves a secrets hit, whether an eye-read find counts
       as a hit that stops the run, or whether "its line" means the
       diff text or a line number.
+- [x] Skill-authoring pass on `haos-cloud-backup` (2026-10-08), seventh
+      pass per the plan, second of the HAOS three. Cross-check map first
+      (plan §5): five blame commits; the touched lines come from
+      `ce0c44f`, `76f9596` and `43a02f9` (2026-07, no log entries, commit
+      bodies serve, none records a rejection); `bf803ea`'s recorded
+      calls (the `$C` resolver, §7's chmod inside the block, the dropped
+      name-based gate) and Settled 7 left untouched. Whole-file
+      `writing-for-agents` review by a fresh-context `opus` reviewer given
+      the skill, the two reference files, plan §4–§5, the inclusion
+      rules, Settled 7 verbatim and a frozen list (the 13 ⚠️ passages,
+      the seven fenced blocks, §7's block and its two bullets, the `$C`
+      resolver, §2's "used in the field", the ~80-char wrap): 16 body
+      findings, 4 description, 9 withdrawn. Every line number and quote
+      re-grepped in the main session; the not-found claims (sprawl,
+      environment-as-cache, disclosure, cross-references other than
+      line 100) re-checked by heading and grep. Landed (maintainer's
+      pick, option A of four: A tiers 1+2, B tier 1 only, C tiers 1–3,
+      D nothing), 12 of 16: F8 line 100's "filters above" now "below and
+      in §4" (wrong since `43a02f9` wrote it: the filters sat below then
+      too); F2 §0 credits the add-on's rename, not HA, with the date in
+      the filename, matching §3; F4 "— do this BEFORE configuring jobs"
+      dropped from §2's heading, the chicken-and-egg ⚠️ carries it; F5
+      as option B, "Two ways in, then two caveats that bite once jobs
+      exist:" (the two ⚠️ bullets stay in §2); F6 a done signal for both
+      §2 routes (the `about gdrive:` check prints usage, then §3); F7 §3
+      opens with "Jobs go in the add-on's options — both routes in §7.";
+      F9 the dry-run bullet names `dry_run` as top-level beside `jobs:`
+      (as §7's `d['dry_run']` shows) and drops "remember to flip it off",
+      the ⚠️ already says it; F10 "(§7 over SSH)" on the flip; F13 the
+      §4 manual dry-run now has a bar (every file it would delete is
+      inside the job's age window, off its anchor dates, matching its
+      filter; any other file means the filter is wrong); F14 "pass the
+      same `--config` as §2" on that abbreviated command; F15 §5 opens
+      on its condition; F16 §6 names the six jobs and why `ls` stays
+      empty while `dry_run` is on. Rejected: F3 (a §1 done signal on
+      `ha apps info`'s exit code; whether a store-listed, uninstalled
+      add-on also exits 0 is [unconfirmed] without hardware), F5 option
+      A (move the two ⚠️ bullets into §3: guardrail 2), and tier 3 (F1
+      the header's restated identity, F11 keeper → anchor, F12 the "Not
+      every Monday" negation; token-only). Description D1–D4 not applied:
+      candidate texts for this skill's description run (one branch for
+      "rate-limit / throttle", drop "— neither can throttle upload
+      speed", drop the second "Google Drive", add "app"). Two reviewer
+      notes opened as `CLAUDE.md` Open items: add-on update backups may
+      never be thinned on the remote, and line 12's sister-skill pointer
+      on a machine that installed this skill alone. Verified:
+      `quick_validate.py` valid (scratch venv); `grep -c '⚠️'` 13 → 13;
+      the seven fenced blocks, §7 and the description byte-identical to
+      HEAD; the one ⚠️ line in the diff is a reflow ("restart. ⚠️ While
+      it's"); lines over 80 chars 13 → 13; `verifier` read-back M1–M7 7/7
+      and Q1–Q8 8/8 (who embeds the date, §2's done signal, where jobs
+      and `dry_run` go, the SSH flip, the delete-preview bar, §5's
+      condition, §6's six jobs, the filters' direction), its
+      no-findings claim spot-checked by grep; `deep-reviewer` second
+      opinion skipped on the maintainer's call (no frozen passage
+      touched, the three new facts derived from in-file tested
+      passages). Diff: 26+/11−, 225 → 240 lines. Plan 1.10.0 (status,
+      table row); `CLAUDE.md` Open 1 now points at the description run.
