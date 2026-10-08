@@ -1310,3 +1310,25 @@ Entries run oldest first; new entries are appended at the end.
       considered and skipped (maintainer call): every pick passes the
       bar mechanically, the edit is text-only, and the description run
       exercises Section F again. README row now names Vue/Nuxt.
+- [x] `git-helper` Step 2 hit handling in plain text closed 2026-10-08
+      (maintainer call). A scan hit was asked through a choice dialog,
+      which covers the text above it, so the raw scan output and the
+      hit lines could go unseen while the user ruled on them. Step 2
+      now states the stop once, in its lead: the raw output and each
+      hit's line go in the reply body, the question is the reply's
+      last line, and the user answers by typing; the dialog is named
+      (Claude Code's `AskUserQuestion`) only as the example to keep
+      out. 2a's "stop and warn" and 2b's "stop and list" collapsed
+      into that lead; 2b keeps only what resolves a PII hit and the
+      eye-read. Description unchanged, so no README edit or
+      description run. Edited via `writing-for-agents`.
+      Verified by `verifier`: file intact (Core Rules 1–7, Steps 0–5,
+      8 fences paired); read-back Q1–Q5 PASS (plain-text reply, raw
+      output in the body, same handling for both scans, no dialog and
+      why, PII resolution, no Step 3 while a hit is open); Core Rules
+      5 and 6 agree, the stop rule stated once. Its finding that the
+      question's content was unstated was fixed ("which hits are safe
+      to commit"); re-check PASS. Left open, pre-existing: Step 2 never
+      says what resolves a secrets hit, whether an eye-read find counts
+      as a hit that stops the run, or whether "its line" means the
+      diff text or a line number.

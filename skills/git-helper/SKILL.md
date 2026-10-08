@@ -68,13 +68,18 @@ Confirm staged files are correct, or tell me which to add.
 
 Scan the staged diff before drafting. Run both and show the actual output in the response, even when clean.
 
+**A hit from either scan stops the run until every hit is resolved.**
+Ask in a plain-text reply: the raw scan output in the body, each hit with its line,
+then, as the reply's last line, the question of which hits are safe to commit;
+the user answers by typing.
+Keep this question out of a choice dialog (such as Claude Code's `AskUserQuestion`):
+the dialog covers the text above it, so the user would rule on hits they never saw.
+
 **2a. Secrets** — credentials that grant access:
 
 ```bash
 git diff --staged | grep -iE "password|secret|api_key|token|private_key|access_key"
 ```
-
-If any matches appear, **stop and warn the user** — do not proceed until resolved.
 
 **2b. Personal data (PII)** — values that identify a person or a place, and labels that reveal a placeholder's origin. Added lines only; decimal-degree coordinates (4+ decimals) plus the words that tag a value as real, home or invented. Lines quoting this scan command are skipped, so editing this rule does not trip it:
 
@@ -82,7 +87,14 @@ If any matches appear, **stop and warn the user** — do not proceed until resol
 git diff --staged | grep -E '^\+' | grep -vE '^\+\+\+|grep -iE' | grep -iE '\b[0-9]{1,3}\.[0-9]{4,}\b|real (home|work|address|coordinate|name)|fictional|真實|虛構|住家|家附近'
 ```
 
-If any matches appear, **stop and list each hit with its line** — proceed only after the user confirms every hit is not personal (a public landmark's coordinates in a test is fine; a home, workplace or regular stop is not). A note saying a value "was real" or "was replaced with a fictional value" is a hit in its own right: it tells anyone reading the history where the real value lived. Names, nicknames, family terms, device names, account IDs, and a bare "placeholder" or "replaced" note with no origin word beside it belong to the same check but have no reliable pattern: read every added line for them by eye and say so in the "Rules applied" line.
+A PII hit is resolved once the user confirms it is not personal
+(a public landmark's coordinates in a test is fine; a home, workplace or regular stop is not).
+A note saying a value "was real" or "was replaced with a fictional value" is a hit in its own right:
+it tells anyone reading the history where the real value lived.
+Names, nicknames, family terms, device names, account IDs,
+and a bare "placeholder" or "replaced" note with no origin word beside it
+belong to the same check but have no reliable pattern:
+read every added line for them by eye and say so in the "Rules applied" line.
 
 ### 3. Detect Language Convention (Core Rule 7)
 
