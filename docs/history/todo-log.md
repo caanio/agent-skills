@@ -1390,3 +1390,39 @@ Entries run oldest first; new entries are appended at the end.
       touched, the three new facts derived from in-file tested
       passages). Diff: 26+/11−, 225 → 240 lines. Plan 1.10.0 (status,
       table row); `CLAUDE.md` Open 1 now points at the description run.
+- [x] `git-helper` push split from the commit, review loop between them
+      (2026-10-08 to 2026-10-10, maintainer call; reopens Settled 10 on new
+      evidence). In a recorded session, reviews that read only committed
+      diffs were skipped at wrap-up because nothing was committed yet; the
+      approved block then ran commit and push back to back, so the moment
+      after the commit and before the push never existed and the skipped
+      reviews never ran. Step 0 now records the base after any pull (the
+      one the user names, else HEAD on the task's first run; later runs
+      use the HEAD the previous Step 6 last reviewed). Steps 4–5 cover the
+      commit alone. New Step 6 follows every commit, push or not: its
+      first round reviews `<base>..HEAD`, never `origin/HEAD` (a
+      long-lived branch can hold dozens of other tasks' commits); decided
+      fixes become new commits through Steps 1–5, staging confirmation
+      included, and stay inside Step 6, so the next round reviews only
+      them. A fix is a defect or security finding the agent agrees with;
+      each round's judgment calls are asked at its end, the picked ones
+      join that round's fixes, the rest go to the issue tracker (an online
+      one only after an ok on the exact command); minor items are listed.
+      After round 3's reviews the loop stops before fixing and asks. An
+      out-of-scope or uninstalled review is skipped with a `review-skip:
+      <review> — <reason>` line. New Step 7 drafts the push as its own
+      block with its own ok, or ends with an unpushed reminder.
+      Two fresh-context `deep-reviewer` rounds: the first found 18 gaps,
+      the second 16 new ones (2 blockers) in the clauses added for the
+      first; the maintainer chose to trim back to the core and fix the
+      blockers rather than run a third round. Edge cases left out on
+      purpose (first commit in an empty repo, base across sessions,
+      verdict ranges) are tracked in the maintainer's own dotfiles repo.
+      Description unchanged, so no README edit or description run.
+      Edited via `writing-for-agents`. Verified by `verifier` on the
+      trimmed version: files intact (Steps 0–7, 8 fences paired); read-back
+      8/8 (commit-to-push order and asks, round ranges with and without a
+      named base, fix-commit asks, judgment calls, round 3 stop, no-push
+      run, skip format, verdict fixed point); one known conflict left open
+      (base taken after Step 0's pull here, at work start in the
+      maintainer's global rules), listed with the other left-out cases.

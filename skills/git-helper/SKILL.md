@@ -43,6 +43,9 @@ description: "Commit workflow: confirm staging, scan the staged diff for secrets
 - Run `git fetch` (short timeout, e.g. `GIT_SSH_COMMAND="ssh -o ConnectTimeout=5 -o BatchMode=yes" git fetch`), then `git status -sb`.
 - **Behind remote** → warn and offer to resolve now (`stash → pull --rebase → stash pop`): fixing divergence before commit beats rebasing a finished commit through conflicts.
 - **Fetch unreachable** (offline / LAN-only remote) → say so, note ahead/behind info is stale, and ask whether to proceed with a local-only commit (push deferred). Report the fetch result in every run, reachable or not.
+- Record the **base** for Step 6 and show it, after any pull in this step: the base the user names;
+  otherwise, on this task's first run, `git rev-parse --short HEAD`.
+  Later runs in the same task use the HEAD the previous Step 6 last reviewed.
 
 ### 1. Confirm Staging
 
@@ -119,9 +122,8 @@ read every added line for them by eye and say so in the "Rules applied" line.
 - **Show the exact commands, byte for byte.** The draft is the literal block Step 5
   will run, never the message alone: the full `git commit` heredoc (required for
   multi-line messages) with every trailer your environment appends (e.g. a
-  `Co-Authored-By:` line), plus a `git push <remote> <branch>` line when the user
-  asked for a push. What the user approves is exactly what lands in the log and on
-  the remote.
+  `Co-Authored-By:` line). What the user approves is exactly what lands in the log.
+  A requested push gets its own block in Step 7, after Step 6's review loop.
 
 **Example output:**
 ```
@@ -136,27 +138,54 @@ no recovery path if the process was killed mid-write.
 Co-Authored-By: <assistant> <noreply@example.com>
 EOF
 )"
-git push origin main
 
 Rules applied: type=feat · subject 34 chars · imperative mood ·
 why-only body · secrets: 0 hits (output above) · PII: 0 hits (output above), every added line read for names/IDs
 
-Reply "ok" to run both commands.
+Reply "ok" to run it.
 ```
 
-### 5. Execute Commit (and Push)
+### 5. Execute Commit
 
 Only after the user replies "ok" or equivalent, run the Step 4 block unchanged via
-the **Bash tool**, one command per call, in order:
-
-1. The `git commit` heredoc exactly as shown.
-2. Only once the commit has succeeded, and only if the block shows it, the
-   `git push` line exactly as shown.
+the **Bash tool**, one command per call, in order.
 
 One ok covers every command in the block. A command that would differ from the
-block in any character — a reworded line, an added trailer, a push the block did
-not show — needs a new draft and a new ok. A failed commit ends the run: report
-the error to the user.
+block in any character — a reworded line, an added trailer — needs a new draft
+and a new ok. A failed commit ends the run: report the error to the user.
+Step 6 follows every successful commit, push requested or not.
+
+### 6. Review Loop (after every commit)
+
+Reviews that read only committed diffs — a diff-based code review, a security
+review over `git diff <from>..HEAD` — run here, after the commit and before any push.
+⚠️ With commit and push approved as one block, this moment never existed:
+reviews skipped earlier because nothing was committed yet never ran before the push.
+
+- Each round runs every such review the project uses over `<from>..HEAD`.
+  The first round's `<from>` is the Step 0 base, never the upstream (`origin/HEAD`):
+  on a long-lived branch `origin/HEAD..HEAD` can hold dozens of earlier commits that belong to other tasks.
+- A finding is a fix when the reviewer marks it a defect or a security issue and you agree;
+  one that needs a preference or tradeoff from the user is a judgment call; style or wording is minor.
+- Fixes decided on in a round → make them and commit them as new commits through Steps 1–5
+  (staging confirmation, a new draft and a new ok). These commits stay inside this Step 6:
+  run the next round with `<from>` = the previous round's HEAD, so it reviews the fix commits alone.
+- At the end of each round, ask the user about its judgment calls: those picked join that round's fixes;
+  the rest go to the project's issue tracker (an online one only after the user oks the exact command). Minor items are listed.
+- The loop closes on a round with no fix decided on. After round 3's reviews it stops before making their fixes,
+  lists what is still open and asks whether to stop here or keep fixing.
+- A review the change's scope doesn't reach, or one not installed, is skipped with one line in the reply,
+  `review-skip: <review> — <reason>`, rewritten every round.
+- The project uses no committed-diff review → say so in one line and go to Step 7.
+
+### 7. Push
+
+No push requested → end the run with one line reminding the user the commits are unpushed.
+Otherwise, once the loop closes, draft the exact `git push <remote> <branch>` line and stop
+for the user's ok. Run it unchanged via the **Bash tool**; any other push needs a
+new draft and a new ok, since Step 4's ok covered the commit alone.
+A push requested later, in a run with nothing to commit, starts here,
+after one Step 6 round over the commits not yet reviewed.
 
 ---
 

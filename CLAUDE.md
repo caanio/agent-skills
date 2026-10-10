@@ -102,8 +102,10 @@ Settled — reopen only on new evidence:
    a file is not UTF-8 (PEP 3120 makes UTF-8 the default); an existing
    UTF-8 line stays. Maintainer call, log: 2026-09-27.
 10. `git-helper`'s Step 4 draft is the literal command block Step 5 runs,
-    trailers and any push line included; one ok covers the block, run as
-    separate calls in order. Maintainer call, log: 2026-09-27.
+    trailers included; one ok covers the block, run as separate calls in
+    order. Step 6's review loop follows every commit; a requested push is
+    a block of its own (Step 7), drafted once the loop closes. Maintainer
+    call, log: 2026-09-27, 2026-10-08 to 2026-10-10.
 11. `web-stack-selector` keeps `simple-datatables (LGPL)` as excluded;
     its survey line takes the license from the repo's `LICENSE` file and
     `package.json`, since the GitHub API reports `NOASSERTION`.
