@@ -1422,6 +1422,7 @@ Entries run oldest first; new entries are appended at the end.
       trimmed version: files intact (Steps 0–7, 8 fences paired); read-back
       8/8 (commit-to-push order and asks, round ranges with and without a
       named base, fix-commit asks, judgment calls, round 3 stop, no-push
-      run, skip format, verdict fixed point); one known conflict left open
-      (base taken after Step 0's pull here, at work start in the
-      maintainer's global rules), part of Open 5's base cases.
+      run, skip format, verdict fixed point). One difference is left to
+      the maintainer's global rules rather than tracked here: the base is
+      taken after Step 0's pull here, at work start there; verdict review
+      ranges likewise belong to those rules alone, not to this skill.
