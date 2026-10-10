@@ -1416,13 +1416,12 @@ Entries run oldest first; new entries are appended at the end.
       the second 16 new ones (2 blockers) in the clauses added for the
       first; the maintainer chose to trim back to the core and fix the
       blockers rather than run a third round. Edge cases left out on
-      purpose (first commit in an empty repo, base across sessions,
-      verdict ranges) are tracked in the maintainer's own dotfiles repo.
-      Description unchanged, so no README edit or description run.
+      purpose are Open 5. Description unchanged, so no description run;
+      the README row now summarises the split commit and push blocks.
       Edited via `writing-for-agents`. Verified by `verifier` on the
       trimmed version: files intact (Steps 0–7, 8 fences paired); read-back
       8/8 (commit-to-push order and asks, round ranges with and without a
       named base, fix-commit asks, judgment calls, round 3 stop, no-push
       run, skip format, verdict fixed point); one known conflict left open
       (base taken after Step 0's pull here, at work start in the
-      maintainer's global rules), listed with the other left-out cases.
+      maintainer's global rules), part of Open 5's base cases.

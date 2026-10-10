@@ -62,7 +62,7 @@ See `docs/agents/triage-labels.md`.
 Single-context: `CONTEXT.md` at the root, ADRs under `docs/adr/`.
 See `docs/agents/domain.md`.
 
-## Open items (last updated 2026-10-08)
+## Open items (last updated 2026-10-10)
 
 The only live list. The per-change log — what each change did, why, and how
 it was verified — is `docs/history/todo-log.md`; read it before reworking a
@@ -148,6 +148,13 @@ Open:
    rule from `haos-addon-deploy` §0/§8. If the skills CLI can install
    one skill alone [unconfirmed], that pointer has no target and the
    skill does not stand on its own. Check the CLI first. Log: 2026-10-08.
+5. `git-helper` Step 6 leaves edge cases out on purpose: the first
+   commit in an empty repo has no base (an empty tree breaks a three-dot
+   diff); a base across sessions, or before commits made outside
+   git-helper, has no recorded source; a judgment call filed to a
+   local-file tracker dirties the tree after the loop closes; rounds
+   after "keep fixing" past round 3 are unstated. Fix one when a recorded
+   session hits it. Log: 2026-10-08 to 2026-10-10.
 
 ## Source Material
 
