@@ -1,6 +1,6 @@
 ---
 name: video-to-line
-description: Convert a video (screen recording .mov, phone clip, any ffmpeg-readable file) into an H.264 mp4 that plays inline in LINE chat, then verify the result. Use when the user wants to send a video over LINE, says a video won't play in LINE (LINE 不能播 / 傳到 LINE), asks to shrink a .mov into a LINE-friendly mp4, or has a video over 5 minutes to send (影片太長 / 超過 5 分鐘).
+description: Convert a video (screen recording .mov, phone clip; mov/mp4, mkv/webm, avi, ts, flv, wmv or mpeg) into an H.264 mp4 that plays inline in LINE chat, then verify the result. Use when the user wants to send a video over LINE, says a video won't play in LINE (LINE 不能播 / 傳到 LINE), asks to shrink a .mov into a LINE-friendly mp4, or has a video over 5 minutes to send (影片太長 / 超過 5 分鐘).
 ---
 
 # Video → LINE-playable mp4
@@ -41,7 +41,7 @@ PSNR average 45.4 dB (SSIM 0.986, measured by hand; the script reports PSNR only
 
 - **Audio**: input has an audio stream → AAC 128 kb/s; none → `-an`.
 - **Odd width/height**: yuv420p needs even sides, so one edge pixel is cropped (no resampling).
-  Even input gets no filter, so it runs exactly the encode settings confirmed to play in LINE.
+  Even input gets no filter, so its video is encoded with the same options confirmed to play in LINE.
 - **Length**: ⚠️ LINE truncates a chat video longer than 5 minutes; hit in practice 2026-10-13.
   LINE's help center publishes no chat-video limit (its one official 5-minute figure is for LINE Premium albums);
   third-party reports agree on 5 minutes.
@@ -68,5 +68,7 @@ PSNR average 45.4 dB (SSIM 0.986, measured by hand; the script reports PSNR only
 - LINE's file-size limit is [unconfirmed]; third-party figures disagree, so the skill states none.
 - Resolution and frame rate are kept, so 4K60 input becomes H.264 High at level 5.x and a large file;
   whether LINE and every phone play that is untested [unconfirmed].
+- Source metadata, such as a phone's GPS location and a title, is copied into the output (kept by maintainer call);
+  whether LINE strips it on upload is [unconfirmed].
 - iPhone HDR / 10-bit HEVC input becomes 8-bit H.264 that still carries the source's HDR colour tags (BT.2020, HLG or PQ), with no tone mapping;
   how LINE and phones display it is [unconfirmed].

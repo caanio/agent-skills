@@ -89,7 +89,7 @@ done
 
 # yuv420p subsamples chroma 2x2, so libx264 rejects odd width/height.
 # Crop one edge pixel instead of scaling: no resample, and the PSNR reference below stays pixel-aligned.
-# Even input gets no filter at all, so it runs exactly the encode settings already confirmed to play in LINE.
+# Even input gets no filter at all, so its video is encoded with the same options already confirmed to play in LINE.
 vf=()
 if [ $((w % 2)) -ne 0 ] || [ $((h % 2)) -ne 0 ]; then
   vf=(-vf "crop=trunc(iw/2)*2:trunc(ih/2)*2:0:0")

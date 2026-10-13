@@ -1511,5 +1511,14 @@ Entries run oldest first; new entries are appended at the end.
       [unconfirmed on Linux]. Kept by maintainer call: no resolution
       cap; 4K60 input stays 4K at H.264 level 5.x, listed as untested.
       Left as minor: `clip.mov` and `clip.mkv` map to one output name,
-      and the guard refuses the second. The audio, odd-size and split
-      paths, and HDR input, are unconfirmed in LINE: Open 6.
+      and the guard refuses the second. Review loop round 1 after
+      commit ade821d: `/security-review` reported nothing at its bar;
+      the source metadata it reproduced in the output (GPS location,
+      title) is kept by maintainer call and listed in the skill. The
+      Spec axis caught the description promising any ffmpeg-readable
+      file despite the container allow-list, and "exactly the
+      LINE-confirmed command" overstating it: every run also adds `-t`,
+      `-f mp4` and a temp file, though the video options are unchanged.
+      Withholding output on a failed check stays, by maintainer call.
+      The audio, odd-size and split paths, and HDR input, are
+      unconfirmed in LINE: Open 6.
