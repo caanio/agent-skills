@@ -1520,5 +1520,10 @@ Entries run oldest first; new entries are appended at the end.
       LINE-confirmed command" overstating it: every run also adds `-t`,
       `-f mp4` and a temp file, though the video options are unchanged.
       Withholding output on a failed check stays, by maintainer call.
-      The audio, odd-size and split paths, and HDR input, are
-      unconfirmed in LINE: Open 6.
+      Round 2 after commit adf4974 (`/security-review` skipped: docs
+      and one comment line): the skill still credited the script with
+      the LINE playback that only the hand-run command had, now stated
+      as such; 3gp added to the description's container list. Kept by
+      maintainer call: review notes stay in this entry, version 1.0.0
+      until first push. No script output has been sent through LINE
+      yet, on any path, and HDR input is untested there: Open 6.

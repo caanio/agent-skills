@@ -1,6 +1,6 @@
 ---
 name: video-to-line
-description: Convert a video (screen recording .mov, phone clip; mov/mp4, mkv/webm, avi, ts, flv, wmv or mpeg) into an H.264 mp4 that plays inline in LINE chat, then verify the result. Use when the user wants to send a video over LINE, says a video won't play in LINE (LINE 不能播 / 傳到 LINE), asks to shrink a .mov into a LINE-friendly mp4, or has a video over 5 minutes to send (影片太長 / 超過 5 分鐘).
+description: Convert a video (screen recording .mov, phone clip; mov/mp4/3gp, mkv/webm, avi, ts, flv, wmv or mpeg) into an H.264 mp4 that plays inline in LINE chat, then verify the result. Use when the user wants to send a video over LINE, says a video won't play in LINE (LINE 不能播 / 傳到 LINE), asks to shrink a .mov into a LINE-friendly mp4, or has a video over 5 minutes to send (影片太長 / 超過 5 分鐘).
 ---
 
 # Video → LINE-playable mp4
@@ -9,9 +9,11 @@ Version: 1.0.0 | Date: 2026-10-13
 
 One script does the conversion and its own verification:
 `scripts/to_line.sh` in this skill's folder (bash + ffmpeg/ffprobe, macOS bash 3.2 compatible).
-Tested 2026-10-13 with ffmpeg 8.1: a macOS QuickTime screen recording (.mov, H.264 Main, 1622x1004, 60 fps, no audio, 11 s, 26 MB)
+Its video options come from a hand-run ffmpeg command tested 2026-10-13 with ffmpeg 8.1:
+a macOS QuickTime screen recording (.mov, H.264 Main, 1622x1004, 60 fps, no audio, 11 s, 26 MB)
 became a 4.1 MB mp4 that played in LINE;
 PSNR average 45.4 dB (SSIM 0.986, measured by hand; the script reports PSNR only).
+The script's own output, which adds a `-t` span and a temp file around those options, has not been sent through LINE yet.
 
 ## Steps
 
@@ -62,8 +64,8 @@ PSNR average 45.4 dB (SSIM 0.986, measured by hand; the script reports PSNR only
 
 ## Coverage limits
 
-- Only the no-audio, even-size path has been confirmed playing in LINE.
-  The audio and odd-size paths pass the script's checks on synthetic test files but are unconfirmed in LINE.
+- Only the hand-run command behind the no-audio, even-size path has been confirmed playing in LINE.
+  The script's output on every path, including that one, passes its checks on synthetic test files but is unconfirmed in LINE.
 - Split parts pass the script's checks on synthetic test files but have not yet been sent through LINE.
 - LINE's file-size limit is [unconfirmed]; third-party figures disagree, so the skill states none.
 - Resolution and frame rate are kept, so 4K60 input becomes H.264 High at level 5.x and a large file;

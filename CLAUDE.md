@@ -155,12 +155,13 @@ Open:
    local-file tracker dirties the tree after the loop closes; rounds
    after "keep fixing" past round 3 are unstated. Fix one when a recorded
    session hits it. Log: 2026-10-08 to 2026-10-10.
-6. `video-to-line`: only the no-audio, even-size path is confirmed
-   playing in LINE. Send an output with audio, one from odd-size input
-   and the parts of a split video; record a real iPhone HDR clip's
-   result (output keeps the HDR tags on 8-bit: retag or tone-map only
-   if it looks wrong); add ⚠️ only for what actually breaks.
-   Log: 2026-10-13.
+6. `video-to-line`: only the hand-run command behind the no-audio,
+   even-size path is confirmed playing in LINE, not the script's own
+   output. Send the script's output for a plain screen recording, one
+   with audio, one from odd-size input and the parts of a split video;
+   record a real iPhone HDR clip's result (output keeps the HDR tags on
+   8-bit: retag or tone-map only if it looks wrong); add ⚠️ only for what
+   actually breaks. Log: 2026-10-13.
 
 ## Source Material
 
