@@ -1426,3 +1426,90 @@ Entries run oldest first; new entries are appended at the end.
       the maintainer's global rules rather than tracked here: the base is
       taken after Step 0's pull here, at work start there; verdict review
       ranges likewise belong to those rules alone, not to this skill.
+- [x] New skill `video-to-line` (2026-10-13). Converts a video into an
+      mp4 that LINE plays inline; no LINE-specific skill turned up on
+      GitHub or skills.sh, and the closest general one was a 432-line
+      ffmpeg cheat sheet. Base command taken from a real run: a macOS
+      screen recording .mov (H.264 Main, 1622x1004, 60 fps, no audio,
+      11 s, 26 MB) became a 4.1 MB mp4 that played in LINE, PSNR average
+      45.4 dB, SSIM 0.986; crf 18 was judged unnecessary. The skill is
+      `SKILL.md` plus `scripts/to_line.sh` (bash 3.2 + ffmpeg/ffprobe):
+      AAC 128k when audio exists, else `-an`; odd sides cropped by one
+      pixel rather than scaled (no resample, and the PSNR reference stays
+      pixel-aligned); even input gets no filter, so it runs the exact
+      LINE-confirmed command; checks h264, yuv420p, moov before mdat,
+      duration within 0.1 s, aac when audio exists; any FAIL exits 1.
+      `-nostdin` added after ffmpeg consumed a heredoc's stdin during
+      testing. `--crf` was first held to 0–51 after a test showed libx264
+      silently clamping 99 into a blurry file that passed every check;
+      a failed encode removes its partial output, so a rerun is not
+      blocked by the existing-output guard; every `RESULT:` line goes to
+      stdout. Verified 2026-10-13 on synthetic files (no audio
+      1622x1004 60 fps, AAC audio, 1281x721): all PASS, a forced check
+      failure exits 1, existing output exits 1, bad `--crf` / missing
+      input exit 2; a `verifier` read-back of the script passed 9/9 and
+      also ran spaces in the name, no extension and a subdirectory.
+      After the first `SKILL.md` read-back found the exit-1 cases out of
+      step with the script, reran: `--crf` 99 / -1 exit 2, 51 passes;
+      unreadable input and audio-only input exit 1 with the script's
+      own message; an encode into a read-only folder exits 1 and leaves
+      no output.
+      `SKILL.md` written via `writing-for-agents`; three `verifier`
+      read-back rounds. Round 1 found the exit-1 cases out of step with
+      the script, round 2 found `RESULT: FAIL` on stderr and no next
+      move after an ffmpeg failure; round 3 ran every exit-table case
+      through the documented `2>&1` call and passed all but one wording
+      gap (a missing input path), fixed by rewording that row. Every run
+      used macOS `/bin/bash` 3.2.57. The quality-skill pass then changed
+      the script: `/code-review` found `--crf 0` rejected by
+      `-profile:v high` (range now 1–51), the container duration masking
+      a short video track or failing a good multi-track file (now the
+      video track's own duration, container duration only where the
+      stream reports N/A), and bitrate N/A printed as 0. Same-context
+      review found names starting with `-` or holding `:` misread as
+      options or protocols (relative paths now get `./`). Hardening
+      moved the encode into a `mktemp` file under an EXIT trap, placed
+      with `mv -n`: SIGINT and SIGTERM mid-encode left nothing, and a
+      file written to the output path mid-run survived untouched. The
+      focused security review reproduced an ffconcat text file renamed
+      to .mov splicing a sibling video into the output, which the skill
+      then sends to someone else; only plain media containers (mov/mp4
+      family, matroska/webm, avi, mpegts, flv, asf, mpeg) are accepted
+      now. HLS was already refused by ffmpeg 8.1. 23 cases rerun after
+      the last change, all as expected. Kept by maintainer call: the
+      PSNR pass decodes both files in full, roughly doubling the run on
+      a long clip; the target is short screen recordings, so v1 keeps it
+      unconditional. Left as minor: an audio codec the local ffmpeg
+      cannot decode fails the whole run [unconfirmed, not reproduced];
+      about nine ffprobe calls could be one. Then the maintainer
+      reported LINE truncating a chat video over 5 minutes, hit first
+      hand. LINE's help center publishes no chat-video limit (all 299
+      smartphone articles scanned in ja, zh-Hant and en; the one
+      5-minute figure is for Premium albums), and third-party posts
+      agree on 5 minutes, so that is the skill's single ⚠️. Video over
+      299 s is now split into equal parts, `_line_<i>of<n>.mp4`, each
+      checked to stay under 300 s of file duration; the 1 s margin is a
+      guess. All parts sit in temp files until every part passes, so a
+      failed check now writes nothing. Tests: 310 s split into 2 parts
+      and 610 s with audio into 3, PSNR about 40 dB on every part, part
+      frames summing to the source's (9300, 18300); 299 s stays whole;
+      a taken part name stops the run before encoding. Two bugs found
+      on the way: separately rounded part boundaries dropped the frame
+      between them, and a seek landing just before a frame made the
+      PSNR pairing one frame off (24 dB). A second `/code-review`, its
+      cases reproduced: mpegts printed every stream field twice and was
+      always refused (probe now keeps the first line); mkv video length
+      fell back to a container length that includes the audio (now its
+      DURATION tag first); audio running past the video stretched the
+      file past 300 s (every output now stops at its video span); and
+      Ctrl-C during the PSNR pass was swallowed, since ffmpeg stops and
+      exits 255 rather than dying from the signal, so the outputs were
+      placed anyway (exit 255 now aborts with 130). The doc called HDR
+      output SDR; a tagged HLG test showed the HDR tags carried onto the
+      8-bit encode, so the doc now says that, and retagging waits for a
+      real clip. `mv -n` placement tolerates GNU's non-zero skip status
+      [unconfirmed on Linux]. Kept by maintainer call: no resolution
+      cap; 4K60 input stays 4K at H.264 level 5.x, listed as untested.
+      Left as minor: `clip.mov` and `clip.mkv` map to one output name,
+      and the guard refuses the second. The audio, odd-size and split
+      paths, and HDR input, are unconfirmed in LINE: Open 6.
