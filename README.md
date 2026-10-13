@@ -70,3 +70,10 @@ Codex / Gemini: one folder per skill under `skills/`, each containing a
   for the infrastructure skills, or in a recorded real session for the process
   skills. No theoretical values, and no ⚠️ on general advice. (This governs
   `skills/` content; the install warnings in this README are not bound by it.)
+
+## License
+
+MIT, per the root [`LICENSE`](LICENSE),
+except [`skills/matt-code-review/`](skills/matt-code-review/):
+it is a verbatim snapshot of `mattpocock/skills` and stays under its own
+[`LICENSE`](skills/matt-code-review/LICENSE) (MIT, Copyright Matt Pocock).
