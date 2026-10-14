@@ -1558,8 +1558,9 @@ Entries run oldest first; new entries are appended at the end.
       equals the cap (1681 and 1197 kb/s, both PASS), and a split run
       stops at its first failing part instead of encoding the rest.
       A 1 s noise clip with AAC still fails (1851 kb/s) and passes at
-      `--crf 40`; the exit table now says to raise `--crf` by 5 on a
-      bitrate FAIL. Fixed from the same review: the size figures in
+      `--crf 40`; the exit table now says to rerun at `--crf 30`, then 40,
+      when the bitrate check is the only FAIL. Fixed from the same
+      review: the size figures in
       Tuning were one clip's averages, now stated as such beside the
       2.1 MB per 10 s the check allows. Rejected: the check sitting on
       the highest passing bitrate (row C is 1714 kb/s, above 1700).
