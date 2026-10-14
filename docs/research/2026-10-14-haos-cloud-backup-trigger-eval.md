@@ -1,9 +1,10 @@
 # `haos-cloud-backup` trigger eval: HEAD and D1–D4
 
-Version: 1.0.0 | Date: 2026-10-14 | Status: decided 2026-10-14 (HEAD
+Version: 1.0.1 | Date: 2026-10-14 | Status: decided 2026-10-14 (HEAD
 stands, no `SKILL.md` edit; D1–D4 scores one query worse in both
-configurations, on Q20; the one shared failure, Q17, is
-text-independent; the pass moves on to `haos-addon-deploy`)
+configurations, on Q20 isolated and Q16 under competitors; the one
+shared failure, Q17, is text-independent; the pass moves on to
+`haos-addon-deploy`)
 
 The description run that plan §2 of
 `2026-10-01-skill-authoring-pass-plan.md` schedules after the 2026-10-08
@@ -27,8 +28,10 @@ queries; `pass` counts queries whose rate is on the right side of 0.5.
 | D1–D4 (587 characters) | 18/20, 1.00 / 0.17 | 18/20, 1.00 / 0.20 | 3/3, 3/3 | 2/3, 1/3 |
 
 The one other mixed cell: Q16 (restore a backup onto a fresh card,
-should-not) D1–D4 under competitors 2/3. Every other cell is 3/3 on a
-should query or 0/3 on a should-not.
+should-not) D1–D4 under competitors 2/3, a failure. Every other cell is
+3/3 on a should query or 0/3 on a should-not. Failed queries per run:
+HEAD Q17 in both configurations; D1–D4 Q17 and Q20 isolated, Q17 and
+Q16 under competitors.
 
 **The should side is saturated.** All ten should queries hit 3/3 on both
 texts in both configurations, the two Traditional Chinese queries that
@@ -39,8 +42,10 @@ Google Drive) hit 3/3 on D1–D4.
 
 **D1–D4 loosens the should-not side.** Q20, a Docker-on-Ubuntu HA
 install backing up its config folder to B2, never fires on HEAD and
-fires 2/3 isolated and 1/3 under competitors on D1–D4. Which of the four
-edits does it is not measured; the splits that would localise it were
+fires 2/3 isolated (a failure) and 1/3 under competitors (a pass) on
+D1–D4; Q16, the restore query, never fires on HEAD and fails 2/3 under
+competitors on D1–D4. Which of the four edits does it is not measured;
+the splits that would localise it were
 offered and declined, since the 26 characters D1–D4 saves are too few
 to pay for a regression. D1–D4 is refuted as a set; no single D is.
 

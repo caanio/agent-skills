@@ -1594,18 +1594,28 @@ Entries run oldest first; new entries are appended at the end.
       workers, `--timeout 90`) isolated and with 38 competitor skills:
       HEAD 19/20 in both; D1–D4, hand-applied from the 2026-10-08 entry's
       paraphrase (the reviewer's texts were not kept), 18/20 in both.
-      D1–D4's extra failure is Q20 (HA on Docker backing up to B2,
-      should-not): 0/3 on HEAD, 2/3 isolated and 1/3 under competitors.
+      D1–D4's extra failure is Q20 isolated (HA on Docker backing up to
+      B2, should-not; 0/3 on HEAD, 2/3) and Q16 under competitors
+      (restore onto a fresh card, should-not; 0/3 on HEAD, 2/3), with
+      Q20 at 1/3 there.
       The shared failure, Q17 (a NAS share as HA's backup location,
       should-not), fires 2/3 or 3/3 on every run and is text-independent;
       its label is arguable. The ten should queries hit 3/3 everywhere.
       `run_loop.py` not started (its only target would be Q17). The
-      splits that would localise Q20 were offered and declined
+      splits that would localise them were offered and declined
       (maintainer's pick, option A of three): 26 characters saved does
       not pay for a regression, so D1–D4 is refuted as a set and no
       single D is. Harness: the three fixes reapplied on a scratch copy,
       `diff -u` byte-identical to the recorded one; probe listed 49
-      entries without the real skill. Details, eval set and both texts:
+      entries without the real skill. Verified: `skills/` untouched;
+      the note's json block re-parsed, 20 items, 10 true; the HEAD text
+      in §4 equal to the frontmatter, 613 → 587 characters; `verifier`
+      read-back M1–M5 5/5 and Q1–Q6 6/6, its no-TODO and
+      no-contradiction claims re-checked by grep. That read-back did not
+      recompute the table from the raw json, so it passed a misattributed
+      failure (Q20 named for both configurations); review-loop round 1
+      caught it and the per-run failed queries were recomputed from the
+      raw json for the fix. Details, eval set and both texts:
       `docs/research/2026-10-14-haos-cloud-backup-trigger-eval.md`.
       Plan 1.11.0 (status, table row, §2 list); `CLAUDE.md` Open 1 now
       points at `haos-addon-deploy`.
