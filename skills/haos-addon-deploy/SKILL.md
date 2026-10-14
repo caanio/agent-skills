@@ -67,9 +67,8 @@ versions. Substitute your own values; nothing here is host-specific.
   - The tell: a step's output is simply **missing**. Read a missing block as "didn't run",
     never as "passed", and re-run that step on its own to confirm.
 - ⚠️ **Protection mode on the SSH add-on must be off**, otherwise you can't reach the
-  Docker socket — every `sudo docker …` here fails (`docker ps` in the § Scope resolver,
-  `exec`, `inspect`); `ha` / Supervisor API calls are unaffected. The user flips it on the
-  add-on's info page; an agent asks the user
+  Docker socket (`sudo docker …`, including the § Scope resolver's `docker ps`). The user
+  flips it on the add-on's info page; an agent asks the user
   and, when it stays on, falls back to log-based verification (§5 explains why).
 - ⚠️ CLI names: use **`ha apps`** (`ha addons` is deprecated); to re-detect local add-ons
   use **`ha store reload`** (`ha apps reload` doesn't exist).
@@ -205,7 +204,8 @@ git archive --format=tar HEAD -- <app-dir> <shared-dir> | ssh <alias> 'tar -x -C
 (`.gitattributes` with `export-ignore` on the other add-on's directory achieves the same.)
 
 This path-scoped archive replaces only the full-`HEAD` line of the committed-tree block
-above: still run its `haos` flatten line; its `rm -rf …/haos` line is then unnecessary.
+above: still run its `haos` flatten line; its `rm -rf …/haos` line is needed only if `haos`
+is among the paths you named.
 
 If you must ship everything, delete the other add-on's directory afterwards — **with the
 delete guarded**, because an unset variable here expands to `rm -rf /addons//` and takes out
@@ -221,7 +221,8 @@ EOF
 ```
 
 Then verify — after every delivery, whichever route above — with this **mechanical** check
-(exits non-zero on a duplicate); §2 is done when it exits 0. It compares `config.yaml` /
+(exits non-zero on a duplicate); §2 is done when it exits 0 and `config.yaml` sits at the
+top of `/addons/<slug>/` (the flat-layout rule above). It compares `config.yaml` /
 `config.yml` slugs only: a `config.json` manifest shows in the listing with no slug and is
 not compared, so read that one by hand.
 
@@ -347,11 +348,10 @@ ssh <alias> "sudo docker exec $C python3 -c '…'"
 ⚠️ **`docker exec` needs Protection mode *off* on the SSH add-on (§0); if it's on, this whole
 byte-fingerprint/exec-based verification path is unavailable to you.** If you're an
 autonomous coding agent, don't assume you can just flip the toggle yourself — turning
-Protection mode off is a Supervisor **security-setting** change (not an add-on option:
-§4's options API cannot set it), and a permission-conscious agent harness may (correctly)
-refuse to let you toggle it without the user watching. Don't fight this by finding a
-workaround; treat it as a real boundary. Fall back to **log-based verification** instead —
-it's usually sufficient:
+Protection mode off is a Supervisor **security-setting** change, and a permission-conscious
+agent harness may (correctly) refuse to let you toggle it
+without the user watching. Don't fight this by finding a workaround; treat it as a real
+boundary. Fall back to **log-based verification** instead — it's usually sufficient:
 `ha apps logs local_<slug>` after start/update should show the new version's log strings
 (a line, a phrase, a startup banner) that only exist in the code you just delivered, plus a
 `grep -iE "error|traceback|exception|Errno|Fatal"` with no hits. If the deploy also added a

@@ -1640,27 +1640,27 @@ Entries run oldest first; new entries are appended at the end.
       `deep-reviewer` on the four frozen-passage edits (maintainer's
       call): all four claims true, three replacements changed. Landed
       (maintainer's pick, option A of four: A tiers 1+2, B tier 1, C all,
-      D nothing), 13 of 15: F1 §0's Protection-mode ⚠️ now says it gates
-      the Docker socket (`docker ps` in the resolver, `exec`, `inspect`)
-      and leaves `ha` / Supervisor API calls alone (`docker/app.py:620`
-      mounts the socket only when unprotected;
-      `api/middleware/security.py:360–362` never reads `protected`; the
-      old line contradicted its own log-based fallback), and §5's "may
-      be unavailable" became "is unavailable"; F2 §5 says Protection mode
-      is not an add-on option §4's options API can set (it is
-      `POST /addons/{app}/security`, `api/__init__.py:656`; the endpoint
-      stays unnamed, since `security.py:132` refuses it to a manager-role
-      token, a source-only fact kept out of a ⚠️); F3 as a caveat, not
+      D nothing), 13 of 15: F1 §0's Protection-mode ⚠️ now names the
+      Docker socket (`sudo docker …`, the resolver's `docker ps`
+      included) instead of the Supervisor API, which contradicted the
+      bullet's own log-based fallback (Supervisor 2026.07.5 source:
+      `docker/app.py:620` mounts the socket only when unprotected,
+      `api/middleware/security.py:360–362` never reads `protected`), and
+      §5's "may be unavailable" became "is unavailable"; F2 §5 drops "via
+      the same options API as §4" (the toggle is
+      `POST /addons/{app}/security`, `api/__init__.py:656`); F3 as a caveat, not
       the reviewer's untested `sed`: the mechanical check compares
       yaml/yml slugs only, a `config.json` manifest is read by hand; F4
       the `.Mounts` comment says what it prints; F5 §5's pointer now
       names §2's "two different claims", not §6; F6 the working-tree
       route points at the path-scoped `git archive`, not the
       committed-tree route (which ships all of `HEAD`); F7 that archive
-      replaces only the full-`HEAD` line, the flatten line still runs;
+      replaces only the full-`HEAD` line, the flatten line still runs,
+      the `rm -rf …/haos` line only when `haos` is among the named paths;
       F8 the committed-tree paragraph points at it when the repo holds a
       second add-on; F9 §2's done signal (the check after every
-      delivery, exit 0); F12 line 22's "see §0, §8" split (set up per
+      delivery exits 0 and `config.yaml` sits at the top of
+      `/addons/<slug>/`); F12 line 22's "see §0, §8" split (set up per
       §8, Protection mode per §0); F13 §5's done signal; F14 §6 ends on
       "verify as in §5"; F15 `/data/apps/data/…` labelled as inside the
       Supervisor container, not host side. Rejected: tier 3 (F10 the
@@ -1677,9 +1677,22 @@ Entries run oldest first; new entries are appended at the end.
       27 → 27; fence lines 30 → 30; the description and §4's temp-file
       block byte-identical to HEAD; the one fenced-block change is F4's
       comment; new lines at most 91 chars, within the file's existing
-      width; `verifier` M1–M6 6/6 and Q1–Q9 9/9 (what Protection mode
-      blocks, whether options can set it, the path-scoped commands, §2
-      and §5 done, after §6, the `.Mounts` output, where `/data` lives,
-      which section sets up SSH), its no-defect claim spot-checked by
-      grep. Diff: 34+/16−, 396 → 414 lines. Plan 1.12.0 (status, table
-      row); `CLAUDE.md` Open 1 now points at the description run.
+      width; `verifier` on `c77cdd4` M1–M6 6/6 and Q1–Q9 9/9 (what
+      Protection mode blocks, whether options can set it, the path-scoped
+      commands, §2 and §5 done, after §6, the `.Mounts` output, where
+      `/data` lives, which section sets up SSH), its no-defect claim
+      spot-checked by grep. No changed line touches a Settled item's
+      wording (grep over the diff, 0 hits), and every hunk maps to a
+      listed F. Review loop round 1 (`matt-code-review` over
+      `20edca8..c77cdd4`; `/security-review` skipped, docs only): both
+      axes flagged source-only clauses inside ⚠️ (F1's "`ha` / Supervisor
+      API calls are unaffected", F2's "§4's options API cannot set it");
+      by the maintainer's call both were cut to what recorded hits
+      support, the source facts kept in this entry only. Also fixed in
+      that round: F9's done signal (it had claimed done on a no-duplicate
+      check alone), F7's `rm -rf` condition, and this entry's missing
+      Settled and diff-scope lines; `verifier` M1–M3 3/3 and Q1–Q4 4/4 on
+      the fix. Not taken: the claim that F1 overrides `bf803ea`'s call
+      ("Supervisor API" is unchanged in that commit, from `def734a`).
+      Diff: 32+/14−, 396 → 414 lines. Plan 1.12.0 (status, table row);
+      `CLAUDE.md` Open 1 now points at the description run.
