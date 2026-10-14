@@ -62,7 +62,7 @@ See `docs/agents/triage-labels.md`.
 Single-context: `CONTEXT.md` at the root, ADRs under `docs/adr/`.
 See `docs/agents/domain.md`.
 
-## Open items (last updated 2026-10-13)
+## Open items (last updated 2026-10-14)
 
 The only live list. The per-change log — what each change did, why, and how
 it was verified — is `docs/history/todo-log.md`; read it before reworking a
@@ -116,6 +116,10 @@ Settled — reopen only on new evidence:
     `http` integration page and the 2026.8 release post; the 2027.2
     cut-off date has only a community source and stays out.
     Maintainer call, log: 2026-10-01.
+13. `video-to-line` stays a skill, and its untested LINE paths (Chrome
+    extension, phone, odd-size input, split parts, iPhone HDR, UI-text
+    readability at the cap) are tested when a real send breaks; that
+    break earns its ⚠️. Maintainer call, log: 2026-10-14.
 
 Open:
 
@@ -155,15 +159,6 @@ Open:
    local-file tracker dirties the tree after the loop closes; rounds
    after "keep fixing" past round 3 are unstated. Fix one when a recorded
    session hits it. Log: 2026-10-08 to 2026-10-10.
-6. `video-to-line`: the 1.1.0 script's output plays inline in LINE for
-   Mac 8.7.0 for an even-size screen recording, with and without audio;
-   the bitrate cap behind it is in
-   `docs/research/2026-10-13-line-desktop-bitrate-gate.md`. Still to send:
-   the capped output through the LINE Chrome extension and a phone, an
-   odd-size input, the parts of a split video, and a real iPhone HDR clip
-   (output keeps the HDR tags on 8-bit: retag or tone-map only if it looks
-   wrong); judge whether UI text stays readable at the cap. Add ⚠️ only for
-   what actually breaks. Log: 2026-10-13.
 
 ## Source Material
 

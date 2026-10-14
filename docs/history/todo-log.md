@@ -1575,3 +1575,16 @@ Entries run oldest first; new entries are appended at the end.
       dense motion goes soft. Not judged: whether UI text stays
       readable at the cap. Untested: the capped output in the Chrome
       extension and on phones (Open 6).
+- [x] `video-to-line` kept, Open 6 frozen (2026-10-14). Asked whether the
+      skill earns its place when an agent can run ffmpeg ad hoc. Its
+      value is the three pitfalls hit in practice (the LINE for Mac
+      bitrate gate, 5-minute truncation, the macOS 12 ffmpeg install)
+      plus the script's checks, 5-minute split and no-overwrite /
+      temp-file / playlist-container guards; ad-hoc runs lose the checks,
+      and the first uncapped version is exactly what arrived as a file.
+      Slimming to a knowledge-only SKILL.md was weighed: it saves only
+      the 242-line script and leaves the LINE-side unknowns as they are.
+      By maintainer call the remaining test matrix (Chrome extension,
+      phone, odd size, split parts, HDR, UI-text readability) is no
+      longer scheduled; a real send that breaks gets its ⚠️ then.
+      Moved from Open 6 to Settled 13 in `CLAUDE.md`.
