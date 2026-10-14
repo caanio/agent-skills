@@ -1597,19 +1597,19 @@ Entries run oldest first; new entries are appended at the end.
       D1–D4's extra failure is Q20 isolated (HA on Docker backing up to
       B2, should-not; 0/3 on HEAD, 2/3) and Q16 under competitors
       (restore onto a fresh card, should-not; 0/3 on HEAD, 2/3), with
-      Q20 at 1/3 there.
-      The shared failure, Q17 (a NAS share as HA's backup location,
-      should-not), fires 2/3 or 3/3 on every run and is text-independent;
-      its label is arguable. The ten should queries hit 3/3 everywhere.
-      `run_loop.py` not started (its only target would be Q17). The
-      splits that would localise them were offered and declined
+      Q20 at 1/3 there. The shared failure, Q17 (a NAS share as HA's
+      backup location, should-not), fires 2/3 or 3/3 on every run and is
+      text-independent; its label is arguable. The ten should queries
+      hit 3/3 everywhere. `run_loop.py` not started (its only target
+      would be Q17). The splits offered to localise Q20 were declined
       (maintainer's pick, option A of three): 26 characters saved does
       not pay for a regression, so D1–D4 is refuted as a set and no
       single D is. Harness: the three fixes reapplied on a scratch copy,
       `diff -u` byte-identical to the recorded one; probe listed 49
       entries without the real skill. Verified: `skills/` untouched;
       the note's json block re-parsed, 20 items, 10 true; the HEAD text
-      in §4 equal to the frontmatter, 613 → 587 characters; `verifier`
+      in §4 equal to the frontmatter, 613 characters (D1–D4 587);
+      `verifier`
       read-back M1–M5 5/5 and Q1–Q6 6/6, its no-TODO and
       no-contradiction claims re-checked by grep. That read-back did not
       recompute the table from the raw json, so it passed a misattributed
