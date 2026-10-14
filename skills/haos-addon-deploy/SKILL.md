@@ -19,7 +19,7 @@ versions. Substitute your own values; nothing here is host-specific.
   installs have no Supervisor, no `/addons`, no `ha` CLI; this skill does not apply.
 - Battle-tested on a Raspberry Pi 4 (**aarch64**), HAOS **17.x–18.1** (Supervisor + Docker
   appliance; the container naming below was observed on Supervisor **2026.07.5**), with the
-  **Advanced SSH & Web Terminal** add-on (Protection mode off — see §0, §8).
+  **Advanced SSH & Web Terminal** add-on (set up per §8; Protection mode off — see §0).
 - ⚠️ Recent HAOS labels add-ons as **"Apps"** in the UI and CLI (`ha apps`), and the rename
   is **half-applied** — never assume which spelling a given surface uses, always check:
   - still `addon`: the `/addons` delivery path, the Supervisor REST API (`/addons/<slug>/…`),
@@ -67,7 +67,9 @@ versions. Substitute your own values; nothing here is host-specific.
   - The tell: a step's output is simply **missing**. Read a missing block as "didn't run",
     never as "passed", and re-run that step on its own to confirm.
 - ⚠️ **Protection mode on the SSH add-on must be off**, otherwise you can't reach the
-  Supervisor API. The user flips it on the add-on's info page; an agent asks the user
+  Docker socket — every `sudo docker …` here fails (`docker ps` in the § Scope resolver,
+  `exec`, `inspect`); `ha` / Supervisor API calls are unaffected. The user flips it on the
+  add-on's info page; an agent asks the user
   and, when it stays on, falls back to log-based verification (§5 explains why).
 - ⚠️ CLI names: use **`ha apps`** (`ha addons` is deprecated); to re-detect local add-ons
   use **`ha store reload`** (`ha apps reload` doesn't exist).
@@ -128,7 +130,9 @@ a snapshot instead. Pick one:
 
 **Committed tree (the default once the repo has commits):** ships exactly `HEAD`, so no
 stray local files (a half-finished edit, a debug script) ride along by accident — that
-guarantee is the whole reason this is the default.
+guarantee is the whole reason this is the default. If the repo holds a second add-on's
+folder, use the path-scoped archive in "Two directories must never declare the same slug"
+below in place of the full-`HEAD` line.
 
 ```bash
 # /addons is owned by root; create the folder once to gain write access
@@ -140,9 +144,9 @@ ssh <alias> 'rm -rf /addons/<slug>/haos'   # remove the duplicate haos/ subfolde
 
 **Working tree directly, no commit required first** — either the repo has no commits yet, or
 this is a hotfix that needs to reach the box now; committing is a separate, later step (see
-`git-helper`), not a prerequisite for deploying. Name the paths
-this add-on actually needs, same as the committed-tree route — never tar the whole project root
-blindly (see the duplicate-slug fix below for why):
+`git-helper`), not a prerequisite for deploying. Name only the paths this add-on
+actually needs, as the duplicate-slug fix's path-scoped `git archive` below does — never
+tar the whole project root blindly (that fix explains why):
 
 ```bash
 ssh <alias> 'sudo mkdir -p /addons/<slug> && sudo chown $(whoami) /addons/<slug>'
@@ -200,6 +204,9 @@ git archive --format=tar HEAD -- <app-dir> <shared-dir> | ssh <alias> 'tar -x -C
 
 (`.gitattributes` with `export-ignore` on the other add-on's directory achieves the same.)
 
+This path-scoped archive replaces only the full-`HEAD` line of the committed-tree block
+above: still run its `haos` flatten line; its `rm -rf …/haos` line is then unnecessary.
+
 If you must ship everything, delete the other add-on's directory afterwards — **with the
 delete guarded**, because an unset variable here expands to `rm -rf /addons//` and takes out
 every add-on on the box:
@@ -213,7 +220,10 @@ rm -rf -- "/addons/${SLUG:?}/${OTHER:?}"
 EOF
 ```
 
-Then verify — as a **mechanical** check, not an eyeball one (exits non-zero on a duplicate):
+Then verify — after every delivery, whichever route above — with this **mechanical** check
+(exits non-zero on a duplicate); §2 is done when it exits 0. It compares `config.yaml` /
+`config.yml` slugs only: a `config.json` manifest shows in the listing with no slug and is
+not compared, so read that one by hand.
 
 ```bash
 ssh <alias> bash -l -s <<'EOF'
@@ -234,7 +244,8 @@ you delivered to, so go find the other copy (`$C` from §Scope):
 ssh <alias> "sudo docker exec $C sh -c 'wc -c \"\$(pwd)/<file>.py\"'"
 ssh <alias> 'wc -c /addons/<slug>/<file>.py'   # what you delivered
 
-# every manifest on the box, wherever the local store actually lives on this install
+# host-side sources of this container's mounts: where this install keeps Supervisor data
+# (not a manifest list — the duplicate-slug check above lists manifests)
 ssh <alias> "sudo docker inspect $C --format '{{range .Mounts}}{{.Source}}{{\"\n\"}}{{end}}'"
 ```
 
@@ -320,6 +331,9 @@ ssh <alias> 'bash -lc "ha apps start local_<slug>"'
 ssh <alias> 'bash -lc "ha apps logs local_<slug>"'
 ```
 
+§5 is done when the log checks in the fallback paragraph below pass (a line only the new
+code prints, and the error `grep` finds nothing); the `docker exec` test is extra evidence.
+
 Testing inside the container (e.g. manually trigger one push notification):
 
 ```bash
@@ -331,16 +345,17 @@ ssh <alias> "sudo docker exec $C python3 -c '…'"
 ```
 
 ⚠️ **`docker exec` needs Protection mode *off* on the SSH add-on (§0); if it's on, this whole
-byte-fingerprint/exec-based verification path may be unavailable to you.** If you're an
+byte-fingerprint/exec-based verification path is unavailable to you.** If you're an
 autonomous coding agent, don't assume you can just flip the toggle yourself — turning
-Protection mode off is a Supervisor **security-setting** change (via the same options API as
-§4), and a permission-conscious agent harness may (correctly) refuse to let you toggle it
-without the user watching. Don't fight this by finding a workaround; treat it as a real
-boundary. Fall back to **log-based verification** instead — it's usually sufficient:
+Protection mode off is a Supervisor **security-setting** change (not an add-on option:
+§4's options API cannot set it), and a permission-conscious agent harness may (correctly)
+refuse to let you toggle it without the user watching. Don't fight this by finding a
+workaround; treat it as a real boundary. Fall back to **log-based verification** instead —
+it's usually sufficient:
 `ha apps logs local_<slug>` after start/update should show the new version's log strings
 (a line, a phrase, a startup banner) that only exist in the code you just delivered, plus a
 `grep -iE "error|traceback|exception|Errno|Fatal"` with no hits. If the deploy also added a
-reachable endpoint, hitting it for real (see §6's version-check philosophy — trust behavior
+reachable endpoint, hitting it for real (see §2's "two different claims" — trust behavior
 you can observe over inference) is stronger evidence than a static byte count anyway.
 
 ## 6. Update (⚠️ pick one of three — the wrong one gets rejected)
@@ -369,10 +384,13 @@ ssh <alias> 'bash -lc "ha apps info local_<slug> | grep -E \"^(version|version_l
 *different* directory that declares your slug: go to §2's "Two directories must never declare
 the same slug".
 
+After the update, rebuild or restart, verify as in §5.
+
 ## 7. Persistence and Logs
 
-- **`/data/` is the persistent volume** (host side: `/data/apps/data/local_<slug>/`):
-  DB, logs and tokens all live here and survive rebuild/update.
+- **`/data/` is the persistent volume** (inside the Supervisor container:
+  `/data/apps/data/local_<slug>/`): DB, logs and tokens all live here and survive
+  rebuild/update.
 - Log to both stdout (for `ha apps logs`) and `/data/logs/` (rotating files).
 - ⚠️ **Never print secrets in the startup log** (`ha apps logs` is visible to anyone
   who can open HA) — print on/off status only.

@@ -1,6 +1,6 @@
 # Skill-authoring pass over `skills/`: scope evaluation
 
-Version: 1.11.0 | Date: 2026-10-14 | Status: decided 2026-10-01 (option A;
+Version: 1.12.0 | Date: 2026-10-14 | Status: decided 2026-10-01 (option A;
 `skill-creator` = validate + description optimization on five skills,
 eval loop dropped); pilot on `handover` done 2026-10-01 (log entry);
 §5 gained the log cross-check after the pilot; `git-helper` done
@@ -19,7 +19,9 @@ sister skill's tested check, D1–D5 parked) and description run done
 pass done 2026-10-08 (log entry; 12 of 16 landed, F3 and F5's move option
 rejected, D1–D4 parked) and description run done 2026-10-14 (log entry;
 HEAD stood, D1–D4 one query worse in both configurations, in
-`2026-10-14-haos-cloud-backup-trigger-eval.md`); next `haos-addon-deploy`
+`2026-10-14-haos-cloud-backup-trigger-eval.md`); `haos-addon-deploy` body
+pass done 2026-10-14 (log entry; 13 of 15 landed, four frozen-passage
+factual fixes checked by `deep-reviewer`); next its description run
 
 Answers `CLAUDE.md` Open item 1 (added 2026-10-01): should every skill in
 `skills/` go through `skill-creator` and `writing-for-agents`, in what
@@ -39,7 +41,7 @@ one, and the two that did have been diff-edited since. The 2026-09-30
 | completion-gate | 226 | 6 | 2026-10-02 (whole-file pass; description run same day) | valid |
 | git-helper | 171 | 0 | 2026-10-01 (whole-file pass) | valid |
 | handover | 108 | 0 | 2026-10-01 (whole-file pass) | unknown keys (see §3) |
-| haos-addon-deploy | 396 | 27 | 2026-09-26 | valid |
+| haos-addon-deploy | 414 | 27 | 2026-10-14 (whole-file pass) | valid |
 | haos-cloud-backup | 240 | 13 | 2026-10-08 (whole-file pass; description run 2026-10-14) | valid |
 | haos-https-tunnel | 140 | 7 | 2026-10-04 (whole-file pass; description run same day) | valid |
 | python-coding-standards | 133 | 1 | 2026-10-02 (whole-file pass) | valid |

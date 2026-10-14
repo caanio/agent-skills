@@ -1619,3 +1619,67 @@ Entries run oldest first; new entries are appended at the end.
       `docs/research/2026-10-14-haos-cloud-backup-trigger-eval.md`.
       Plan 1.11.0 (status, table row, §2 list); `CLAUDE.md` Open 1 now
       points at `haos-addon-deploy`.
+- [x] Skill-authoring pass on `haos-addon-deploy` (2026-10-14), eighth
+      pass per the plan, last of the HAOS three. Cross-check map first
+      (plan §5): the touched lines come from `def734a`, `2d01cf9`,
+      `2ad1dab`, `b264b61`, `e69ed91` and `bf803ea`; only `bf803ea` has a
+      log entry (2026-09-26, prompt audit second batch: who flips
+      Protection mode), and none records a rejection; Settled 7's §4
+      block left untouched. Whole-file `writing-for-agents` review by a
+      fresh-context `opus` reviewer given the skill, the two reference
+      files, plan §4–§5, the inclusion rules, Settled 7 verbatim and a
+      frozen list (the 27 ⚠️ passages, the 15 fenced blocks, the § Scope
+      `$C` resolver, §4's temp-file handling, §0/§4/§8 and the section
+      numbers the sister skills point at, the description, line breaks):
+      15 body findings, 5 description, 11 withdrawn; five tier-1
+      findings sat inside frozen passages, flagged as factual. Every
+      line number and quote re-grepped in the main session; the
+      Supervisor 2026.07.5 source citations re-fetched; the not-found
+      claims (§6 states no trust-behavior idea, no done signal in §2,
+      §5 or §6, one mechanical check, no IP or PII) re-checked by grep.
+      `deep-reviewer` on the four frozen-passage edits (maintainer's
+      call): all four claims true, three replacements changed. Landed
+      (maintainer's pick, option A of four: A tiers 1+2, B tier 1, C all,
+      D nothing), 13 of 15: F1 §0's Protection-mode ⚠️ now says it gates
+      the Docker socket (`docker ps` in the resolver, `exec`, `inspect`)
+      and leaves `ha` / Supervisor API calls alone (`docker/app.py:620`
+      mounts the socket only when unprotected;
+      `api/middleware/security.py:360–362` never reads `protected`; the
+      old line contradicted its own log-based fallback), and §5's "may
+      be unavailable" became "is unavailable"; F2 §5 says Protection mode
+      is not an add-on option §4's options API can set (it is
+      `POST /addons/{app}/security`, `api/__init__.py:656`; the endpoint
+      stays unnamed, since `security.py:132` refuses it to a manager-role
+      token, a source-only fact kept out of a ⚠️); F3 as a caveat, not
+      the reviewer's untested `sed`: the mechanical check compares
+      yaml/yml slugs only, a `config.json` manifest is read by hand; F4
+      the `.Mounts` comment says what it prints; F5 §5's pointer now
+      names §2's "two different claims", not §6; F6 the working-tree
+      route points at the path-scoped `git archive`, not the
+      committed-tree route (which ships all of `HEAD`); F7 that archive
+      replaces only the full-`HEAD` line, the flatten line still runs;
+      F8 the committed-tree paragraph points at it when the repo holds a
+      second add-on; F9 §2's done signal (the check after every
+      delivery, exit 0); F12 line 22's "see §0, §8" split (set up per
+      §8, Protection mode per §0); F13 §5's done signal; F14 §6 ends on
+      "verify as in §5"; F15 `/data/apps/data/…` labelled as inside the
+      Supervisor container, not host side. Rejected: tier 3 (F10 the
+      default's restated rationale, F11 the commit-later duplicate and
+      its `git-helper` pointer) and F12's run-order bullet (F14 covers
+      its §6 → §5 half). Description candidates `haos-addon-deploy`
+      D1–D5 not applied, kept for this skill's description run: D1 cut
+      the "Covers…" sentence, D2 a full rewrite, D3 add the
+      update-not-detected symptoms, D4 add moving off a sleeping
+      workstation, D5 drop "installing". Reviewer note not acted on: W4,
+      whether loose private-key permissions really make §8's saved
+      config revert (a ⚠️ recorded as hit; raised only as a question).
+      Verified: `quick_validate.py` valid (scratch venv); `grep -c '⚠️'`
+      27 → 27; fence lines 30 → 30; the description and §4's temp-file
+      block byte-identical to HEAD; the one fenced-block change is F4's
+      comment; new lines at most 91 chars, within the file's existing
+      width; `verifier` M1–M6 6/6 and Q1–Q9 9/9 (what Protection mode
+      blocks, whether options can set it, the path-scoped commands, §2
+      and §5 done, after §6, the `.Mounts` output, where `/data` lives,
+      which section sets up SSH), its no-defect claim spot-checked by
+      grep. Diff: 34+/16−, 396 → 414 lines. Plan 1.12.0 (status, table
+      row); `CLAUDE.md` Open 1 now points at the description run.
