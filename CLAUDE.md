@@ -133,9 +133,10 @@ Open:
    candidate texts, D5 refuted, D6 double-edged), `haos-https-tunnel`
    (body pass and description run, both 2026-10-04; D1–D4 landed, the
    first description change of the pass), `haos-cloud-backup` (body
-   pass 2026-10-08; D1–D4 wait as candidate texts), all in the log.
-   Next: `haos-cloud-backup`'s description run, then `haos-addon-deploy`'s
-   body pass and description run, each with the harness fixes in
+   pass 2026-10-08, description run 2026-10-14; HEAD stood, D1–D4
+   refuted as a set), all in the log.
+   Next: `haos-addon-deploy`'s body pass and description run, with the
+   harness fixes in
    `docs/research/2026-10-02-web-stack-selector-trigger-eval.md` §2;
    every pass ends in one log entry.
 2. `web-stack-selector` description run for Vue / Nuxt: Section F
