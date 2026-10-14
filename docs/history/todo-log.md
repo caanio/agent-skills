@@ -1527,3 +1527,50 @@ Entries run oldest first; new entries are appended at the end.
       maintainer call: review notes stay in this entry, version 1.0.0
       until first push. No script output has been sent through LINE
       yet, on any path, and HDR input is untested there: Open 6.
+- [x] `video-to-line` 1.1.0: bitrate cap for LINE for Mac (2026-10-13).
+      The 1.0.0 script's output, sent through LINE for Mac 8.7.0 on
+      macOS 12.7.6, arrived as a file attachment, while the same
+      encode arrived as a video through the LINE Chrome extension on
+      macOS 15. One-factor variants of the source recording, each sent
+      by hand (table and probes:
+      `docs/research/2026-10-13-line-desktop-bitrate-gate.md`), ruled
+      out audio, frame-rate mode, profile/level, resolution and file
+      size: video at 1.71 Mbps or below, file at 2.86 Mbps or above,
+      including an 8.3 MB 74 s clip at 0.90 Mbps arriving as a video.
+      The script now encodes with `-maxrate 1300k -bufsize 1300k` and
+      checks that the file's bitrate is at most 1700 kb/s. A first
+      1500k cap averaged 6% over: 1597 kb/s without audio, 1726 kb/s
+      with AAC, which the new check failed with no output written.
+      Final output: 1300 kb/s (1.8 MB, PSNR 42.7 dB, was 45.4) and
+      1423 kb/s with AAC, all checks PASS, both sent as videos in LINE
+      for Mac 8.7.0. `-stats` dropped: its progress line flooded the
+      `2>&1` output an agent reads. Also recorded: the source's
+      "60 fps" was the nominal `r_frame_rate`; it is variable, averaging
+      31 fps. Built-in `avconvert` output (10.4 Mbps) also arrived as a
+      file, so it is no fallback when ffmpeg is missing. On macOS 12,
+      `brew install ffmpeg` built from source and failed twice on
+      unlinked kegs (`lame`, then an older `x264`), fixed by
+      `brew link lame` and `brew link --overwrite x264`. The
+      description gains the file-attachment symptom.
+      `/code-review` reproduced short busy clips overshooting the cap:
+      with bufsize at 2x the cap, a 1 s and a 2 s noise clip came to
+      2162 and 1773 kb/s and failed. By maintainer call, bufsize now
+      equals the cap (1681 and 1197 kb/s, both PASS), and a split run
+      stops at its first failing part instead of encoding the rest.
+      A 1 s noise clip with AAC still fails (1851 kb/s) and passes at
+      `--crf 40`; the exit table now says to raise `--crf` by 5 on a
+      bitrate FAIL. Fixed from the same review: the size figures in
+      Tuning were one clip's averages, now stated as such beside the
+      2.1 MB per 10 s the check allows. Rejected: the check sitting on
+      the highest passing bitrate (row C is 1714 kb/s, above 1700).
+      Kept by maintainer call: no downscaling of wide input, so 4K
+      stays very soft under the cap; no throttled progress output.
+      Rerun after the last change: plain, AAC, a true 1281x721 input
+      (cropped) and 310 s split into two parts all PASS at
+      1300–1423 kb/s; 1, 2 and 3 s noise clips PASS; a check forced
+      to fail on part 1 of 2 left part 2 unencoded and wrote nothing;
+      existing output exits 1, `--crf 0` and a missing input exit 2.
+      The busy `testsrc2` pattern scores PSNR 28.5 dB at the cap, so
+      dense motion goes soft. Not judged: whether UI text stays
+      readable at the cap. Untested: the capped output in the Chrome
+      extension and on phones (Open 6).

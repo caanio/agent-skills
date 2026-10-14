@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # to_line.sh — convert a video into an mp4 that LINE plays inline.
-# Version: 1.0.0
+# Version: 1.1.0
 # Usage: bash to_line.sh <input> [--crf N]
 # Output: <input dir>/<input name>_line.mp4; the input is never modified.
 #         Over 299 s of video: equal parts <input name>_line_<i>of<n>.mp4, each under LINE's 5 minutes.
@@ -18,6 +18,13 @@ done
 [ $# -ge 1 ] || usage
 in="$1"; shift
 crf=23
+# LINE for Mac 8.7.0 sends a clip as a file, not a video, above an average bitrate somewhere between 1.71 Mbps
+# (still a video) and 2.86 Mbps (a file), measured 2026-10-13; size and resolution made no difference there.
+# x264 averaged about 6% over -maxrate on an 11 s clip, and a clip of a few seconds can go further because the
+# VBV buffer starts nearly full; the cap leaves room for that and the 128 kb/s audio track under the checked total,
+# and bufsize equal to the cap keeps that start-up burst small (a busy 2 s clip: 1773 kb/s at 2x, 1197 kb/s at 1x).
+max_video_kbps=1300
+max_total_kbps=1700
 while [ $# -gt 0 ]; do
   case "$1" in
     --crf) [ $# -ge 2 ] || usage; crf="$2"; shift 2 ;;
@@ -89,7 +96,7 @@ done
 
 # yuv420p subsamples chroma 2x2, so libx264 rejects odd width/height.
 # Crop one edge pixel instead of scaling: no resample, and the PSNR reference below stays pixel-aligned.
-# Even input gets no filter at all, so its video is encoded with the same options already confirmed to play in LINE.
+# Even input gets no filter at all, so its pixels are never resampled.
 vf=()
 if [ $((w % 2)) -ne 0 ] || [ $((h % 2)) -ne 0 ]; then
   vf=(-vf "crop=trunc(iw/2)*2:trunc(ih/2)*2:0:0")
@@ -111,6 +118,7 @@ check() { # name, detail, test command...
 }
 # A non-numeric duration (N/A) counts as a FAIL rather than as 0 s.
 within_01s() { awk -v a="$1" -v b="$2" 'BEGIN { if (a !~ /^[0-9.]+$/ || b !~ /^[0-9.]+$/) exit 1; d = a - b; if (d < 0) d = -d; exit !(d < 0.1) }'; }
+under_kbps() { awk -v a="$1" -v m="$2" 'BEGIN { if (a !~ /^[0-9]+$/) exit 1; exit !(a <= m * 1000) }'; }
 under_300s() { awk -v a="$1" 'BEGIN { if (a !~ /^[0-9.]+$/) exit 1; exit !(a < 300) }'; }
 
 # Every part is encoded into a file mktemp created for this run, so the only files ever deleted are ones
@@ -154,8 +162,9 @@ while [ "$i" -le "$nparts" ]; do
 
   echo "converting${label}: $in -> $out (crf $crf, audio: ${has_audio:-none})"
   rc=0
-  ffmpeg -nostdin -hide_banner -loglevel error -stats -y ${seek[@]+"${seek[@]}"} -i "$in" -map 0:v:0 ${vf[@]+"${vf[@]}"} \
-    -c:v libx264 -preset fast -crf "$crf" -pix_fmt yuv420p -profile:v high \
+  ffmpeg -nostdin -hide_banner -loglevel error -y ${seek[@]+"${seek[@]}"} -i "$in" -map 0:v:0 ${vf[@]+"${vf[@]}"} \
+    -c:v libx264 -preset fast -crf "$crf" -maxrate "${max_video_kbps}k" -bufsize "${max_video_kbps}k" \
+    -pix_fmt yuv420p -profile:v high \
     "${audio[@]}" ${span[@]+"${span[@]}"} -movflags +faststart -f mp4 "$tmp" || rc=$?
   interrupted "$rc"
   [ "$rc" -eq 0 ] || { echo "RESULT: FAIL — ffmpeg could not convert $in${label}"; exit 1; }
@@ -190,6 +199,9 @@ while [ "$i" -le "$nparts" ]; do
     else        printf "size     %.1f MB (input %.1f MB in total)\n", so/1e6, si/1e6
     printf "bitrate  %s -> %s\n", kbps(bi), kbps(bo)
   }'
+  check "bitrate at most ${max_total_kbps} kb/s${label}" "${br_out:-none} b/s" under_kbps "$br_out" "$max_total_kbps"
+  # A failed part already means nothing will be placed, so the remaining encodes and PSNR passes would be wasted time.
+  [ "$fail" -eq 0 ] || break
 
   # The reference is cut to the same span and cropped the same way. Both sides restart their timestamps at 0:
   # a seek that lands a fraction of a millisecond before a frame otherwise offsets the pairing by one frame.
