@@ -1,6 +1,6 @@
 ---
 name: haos-addon-deploy
-description: "Deploy a self-written app as a Home Assistant OS (HAOS) local add-on (now labelled 'app' in the HA UI/CLI) on a Raspberry Pi for 24/7 operation. Covers the full battle-tested procedure and every known pitfall: git archive delivery, ha CLI quirks (bash -lc, store reload, update vs rebuild), add-on options as config, /data persistence, and base-image (musl vs glibc) selection. Use when deploying, installing, updating or debugging a HAOS local add-on / HA app, or when the user mentions 部署到 RPi / HAOS / HA add-on / HA app."
+description: "Deploy a self-written app as a Home Assistant OS (HAOS) local add-on (now labelled 'app' in the HA UI/CLI) on a Raspberry Pi for 24/7 operation, e.g. moving a poller or monitor off a workstation that sleeps. Use when deploying, updating or debugging a HAOS local add-on / HA app, or when the user mentions 部署到 RPi / HAOS / HA add-on / HA app. Also consult when an add-on update is not detected (update_available stays false, version_latest shows the old version) or a rebuild keeps running old code."
 ---
 
 # HAOS Local Add-on Deployment (RPi, 24/7)

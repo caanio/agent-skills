@@ -1,6 +1,6 @@
 # Skill-authoring pass over `skills/`: scope evaluation
 
-Version: 1.12.0 | Date: 2026-10-14 | Status: decided 2026-10-01 (option A;
+Version: 1.13.0 | Date: 2026-10-15 | Status: decided 2026-10-01 (option A;
 `skill-creator` = validate + description optimization on five skills,
 eval loop dropped); pilot on `handover` done 2026-10-01 (log entry);
 §5 gained the log cross-check after the pilot; `git-helper` done
@@ -21,7 +21,12 @@ rejected, D1–D4 parked) and description run done 2026-10-14 (log entry;
 HEAD stood, D1–D4 one query worse in both configurations, in
 `2026-10-14-haos-cloud-backup-trigger-eval.md`); `haos-addon-deploy` body
 pass done 2026-10-14 (log entry; 13 of 15 landed, four frozen-passage
-factual fixes checked by `deep-reviewer`); next its description run
+factual fixes checked by `deep-reviewer`) and description run done
+2026-10-15 (log entry; D1 + D3 + D4 + D5 landed by a tiebreak rule
+registered before the runs, the only text at the top score in both
+configurations, in `2026-10-15-haos-addon-deploy-trigger-eval.md`);
+all eight body passes
+and all five description runs done
 
 Answers `CLAUDE.md` Open item 1 (added 2026-10-01): should every skill in
 `skills/` go through `skill-creator` and `writing-for-agents`, in what
@@ -41,7 +46,7 @@ one, and the two that did have been diff-edited since. The 2026-09-30
 | completion-gate | 226 | 6 | 2026-10-02 (whole-file pass; description run same day) | valid |
 | git-helper | 171 | 0 | 2026-10-01 (whole-file pass) | valid |
 | handover | 108 | 0 | 2026-10-01 (whole-file pass) | unknown keys (see §3) |
-| haos-addon-deploy | 414 | 27 | 2026-10-14 (whole-file pass) | valid |
+| haos-addon-deploy | 414 | 27 | 2026-10-14 (whole-file pass; description run 2026-10-15) | valid |
 | haos-cloud-backup | 240 | 13 | 2026-10-08 (whole-file pass; description run 2026-10-14) | valid |
 | haos-https-tunnel | 140 | 7 | 2026-10-04 (whole-file pass; description run same day) | valid |
 | python-coding-standards | 133 | 1 | 2026-10-02 (whole-file pass) | valid |
@@ -80,7 +85,8 @@ Description optimization applies to at most five skills:
   earlier "asked-first by policy" reason being one maintainer's, not the
   skill's), `python-coding-standards` (had a description-optimization
   pass 2026-08-19, log entry).
-- In: `completion-gate` (done 2026-10-02), `haos-addon-deploy`,
+- In: `completion-gate` (done 2026-10-02), `haos-addon-deploy` (done
+  2026-10-15),
   `haos-cloud-backup` (done 2026-10-14), `haos-https-tunnel` (done
   2026-10-04),
   `web-stack-selector` (done 2026-10-02).

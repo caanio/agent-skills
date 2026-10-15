@@ -1696,3 +1696,44 @@ Entries run oldest first; new entries are appended at the end.
       ("Supervisor API" is unchanged in that commit, from `def734a`).
       Diff: 32+/14−, 396 → 414 lines. Plan 1.12.0 (status, table row);
       `CLAUDE.md` Open 1 now points at the description run.
+- [x] Description run on `haos-addon-deploy` (2026-10-15), last of the
+      five plan §2 schedules; D1 + D3 + D4 + D5 lands, 524 → 499
+      characters. Four texts scored with `run_eval.py` (20 queries × 3
+      runs, `opus`, 10 workers, `--timeout 90`, 2026-10-15 12:47–13:14)
+      isolated and with 38 competitor skills: HEAD, D2 (the reviewer's
+      rewrite) and D3 + D4 (the adds) 17/20 and 19/20; D1 + D3 + D4 + D5
+      17/20 and 20/20. The candidates' texts are the body-pass
+      reviewer's D1–D5 verbatim, recovered from its report in that
+      session's scratchpad. The ten should queries hit 3/3 everywhere,
+      Q5–Q8 included, built around the trigger words only the "Covers…"
+      sentence carries (`musl`, `/data`, `git archive`, `bash -lc`).
+      Isolated, every text fails Q11 and Q12 (2/3 or 3/3), the backup
+      and cloudflared queries that belong to the two siblings; with the
+      siblings listed no text fires on them. Q13, the systemd poller
+      with no HA that probes D4, is 0/3 on every run. The texts differ
+      only on Q15 under competitors (the store Mosquitto add-on, label
+      arguable): HEAD and D2 3/3, D3 + D4 2/3, D1 + D3 + D4 + D5 1/3;
+      D5's removal of "installing" is the plausible cause, unconfirmed.
+      Relabelling Q15 should-trigger would land D2 by the same rule.
+      Tiebreak registered before the runs (2026-10-14 23:15): among
+      texts with the top score in both configurations and no query
+      flipped to fail against HEAD, the shortest wins, else HEAD; only
+      D1 + D3 + D4 + D5 qualifies. Maintainer's pick, option A of three
+      (A land it by the rule, B rerun HEAD and it isolated, C keep HEAD
+      against the rule). Candidate set picked before the runs, option A
+      of three (4 texts; 5 with D1 + D3 + D4 to isolate D5; 3 without
+      the adds-only text). Landed with `writing-for-agents` loaded: the
+      frontmatter line only, double quotes kept though the new text has
+      no `: `. Harness: the three fixes reapplied on a scratch copy,
+      `diff -u` byte-identical to the recorded one; probe listed 49
+      entries without the real skill. `completion-gate`'s untested
+      D1–D4 and D7 stay recorded in its eval note and are not scheduled.
+      Verified: `quick_validate.py` valid (scratch venv); `grep -c '⚠️'`
+      27 → 27; `git diff` on `skills/` one line, the description; the
+      new frontmatter parses to the scored text; `verifier` read-back
+      M1–M6 6/6 and Q1–Q5 5/5, the §1 table and the Q15 relabel
+      arithmetic recomputed by it from the raw json; its no-TODO and
+      no-dangling Open-reference claims re-checked by grep. Details, eval set and all four texts:
+      `docs/research/2026-10-15-haos-addon-deploy-trigger-eval.md`.
+      Plan 1.13.0 (status, table row, §2 list); `CLAUDE.md` Open 1
+      closed, Open 2–5 renumbered 1–4.
