@@ -1,6 +1,6 @@
 # `haos-addon-deploy` trigger eval: HEAD, D2, D3 + D4 and D1 + D3 + D4 + D5
 
-Version: 1.0.0 | Date: 2026-10-15 | Status: decided 2026-10-15
+Version: 1.0.1 | Date: 2026-10-15 | Status: decided 2026-10-15
 (D1 + D3 + D4 + D5 lands by the tiebreak rule registered before the
 runs: the only text at the top score in both configurations, 20/20
 under competitors; the margin is one query, Q15, whose label was
