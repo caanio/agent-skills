@@ -3,18 +3,22 @@
 Version: 1.0.0 | Date: 2026-10-15 | Status: decided 2026-10-15
 (D1 + D3 + D4 + D5 lands by the tiebreak rule registered before the
 runs: the only text at the top score in both configurations, 20/20
-under competitors; 524 → 499 characters; the last of the five
+under competitors; the margin is one query, Q15, whose label was
+registered as arguable, and with Q15 labelled should-trigger the same
+rule would land D2; 524 → 499 characters; the last of the five
 description runs plan §2 schedules)
 
 The description run that plan §2 of
 `2026-10-01-skill-authoring-pass-plan.md` schedules after the 2026-10-14
 body pass. Four descriptions were scored with `skill-creator`'s
 `run_eval.py` (20 queries × 3 runs, `opus`, 10 workers, `--timeout 90`)
-in two configurations, eight runs of 2:58–3:28 minutes each
-(2026-10-15 12:47–13:14); every run exited 0 and no log carries a timeout or an
+in two configurations, eight runs of 2:58–3:28 minutes each (2026-10-15
+12:47–13:14); every run exited 0 and no log carries a timeout or an
 error. `run_loop.py` was not started: the should side is saturated on
-every text, and the only should-not failures are queries no description
-wording in this set moves (§1).
+every text, and on the should-not side the texts differ by at most two
+of three runs on any query (Q15 under competitors; Q11, Q12 and Q20
+isolated, one run each; §1), too thin a signal for a train/hold-out loop
+to optimise against.
 
 The candidate texts are the body-pass reviewer's own D1–D5, copied
 verbatim from its report (kept in that session's scratchpad); the log

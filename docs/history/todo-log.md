@@ -1714,7 +1714,9 @@ Entries run oldest first; new entries are appended at the end.
       only on Q15 under competitors (the store Mosquitto add-on, label
       arguable): HEAD and D2 3/3, D3 + D4 2/3, D1 + D3 + D4 + D5 1/3;
       D5's removal of "installing" is the plausible cause, unconfirmed.
-      Relabelling Q15 should-trigger would land D2 by the same rule.
+      The landing rests on that one query: relabelling Q15
+      should-trigger would land D2 by the same rule. Not run by
+      maintainer call: a diagnostic D1 + D3 + D4 run to isolate D5.
       Tiebreak registered before the runs (2026-10-14 23:15): among
       texts with the top score in both configurations and no query
       flipped to fail against HEAD, the shortest wins, else HEAD; only
@@ -1727,13 +1729,24 @@ Entries run oldest first; new entries are appended at the end.
       no `: `. Harness: the three fixes reapplied on a scratch copy,
       `diff -u` byte-identical to the recorded one; probe listed 49
       entries without the real skill. `completion-gate`'s untested
-      D1–D4 and D7 stay recorded in its eval note and are not scheduled.
+      D1–D4 and D7 stay recorded in its eval note, not scheduled
+      (maintainer call).
       Verified: `quick_validate.py` valid (scratch venv); `grep -c '⚠️'`
       27 → 27; `git diff` on `skills/` one line, the description; the
       new frontmatter parses to the scored text; `verifier` read-back
       M1–M6 6/6 and Q1–Q5 5/5, the §1 table and the Q15 relabel
       arithmetic recomputed by it from the raw json; its no-TODO and
-      no-dangling Open-reference claims re-checked by grep. Details, eval set and all four texts:
+      no-dangling Open-reference claims re-checked by grep. No changed
+      line touches a Settled item's wording (grep over the diff, 0
+      hits). Details, eval set and all four texts:
       `docs/research/2026-10-15-haos-addon-deploy-trigger-eval.md`.
       Plan 1.13.0 (status, table row, §2 list); `CLAUDE.md` Open 1
-      closed, Open 2–5 renumbered 1–4.
+      closed, Open 2–5 renumbered 1–4, and the Vue / Nuxt item's
+      "same harness as Open 1" now names the harness path.
+      Review loop round 1 (`matt-code-review` over `9b74d4d..5f26e96`;
+      `/security-review` skipped, docs only): fixed the note's
+      `run_loop.py` reason, which contradicted §1; the Q15 dependence
+      added to the note's status; this entry's missing Settled grep,
+      pointer rewrite and an over-long line. Not taken: `plan:31`'s
+      dated "Open item 1", the entry restating the note (house style),
+      and the D texts' scratchpad source (§4 quotes every scored text).
