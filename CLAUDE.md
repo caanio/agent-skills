@@ -62,7 +62,7 @@ See `docs/agents/triage-labels.md`.
 Single-context: `CONTEXT.md` at the root, ADRs under `docs/adr/`.
 See `docs/agents/domain.md`.
 
-## Open items (last updated 2026-10-15)
+## Open items (last updated 2026-10-16)
 
 The only live list. The per-change log — what each change did, why, and how
 it was verified — is `docs/history/todo-log.md`; read it before reworking a
@@ -145,6 +145,12 @@ Open:
    local-file tracker dirties the tree after the loop closes; rounds
    after "keep fixing" past round 3 are unstated. Fix one when a recorded
    session hits it. Log: 2026-10-08 to 2026-10-10.
+5. Review loop tickets never reach the next-steps list:
+   `completion-gate` step 5 runs before the commit, while `git-helper`
+   Step 6 opens tracker tickets and closes items after it. Add to Step 6:
+   when the loop closes with new tickets or closed items, update the
+   list per `completion-gate` step 5 inside the last fix commit.
+   Log: 2026-10-15.
 
 ## Source Material
 
