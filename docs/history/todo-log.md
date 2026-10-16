@@ -1750,3 +1750,35 @@ Entries run oldest first; new entries are appended at the end.
       pointer rewrite and an over-long line. Not taken: `plan:31`'s
       dated "Open item 1", the entry restating the note (house style),
       and the D texts' scratchpad source (§4 quotes every scored text).
+- [x] Next-steps list (2026-10-15): `completion-gate` wrap-up step 5
+      now writes the repo's next-steps list, the one the repo's
+      `CLAUDE.md` / `AGENTS.md` holds or points to, with substance: one
+      entry per open item in priority order (what it is, why that rank,
+      next action, path to read first). A session that opened, closed and
+      advanced nothing writes nothing; no route → adopt an existing
+      `docs/TODO.md` / `TODO.md`; no list anywhere and something open →
+      create `docs/TODO.md`; either way add a route line to whichever of
+      `CLAUDE.md` / `AGENTS.md` the repo loads. `handover` step 5
+      now only confirms follow-ups landed there, so one skill owns the
+      list; its README row follows. Trigger: a fresh session asked for
+      todo priority skipped the repo's `docs/TODO.md` and ranked
+      `.scratch/` tickets on its own; with a route line in `CLAUDE.md`
+      the same prompt read the list first. Verified by two `verifier`
+      read-backs; the first caught the step's ⚠️ paragraph still saying
+      "continuation notes", renamed to "next-steps list". A
+      `deep-reviewer` round then found 15 issues (3 high); 14 addressed in
+      the same change, among them adopting an unrouted `docs/TODO.md`
+      instead of overwriting it, rewriting the next action of items the
+      session advanced, `git status --short` to catch untracked tickets,
+      and `handover` step 5 defining the list on its own. The 15th (review
+      loop tickets never reaching the list) is a rules-side follow-up.
+      A second round: 8 of the 15 resolved, 6 partly, plus 3 major and
+      8 minor new findings (among them the read rule missing a list kept
+      inside `CLAUDE.md`, the list skipping read-back, and `handover`
+      creating an empty `docs/TODO.md`); all 11 changed in the same edit.
+      A third round: 0 high, 4 medium, 9 low. Changed: the resume line
+      names the list's path, `handover` step 5 finds a list kept inside
+      `CLAUDE.md`, and a newly created list ends with an unranked entry
+      pointing at the tracker's other open tickets. The fourth medium
+      (review loop tickets) also needs `git-helper` Step 6; still open.
+      The 9 low findings were left as they are.

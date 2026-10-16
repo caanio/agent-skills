@@ -28,7 +28,7 @@ The gate between "I think it works" and "it is done".
   installed.
 - *A deeper maintainer-handover pass* (backfilling ADRs, checking
   README/CONTEXT.md against reality, recording production facts and the
-  deploy path, a prioritized TODO) → the `handover` skill. Run it only
+  deploy path) → the `handover` skill. Run it only
   after this gate passes, never in place of it; wrap-up step 6 says when
   to ask.
 
@@ -204,17 +204,41 @@ inside it always looks like bad luck.
    proceed either way — this step only blocks one thing:
    you may not write **verified / PASS** as a claim about the change until the
    second opinion you decided to run has actually come back.
-5. **Then** update the continuation notes / TODO index. You must have actually
-   run `git diff HEAD --stat` for the whole session and checked every file it
-   lists — not recalled from memory — before this step counts as done. This
-   step writes pointers only, never substance — which is exactly why it comes
-   after the real docs. Update the index first and it points at content that
-   no longer exists.
+5. **Then** update the repo's **next-steps list**: the one priority list a
+   fresh session reads to learn what's next. First list what the whole
+   session changed, file by file, not recalled from memory:
+   `git status --short` (a new tracker ticket is usually untracked),
+   `git diff --stat <last commit before this session>..HEAD`, and the
+   tickets it opened in a remote tracker, queried from the tracker.
+   Find the list: the one the repo's `CLAUDE.md` / `AGENTS.md` routes
+   what's-next questions to, or holds itself. No route → adopt an existing
+   `docs/TODO.md` or `TODO.md`; two candidates → ask which one.
+   Then: items this session closed leave the list, items it opened enter
+   it, items it advanced get their next action rewritten. Nothing opened,
+   closed or advanced → this step writes nothing. An item it opened or
+   advanced is still open and no list exists anywhere → create
+   `docs/TODO.md`, ending with one unranked entry that points at the
+   repo's other open tracker tickets (their folder, label or list
+   command). A list you adopted or created gets a route line in
+   whichever of `CLAUDE.md` / `AGENTS.md` the repo already loads; with
+   neither, in a new `CLAUDE.md`.
+   One entry per open item, in priority order. Each entry you write or
+   rewrite carries what it is, why it holds that rank, its next concrete
+   action, and the path to read first.
+   Tickets of one feature share one entry pointing at their folder or
+   label. Detail stays in its own doc (ADR, spec, ticket, a topic list) and
+   the entry points at it — which is why this step comes after the real
+   docs: written first, it points at content that no longer exists.
+   *Done when*: every item this session opened, and every tracker ticket
+   it opened or re-ranked that is still open, has an entry; every item it
+   advanced has a current next action; every item it closed is gone; the
+   list order is the priority order; the list, and any route line you
+   added, passed the Docs row's read-back.
    ⚠️ This checks a different scope than step 2: step 2 asks "did *this round's*
    diff invalidate a doc", step 5 asks "has the *whole session's* accumulated
-   work drifted from the continuation notes". A round with nothing to update in
+   work drifted from the next-steps list". A round with nothing to update in
    step 2 does not excuse skipping step 5 — reusing that verdict across both
-   has produced stale continuation notes in practice.
+   has produced a stale next-steps list in practice.
 6. **Then ask — out loud, every time — whether to run `handover`.** This is a
    real question to the user, not a decision you make alone: attach your own
    recommendation — run it now or skip it — and your reasoning, never a bare

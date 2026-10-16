@@ -1,6 +1,6 @@
 ---
 name: handover
-description: Turn a session's work into something a human maintainer with zero session context can pick up — backfill ADRs, check README/CONTEXT.md, record production facts and the deploy path, write a prioritized TODO.
+description: Turn a session's work into something a human maintainer with zero session context can pick up — backfill ADRs, check README/CONTEXT.md, record production facts and the deploy path, confirm follow-ups reached the next-steps list.
 argument-hint: "Anything this session touched that's easy to miss (optional)"
 disable-model-invocation: true
 ---
@@ -85,15 +85,19 @@ only the files already there.
    *Done when*: the deployment doc reflects this session's change, or
    you've confirmed nothing production-facing happened.
 
-5. **Write the handover TODO.** Produce or update `docs/TODO.md`:
-   what's done, what's next, and the priority order across what's left —
-   written for a reader with none of this session's context. Point at the
-   ADRs and docs above rather than restating them. For each *follow-up*
-   candidate from step 1, decide whether it belongs in this project's
-   issue tracker as well as `docs/TODO.md`.
-   *Done when*: `docs/TODO.md` is maintainer-ready on its own — a reader
-   with no access to this conversation can tell what to do next and in
-   what order.
+5. **Check the follow-ups landed.** The repo's next-steps list is the one
+   priority list a fresh session reads to learn what's next, usually kept
+   by your completion gate's wrap-up: the list the repo's `CLAUDE.md` /
+   `AGENTS.md` routes what's-next questions to, or holds itself; with
+   neither, an existing `docs/TODO.md` or `TODO.md`; with none of these
+   and at least one follow-up, create `docs/TODO.md` and add that route
+   line. Confirm each *follow-up* candidate from step 1 has an
+   entry there — what it is, why it holds its rank, its next concrete
+   action, the path to read first. Add any that are missing, in priority
+   order, and decide whether each also belongs in this project's issue
+   tracker.
+   *Done when*: every follow-up candidate has an entry in the next-steps
+   list.
 
 ## Also worth checking
 
@@ -104,5 +108,5 @@ Not gated steps — a maintainer-readiness sweep most sessions miss:
   in "for reference."
 - **This skill's own new files still need a commit.** Steps 2–5 above write
   to the repo but never stage or commit (see Scope boundary) — an ADR or
-  `docs/TODO.md` left uncommitted, or committed but unpushed, is invisible
+  a next-steps entry left uncommitted, or committed but unpushed, is invisible
   to the maintainer you're handing this to.
