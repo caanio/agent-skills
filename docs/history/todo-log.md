@@ -1787,3 +1787,8 @@ Entries run oldest first; new entries are appended at the end.
       tickets, the last round may lack a fix commit, `git-helper` must
       spell the steps out itself); `completion-gate` and `handover` stop
       creating a `CLAUDE.md` in a repo that has neither agent file.
+      Two review choices left open went to `CLAUDE.md` as Open 6
+      (`handover` repeating the list rules) and Open 7 (a list named
+      like `docs/roadmap-*.md` without a route line). Round 3 then fixed
+      `handover` naming a report it never defines, and cross-linked
+      Open 5 and Open 6.

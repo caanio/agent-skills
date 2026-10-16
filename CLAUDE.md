@@ -152,12 +152,14 @@ Open:
    a fix commit or a commit of its own (the last round may have no fix
    commit). Spell the list lookup and entry format out inside
    `git-helper` rather than pointing at `completion-gate`, so `git-helper`
-   still stands on its own. Log: 2026-10-15.
+   still stands on its own; that makes a third copy, so settle Open 6
+   first. Log: 2026-10-15.
 6. `handover` step 5 repeats `completion-gate` step 5's list lookup,
    route line and entry format so it stands on its own; the two copies
    can drift and already differ in when they create `docs/TODO.md`.
    Decide: keep both copies, or point one at the other at the cost of
-   standing alone. Log: 2026-10-16.
+   standing alone; Open 5 would add a third copy in `git-helper`.
+   Log: 2026-10-16.
 7. With no route line, the list lookup adopts only `docs/TODO.md` /
    `TODO.md`, so a repo whose list is `docs/roadmap-*.md` without a
    route line reads as having none. Decide: scan `docs/` for such

@@ -92,11 +92,11 @@ only the files already there.
    neither, an existing `docs/TODO.md` or `TODO.md`; with none of these
    and at least one follow-up, create `docs/TODO.md` and add that route
    line to whichever of `CLAUDE.md` / `AGENTS.md` the repo loads; with
-   neither, name the missing route in your report. Confirm each *follow-up* candidate from step 1 has an
-   entry there — what it is, why it holds its rank, its next concrete
-   action, the path to read first. Add any that are missing, in priority
-   order, and decide whether each also belongs in this project's issue
-   tracker.
+   neither, tell the user the list has no route line. Confirm each
+   *follow-up* candidate from step 1 has an entry there — what it is,
+   why it holds its rank, its next concrete action, the path to read
+   first. Add any that are missing, in priority order, and decide
+   whether each also belongs in this project's issue tracker.
    *Done when*: every follow-up candidate has an entry in the next-steps
    list.
 
