@@ -147,10 +147,21 @@ Open:
    session hits it. Log: 2026-10-08 to 2026-10-10.
 5. Review loop tickets never reach the next-steps list:
    `completion-gate` step 5 runs before the commit, while `git-helper`
-   Step 6 opens tracker tickets and closes items after it. Add to Step 6:
-   when the loop closes with new tickets or closed items, update the
-   list per `completion-gate` step 5 inside the last fix commit.
-   Log: 2026-10-15.
+   Step 6 files judgment calls as tracker tickets after it. Add to Step 6:
+   before the loop closes, give each new ticket an entry in the list, in
+   a fix commit or a commit of its own (the last round may have no fix
+   commit). Spell the list lookup and entry format out inside
+   `git-helper` rather than pointing at `completion-gate`, so `git-helper`
+   still stands on its own. Log: 2026-10-15.
+6. `handover` step 5 repeats `completion-gate` step 5's list lookup,
+   route line and entry format so it stands on its own; the two copies
+   can drift and already differ in when they create `docs/TODO.md`.
+   Decide: keep both copies, or point one at the other at the cost of
+   standing alone. Log: 2026-10-16.
+7. With no route line, the list lookup adopts only `docs/TODO.md` /
+   `TODO.md`, so a repo whose list is `docs/roadmap-*.md` without a
+   route line reads as having none. Decide: scan `docs/` for such
+   files, or rely on the route line. Log: 2026-10-16.
 
 ## Source Material
 

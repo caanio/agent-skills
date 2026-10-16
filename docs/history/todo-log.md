@@ -1782,3 +1782,8 @@ Entries run oldest first; new entries are appended at the end.
       pointing at the tracker's other open tickets. The fourth medium
       (review loop tickets) also needs `git-helper` Step 6; still open.
       The 9 low findings were left as they are.
+      Review loop after the commit (2026-10-16): `CLAUDE.md` Open 5 added
+      for the still-open review loop gap, then corrected (Step 6 files
+      tickets, the last round may lack a fix commit, `git-helper` must
+      spell the steps out itself); `completion-gate` and `handover` stop
+      creating a `CLAUDE.md` in a repo that has neither agent file.

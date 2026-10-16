@@ -221,7 +221,7 @@ inside it always looks like bad luck.
    repo's other open tracker tickets (their folder, label or list
    command). A list you adopted or created gets a route line in
    whichever of `CLAUDE.md` / `AGENTS.md` the repo already loads; with
-   neither, in a new `CLAUDE.md`.
+   neither, list the missing route under part 3 of the delivery message.
    One entry per open item, in priority order. Each entry you write or
    rewrite carries what it is, why it holds that rank, its next concrete
    action, and the path to read first.
