@@ -1,8 +1,7 @@
 ---
 name: handover
-description: Turn a session's work into something a human maintainer with zero session context can pick up — backfill ADRs, check README/CONTEXT.md, record production facts and the deploy path, confirm follow-ups reached the next-steps list.
+description: "Turns a session's work into something a human maintainer with zero session context can pick up — backfill ADRs, check README/CONTEXT.md, record production facts and the deploy path, confirm follow-ups reached the next-steps list. Use at completion-gate's wrap-up step 6, when closing out a feature or milestone, before handing the repo over, or after a change to production config or the deploy path."
 argument-hint: "Anything this session touched that's easy to miss (optional)"
-disable-model-invocation: true
 ---
 
 # handover
@@ -55,6 +54,8 @@ only the files already there.
    *Done when*: every decision, rejected alternative and discovered
    constraint from the session is on the list with a tag, or you've
    concluded there's nothing beyond the diff worth carrying forward.
+   An empty list ends the run here: report one line,
+   `handover-skip: <reason>`.
 
 2. **Backfill architecture decisions.** For each candidate from step 1 that
    changes *how* the system is built or *why*, not just *what* changed, and

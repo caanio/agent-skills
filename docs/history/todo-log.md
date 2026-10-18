@@ -1792,3 +1792,16 @@ Entries run oldest first; new entries are appended at the end.
       like `docs/roadmap-*.md` without a route line). Round 3 then fixed
       `handover` naming a report it never defines, and cross-linked
       Open 5 and Open 6.
+- [x] `handover` runs itself at wrap-up (2026-10-18). The user chose to
+      drop the "run `handover`?" question: `handover` writes docs only, never
+      commits or sends anything, and the wrap-up asks were mostly answered
+      with a skip. `handover` lost `disable-model-invocation` and its
+      description now carries trigger branches; its step 1 ends on an empty
+      candidate list with one `handover-skip: <reason>` line.
+      `completion-gate` wrap-up step 6 runs `handover` instead of asking, and
+      its done-when is that report or skip line showing before any commit is
+      drafted. README row no longer says user-invoked. Machines need
+      `npx skills@latest update completion-gate handover -g`; until then the
+      installed copy still blocks model invocation. Checked by a `verifier`
+      read-back: 7 of 7 criteria passed (frontmatter parses, no remaining
+      ask wording, step 6 consistent with the rules-side wrap-up order).

@@ -29,8 +29,7 @@ The gate between "I think it works" and "it is done".
 - *A deeper maintainer-handover pass* (backfilling ADRs, checking
   README/CONTEXT.md against reality, recording production facts and the
   deploy path) → the `handover` skill. Run it only
-  after this gate passes, never in place of it; wrap-up step 6 says when
-  to ask.
+  after this gate passes, never in place of it; wrap-up step 6 runs it.
 
 ## Core Rules
 
@@ -239,12 +238,11 @@ inside it always looks like bad luck.
    work drifted from the next-steps list". A round with nothing to update in
    step 2 does not excuse skipping step 5 — reusing that verdict across both
    has produced a stale next-steps list in practice.
-6. **Then ask — out loud, every time — whether to run `handover`.** This is a
-   real question to the user, not a decision you make alone: attach your own
-   recommendation — run it now or skip it — and your reasoning, never a bare
-   yes/no. How often `handover` actually runs is the user's call; whether you
-   asked this time is not. Completing step 5 is not permission to skip
-   straight to committing.
+6. **Then run `handover` yourself**, every time, with no question to the
+   user. Its step 1 decides whether anything is owed: an empty candidate
+   list ends it with one `handover-skip: <reason>` line in your reply.
+   *Done when*: the reply shows `handover`'s report or that skip line,
+   before any commit is drafted.
    ⚠️ Observed in practice: finishing step 5 reflexively rolls straight into
-   commit, skipping this question entirely — that is exactly the gap this
-   step closes.
+   commit, skipping `handover` entirely — the visible report or skip line
+   is what closes that gap.
