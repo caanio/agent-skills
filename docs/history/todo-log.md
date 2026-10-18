@@ -1811,6 +1811,9 @@ Entries run oldest first; new entries are appended at the end.
       triggers only that section had; step 6's ⚠️ now names what was
       actually observed, the step being skipped while it was still a
       question. Checked by a `verifier` read-back: 6 of 6 criteria
-      passed. Round 2: the round 1 note above gained this verification
-      line, and step 6's ⚠️ now says the question was what got skipped
-      and that the same pull applies to the run.
+      passed. Rounds 2-3: step 6's ⚠️ first named the skipped question
+      but also claimed the run gets skipped the same way, which was never
+      observed; it now keeps only the observed skip and points at the
+      done-when that guards the run. Round 2's wording passed its
+      `verifier` read-back before round 3's review caught that claim.
+      Round 3's fix: `verifier` read-back, 5 of 5 criteria passed.

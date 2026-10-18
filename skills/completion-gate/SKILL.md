@@ -245,5 +245,5 @@ inside it always looks like bad luck.
    before any commit is drafted.
    ⚠️ Observed in practice while this step was still a question to the
    user: finishing step 5 reflexively rolled straight into commit and the
-   question was never asked. The same pull skips the run — the visible
-   report or skip line is what closes that gap.
+   question was never asked — the reason the done-when above requires the
+   report or skip line in the reply.
