@@ -243,6 +243,6 @@ inside it always looks like bad luck.
    list ends it with one `handover-skip: <reason>` line in your reply.
    *Done when*: the reply shows `handover`'s report or that skip line,
    before any commit is drafted.
-   ⚠️ Observed in practice: finishing step 5 reflexively rolls straight into
-   commit, skipping `handover` entirely — the visible report or skip line
-   is what closes that gap.
+   ⚠️ Observed in practice while this step was a question to the user:
+   finishing step 5 reflexively rolled straight into commit, skipping it
+   entirely — the visible report or skip line is what closes that gap.

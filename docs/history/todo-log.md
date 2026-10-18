@@ -1805,3 +1805,9 @@ Entries run oldest first; new entries are appended at the end.
       installed copy still blocks model invocation. Checked by a `verifier`
       read-back: 7 of 7 criteria passed (frontmatter parses, no remaining
       ask wording, step 6 consistent with the rules-side wrap-up order).
+      Review loop round 1 (2026-10-18): `handover`'s "When to invoke"
+      section repeated the description's triggers and had already drifted
+      (no wrap-up branch), so it went and the description took the
+      triggers only that section had; step 6's ⚠️ now names what was
+      actually observed, the step being skipped while it was still a
+      question.

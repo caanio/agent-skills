@@ -1,6 +1,6 @@
 ---
 name: handover
-description: "Turns a session's work into something a human maintainer with zero session context can pick up — backfill ADRs, check README/CONTEXT.md, record production facts and the deploy path, confirm follow-ups reached the next-steps list. Use at completion-gate's wrap-up step 6, when closing out a feature or milestone, before handing the repo over, or after a change to production config or the deploy path."
+description: "Turns a session's work into something a human maintainer with zero session context can pick up — backfill ADRs, check README/CONTEXT.md, record production facts and the deploy path, confirm follow-ups reached the next-steps list. Use at completion-gate's wrap-up step 6, when closing out a feature or milestone or before a longer pause, before handing the repo over to another engineer or another machine, or after a change to production config, infrastructure or the deploy path."
 argument-hint: "Anything this session touched that's easy to miss (optional)"
 ---
 
@@ -30,15 +30,6 @@ it in production.
   collection doesn't ship one (e.g. `mattpocock/skills`' `handoff`). That
   targets the next **agent turn**; this skill targets the next **human**,
   further out, and writes durable repo files, not a temp-directory note.
-
-## When to invoke
-
-- Closing out a feature, a milestone, or before a longer pause on the
-  project.
-- Before handing the repo to another engineer, or to your own future self
-  on a different machine.
-- After any change that touches production configuration, infrastructure,
-  or how the project gets deployed.
 
 ## Process
 
