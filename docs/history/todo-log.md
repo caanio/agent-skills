@@ -1810,4 +1810,7 @@ Entries run oldest first; new entries are appended at the end.
       (no wrap-up branch), so it went and the description took the
       triggers only that section had; step 6's ⚠️ now names what was
       actually observed, the step being skipped while it was still a
-      question.
+      question. Checked by a `verifier` read-back: 6 of 6 criteria
+      passed. Round 2: the round 1 note above gained this verification
+      line, and step 6's ⚠️ now says the question was what got skipped
+      and that the same pull applies to the run.
