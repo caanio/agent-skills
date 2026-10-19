@@ -51,12 +51,11 @@ versions. Substitute your own values; nothing here is host-specific.
   - Why: off the home LAN an mDNS name such as `homeassistant.local` does not fail fast —
     `ssh` can block on name resolution with no output at all, which `ConnectTimeout` (a TCP
     connect bound) does not cover. A backup sent with a 10-minute timeout then just looks
-    slow and sits in the background (real case: about an hour lost). Re-run the preflight
-    after any network change, and treat a remote step whose output is still empty after
-    the expected duration as unreachable, not as slow.
-  - An alias tunnelled through `cloudflared access ssh` needs the 20 s: its banner exchange
-    timed out at 5 s and passed within 20 s, and it may first ask the user to authorize
-    in a browser.
+    slow and sits in the background (real case: about an hour lost).
+  - An alias tunnelled through `cloudflared access ssh` needs the 20 s: it timed out at
+    5 s and passed within 20 s, and it may first ask the user to authorize in a browser.
+- **Re-run the preflight after any network change**, and treat a remote step whose output
+  is still empty after its expected duration as unreachable, not as slow.
 - ⚠️ **Every `ha` CLI / Supervisor API call needs a login shell**, which loads
   `SUPERVISOR_TOKEN`; without it the call fails with `unauthorized`. Plain
   `docker`/`ls`/`grep` are unaffected — only `ha` and direct `http://supervisor` calls

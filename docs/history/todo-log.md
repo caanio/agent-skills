@@ -1834,3 +1834,10 @@ Entries run oldest first; new entries are appended at the end.
       timeout values consistent, no conflict with §0's other rules,
       placeholders only, no PII, one ⚠️ on the observed pitfall,
       read-back questions answerable).
+      Review loop round 1 (2026-10-19): the `cloudflared` sub-bullet named
+      a "banner exchange" timeout no record of the session carried, so it
+      now says only that the alias timed out at 5 s; the two rules derived
+      from the case (re-run after a network change, empty output past the
+      expected duration means unreachable) left the ⚠️ for a bold bullet
+      of their own, since they were inferred rather than observed.
+      Checked by a `verifier` read-back: 6 of 6 criteria passed.
