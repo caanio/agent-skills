@@ -1817,3 +1817,20 @@ Entries run oldest first; new entries are appended at the end.
       done-when that guards the run. Round 2's wording passed its
       `verifier` read-back before round 3's review caught that claim.
       Round 3's fix: `verifier` read-back, 5 of 5 criteria passed.
+- [x] `haos-addon-deploy` §0 opens with a reachability preflight
+      (2026-10-19). A real deploy session ran with the workstation off the
+      home LAN: `ssh` to an mDNS name blocked on name resolution with no
+      output, a backup with a 10-minute timeout went to the background, and
+      about an hour was lost. `ConnectTimeout` bounds only the TCP connect,
+      not resolution. The new first rule runs
+      `ssh -n -o ConnectTimeout=20 <alias> true` under a ≤30 s wall-clock
+      limit before any backup, delivery or build, and on any failure stops
+      and reports the alias and network. A `cloudflared access ssh` alias
+      timed out at 5 s and passed within 20 s in the same session, hence
+      20 s. Not done (not chosen): `ConnectTimeout` in the SSH config host
+      entry, and ControlMaster connection sharing to avoid repeated browser
+      authorization on a tunnelled alias. Checked by a `verifier`
+      read-back: 8 of 8 criteria passed (single hunk, runnable command,
+      timeout values consistent, no conflict with §0's other rules,
+      placeholders only, no PII, one ⚠️ on the observed pitfall,
+      read-back questions answerable).

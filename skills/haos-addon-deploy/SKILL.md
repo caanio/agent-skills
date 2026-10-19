@@ -42,6 +42,21 @@ versions. Substitute your own values; nothing here is host-specific.
 
 ## 0. Global Rules (read first)
 
+- ⚠️ **Preflight reachability first, before any backup, delivery or build:**
+  `ssh -n -o ConnectTimeout=20 <alias> true`, run with a **short wall-clock limit**
+  (≤30 s — your tool's own timeout; macOS has no `timeout` command). The preflight passes
+  when it exits 0 within that limit. Anything else — an error, a timeout, a move to the
+  background — means stop, report which alias failed and which network the workstation is
+  on, and wait for the user before running any remote step.
+  - Why: off the home LAN an mDNS name such as `homeassistant.local` does not fail fast —
+    `ssh` can block on name resolution with no output at all, which `ConnectTimeout` (a TCP
+    connect bound) does not cover. A backup sent with a 10-minute timeout then just looks
+    slow and sits in the background (real case: about an hour lost). Re-run the preflight
+    after any network change, and treat a remote step whose output is still empty after
+    the expected duration as unreachable, not as slow.
+  - An alias tunnelled through `cloudflared access ssh` needs the 20 s: its banner exchange
+    timed out at 5 s and passed within 20 s, and it may first ask the user to authorize
+    in a browser.
 - ⚠️ **Every `ha` CLI / Supervisor API call needs a login shell**, which loads
   `SUPERVISOR_TOKEN`; without it the call fails with `unauthorized`. Plain
   `docker`/`ls`/`grep` are unaffected — only `ha` and direct `http://supervisor` calls
