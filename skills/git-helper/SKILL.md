@@ -174,8 +174,9 @@ reviews skipped earlier because nothing was committed yet never ran before the p
   the rest go to the project's issue tracker (an online one only after the user oks the exact command). Minor items are listed.
 - The loop closes on a round with no fix decided on. After round 3's reviews it stops before making their fixes,
   lists what is still open and asks whether to stop here or keep fixing.
-- A review the change's scope doesn't reach, or one not installed, is skipped with one line in the reply,
-  `review-skip: <review> — <reason>`, rewritten every round.
+- A review the change's scope doesn't reach, or one not installed, is skipped with its own Bash call before the push,
+  `echo 'review-skip: <review> — <reason>'`, rewritten every round:
+  a tool call reaches the session transcript verbatim, where a push guard reading the transcript finds it.
 - The project uses no committed-diff review → say so in one line and go to Step 7.
 
 ### 7. Push
