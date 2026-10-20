@@ -184,7 +184,7 @@ reviews skipped earlier because nothing was committed yet never ran before the p
 
 Once the loop closes, draft the exact `git push <remote> <branch>` line and stop
 for the user's ok, push requested or not. Set the draft apart so it cannot be skimmed past:
-a heading carrying 🔴 and the unpushed commit count, the push line in its own code block,
+a heading carrying the unpushed commit count, the push line in its own code block,
 and a bold last line naming both replies (ok pushes; no leaves the commits unpushed).
 Run it unchanged via the **Bash tool**; any other push needs a new draft and a new ok,
 since Step 4's ok covered the commit alone.

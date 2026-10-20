@@ -1860,3 +1860,8 @@ Entries run oldest first; new entries are appended at the end.
       every docs-only push stalled; a tool call is kept verbatim. The
       reason sentence names no particular checker, so the skill still
       stands on its own. Checked by a `verifier` read-back: 4 of 4 criteria passed.
+- [x] `git-helper` Step 7's push-draft heading drops the 🔴 (2026-10-20).
+      The user judged it unneeded once seen in a real draft: the heading
+      with the unpushed commit count, the push line in its own code block
+      and the bold last line already set the draft apart. Checked by a
+      `verifier` read-back: 4 of 4 criteria passed.
