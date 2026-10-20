@@ -1852,3 +1852,11 @@ Entries run oldest first; new entries are appended at the end.
       4's pointer to Step 7 dropped "requested" to match. Checked by a
       `verifier` read-back: 7 of 7 criteria passed, plus a re-check of the
       Step 4 line: 2 of 2.
+- [x] `git-helper` Step 6 skips a review with its own
+      `echo 'review-skip: <review> — <reason>'` call, sent again every
+      round (2026-10-20). Before, the skip was one line of reply text.
+      Reply text between tool calls can be stored rewritten in the
+      session record, so a check reading that record missed the line and
+      every docs-only push stalled; a tool call is kept verbatim. The
+      reason sentence names no particular checker, so the skill still
+      stands on its own. Checked by a `verifier` read-back: 4 of 4 criteria passed.
