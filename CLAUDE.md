@@ -62,7 +62,7 @@ See `docs/agents/triage-labels.md`.
 Single-context: `CONTEXT.md` at the root, ADRs under `docs/adr/`.
 See `docs/agents/domain.md`.
 
-## Open items (last updated 2026-10-16)
+## Open items (last updated 2026-10-20)
 
 The only live list. The per-change log — what each change did, why, and how
 it was verified — is `docs/history/todo-log.md`; read it before reworking a
@@ -103,9 +103,10 @@ Settled — reopen only on new evidence:
    UTF-8 line stays. Maintainer call, log: 2026-09-27.
 10. `git-helper`'s Step 4 draft is the literal command block Step 5 runs,
     trailers included; one ok covers the block, run as separate calls in
-    order. Step 6's review loop follows every commit; a requested push is
-    a block of its own (Step 7), drafted once the loop closes. Maintainer
-    call, log: 2026-09-27, 2026-10-08 to 2026-10-10.
+    order. Step 6's review loop follows every commit; the push, requested
+    or not, is a block of its own (Step 7), drafted once the loop closes
+    in a set-apart format and run only on its own ok. Maintainer
+    call, log: 2026-09-27, 2026-10-08 to 2026-10-10, 2026-10-20.
 11. `web-stack-selector` keeps `simple-datatables (LGPL)` as excluded;
     its survey line takes the license from the repo's `LICENSE` file and
     `package.json`, since the GitHub API reports `NOASSERTION`.

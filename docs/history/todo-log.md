@@ -1841,3 +1841,14 @@ Entries run oldest first; new entries are appended at the end.
       expected duration means unreachable) left the ⚠️ for a bold bullet
       of their own, since they were inferred rather than observed.
       Checked by a `verifier` read-back: 6 of 6 criteria passed.
+- [x] `git-helper` Step 7 drafts the push after every closed review loop,
+      requested or not (2026-10-20). Before, a run with no push requested
+      ended on a one-line "unpushed" reminder, easy to read past. The
+      draft is now set apart: a heading with 🔴 and the unpushed commit
+      count, the push line in its own code block, and a bold last line
+      naming both replies (ok pushes; no leaves the commits unpushed).
+      Pushing without an ok was ruled out: a push sends work outward,
+      which always needs the user's explicit ok. The description and Step
+      4's pointer to Step 7 dropped "requested" to match. Checked by a
+      `verifier` read-back: 7 of 7 criteria passed, plus a re-check of the
+      Step 4 line: 2 of 2.

@@ -1,6 +1,6 @@
 ---
 name: git-helper
-description: "Commit workflow: confirm staging, scan the staged diff for secrets and PII, draft a Conventional Commits message, and run the approved commit, and push when asked. Use when the user wants to commit, write a commit message, or commit and push."
+description: "Commit workflow: confirm staging, scan the staged diff for secrets and PII, draft a Conventional Commits message, run the approved commit, then draft the push for approval. Use when the user wants to commit, write a commit message, or commit and push."
 ---
 
 # git-helper
@@ -123,7 +123,7 @@ read every added line for them by eye and say so in the "Rules applied" line.
   will run, never the message alone: the full `git commit` heredoc (required for
   multi-line messages) with every trailer your environment appends (e.g. a
   `Co-Authored-By:` line). What the user approves is exactly what lands in the log.
-  A requested push gets its own block in Step 7, after Step 6's review loop.
+  The push gets its own block in Step 7, after Step 6's review loop.
 
 **Example output:**
 ```
@@ -180,10 +180,12 @@ reviews skipped earlier because nothing was committed yet never ran before the p
 
 ### 7. Push
 
-No push requested → end the run with one line reminding the user the commits are unpushed.
-Otherwise, once the loop closes, draft the exact `git push <remote> <branch>` line and stop
-for the user's ok. Run it unchanged via the **Bash tool**; any other push needs a
-new draft and a new ok, since Step 4's ok covered the commit alone.
+Once the loop closes, draft the exact `git push <remote> <branch>` line and stop
+for the user's ok, push requested or not. Set the draft apart so it cannot be skimmed past:
+a heading carrying 🔴 and the unpushed commit count, the push line in its own code block,
+and a bold last line naming both replies (ok pushes; no leaves the commits unpushed).
+Run it unchanged via the **Bash tool**; any other push needs a new draft and a new ok,
+since Step 4's ok covered the commit alone.
 A push requested later, in a run with nothing to commit, starts here,
 after one Step 6 round over the commits not yet reviewed.
 
