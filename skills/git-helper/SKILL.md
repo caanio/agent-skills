@@ -64,7 +64,7 @@ Before committing, confirming staging scope:
 - `src/core/database.py` (modified)
 - `README.md` (modified)
 
-Confirm staged files are correct, or tell me which to add.
+Reply "stage" or "ok" to add the suggested files, or tell me which to add.
 ```
 
 ### 2. Secrets and Personal-Data Check (Core Rule 6)
@@ -142,13 +142,15 @@ EOF
 Rules applied: type=feat · subject 34 chars · imperative mood ·
 why-only body · secrets: 0 hits (output above) · PII: 0 hits (output above), every added line read for names/IDs
 
-Reply "ok" to run it.
+Reply "commit" or "ok" to run it; "no" leaves the changes staged and uncommitted.
 ```
 
 ### 5. Execute Commit
 
-Only after the user replies "ok" or equivalent, run the Step 4 block unchanged via
+Only after the user replies "commit", "ok" or equivalent, run the Step 4 block unchanged via
 the **Bash tool**, one command per call, in order.
+Each stop in this skill names its yes replies as the lowercase action word
+("stage", "commit", "push") or "ok".
 
 One ok covers every command in the block. A command that would differ from the
 block in any character — a reworded line, an added trailer — needs a new draft
@@ -185,7 +187,7 @@ reviews skipped earlier because nothing was committed yet never ran before the p
 Once the loop closes, draft the exact `git push <remote> <branch>` line and stop
 for the user's ok, push requested or not. Set the draft apart so it cannot be skimmed past:
 a heading carrying the unpushed commit count, the push line in its own code block,
-and a bold last line naming both replies (ok pushes; no leaves the commits unpushed).
+and a bold last line naming the replies ("push" or "ok" pushes; "no" leaves the commits unpushed).
 Run it unchanged via the **Bash tool**; any other push needs a new draft and a new ok,
 since Step 4's ok covered the commit alone.
 A push requested later, in a run with nothing to commit, starts here,
