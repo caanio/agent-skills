@@ -149,8 +149,6 @@ Reply "commit" or "ok" to run it; "no" leaves the changes staged and uncommitted
 
 Only after the user replies "commit", "ok" or equivalent, run the Step 4 block unchanged via
 the **Bash tool**, one command per call, in order.
-Each stop in this skill names its yes replies as the lowercase action word
-("stage", "commit", "push") or "ok".
 
 One ok covers every command in the block. A command that would differ from the
 block in any character — a reworded line, an added trailer — needs a new draft

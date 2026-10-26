@@ -1867,9 +1867,9 @@ Entries run oldest first; new entries are appended at the end.
       `verifier` read-back: 4 of 4 criteria passed.
 - [x] `git-helper` names the yes replies by action (2026-10-26). Step 1's
       staging question takes "stage" or "ok", Step 4's draft "commit" or
-      "ok" ("no" leaves the changes staged), Step 7's push "push" or "ok";
-      Step 5 states the rule once: each stop's yes replies are the
-      lowercase action word or "ok". Before, Steps 4 and 7 named only "ok"
-      and Step 1 named no reply word; the user asked for prompts that say
-      what the reply runs (dotfiles-ai TODO item 55). Checked by a
-      `verifier` read-back: 7 of 7 criteria passed.
+      "ok" ("no" leaves the changes staged), Step 7's push "push" or "ok".
+      Before, Steps 4 and 7 named only "ok" and Step 1 named no reply word;
+      the user asked for prompts that say what the reply runs. A Step 5
+      sentence restating the reply words for every stop was dropped in
+      review: each prompt already names its own. Checked by a `verifier`
+      read-back: 7 of 7 criteria passed.
