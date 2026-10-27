@@ -80,8 +80,8 @@ only the files already there.
    *Done when*: the deployment doc reflects this session's change, or
    you've confirmed nothing production-facing happened.
 
-5. **Check the follow-ups and findings landed.** The repo's next-steps
-   list is the one
+5. **Check the follow-ups and findings landed.**
+   The repo's next-steps list is the one
    priority list a fresh session reads to learn what's next, usually kept
    by your completion gate's wrap-up: the list the repo's `CLAUDE.md` /
    `AGENTS.md` routes what's-next questions to, or holds itself; with

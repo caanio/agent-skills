@@ -62,7 +62,7 @@ See `docs/agents/triage-labels.md`.
 Single-context: `CONTEXT.md` at the root, ADRs under `docs/adr/`.
 See `docs/agents/domain.md`.
 
-## Open items (last updated 2026-10-20)
+## Open items (last updated 2026-10-27)
 
 The only live list. The per-change log — what each change did, why, and how
 it was verified — is `docs/history/todo-log.md`; read it before reworking a
@@ -165,6 +165,11 @@ Open:
    `TODO.md`, so a repo whose list is `docs/roadmap-*.md` without a
    route line reads as having none. Decide: scan `docs/` for such
    files, or rely on the route line. Log: 2026-10-16.
+8. `handover`'s *finding* candidates are untested where they failed: a
+   fresh-context dry run caught both recorded shapes with the old text
+   too. Watch the next real investigation session's wrap-up; if step 1
+   lists no finding, the check needs a gate that does not rely on
+   recall. Log: 2026-10-27.
 
 ## Source Material
 
