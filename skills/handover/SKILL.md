@@ -1,6 +1,6 @@
 ---
 name: handover
-description: "Turns a session's work into something a human maintainer with zero session context can pick up — backfill ADRs, check README/CONTEXT.md, record production facts and the deploy path, confirm follow-ups reached the next-steps list. Use at completion-gate's wrap-up step 6, when closing out a feature or milestone or before a longer pause, before handing the repo over to another engineer or another machine, or after a change to production config, infrastructure or the deploy path."
+description: "Turns a session's work into something a human maintainer with zero session context can pick up — backfill ADRs, check README/CONTEXT.md, record production facts and the deploy path, confirm follow-ups and unfixed report findings reached the next-steps list or tracker. Use at completion-gate's wrap-up step 6, when closing out a feature or milestone or before a longer pause, before handing the repo over to another engineer or another machine, or after a change to production config, infrastructure or the deploy path."
 argument-hint: "Anything this session touched that's easy to miss (optional)"
 ---
 
@@ -38,13 +38,16 @@ only the files already there.
 
 1. **Review the session for anything a maintainer needs that isn't in the
    diff**: decisions made, alternatives rejected and why, constraints
-   discovered along the way. List each candidate before touching any file,
-   tagged with where it lands: *architecture decision* (step 2),
-   *top-level docs* (step 3), *production* (step 4) or *follow-up*
-   (step 5).
-   *Done when*: every decision, rejected alternative and discovered
-   constraint from the session is on the list with a tag, or you've
-   concluded there's nothing beyond the diff worth carrying forward.
+   discovered along the way, and **findings**: every item a scan, audit or
+   investigation this session judged to affect the project, fixed or
+   not — from the report's prose as well as its table, whether the
+   report sits in the repo or in a scratch directory. List each candidate
+   before touching any file, tagged with where it lands: *architecture
+   decision* (step 2), *top-level docs* (step 3), *production* (step 4),
+   *follow-up* or *finding* (step 5).
+   *Done when*: every decision, rejected alternative, discovered
+   constraint and finding from the session is on the list with a tag, or
+   you've concluded there's nothing beyond the diff worth carrying forward.
    An empty list ends the run here: report one line,
    `handover-skip: <reason>`.
 
@@ -77,7 +80,8 @@ only the files already there.
    *Done when*: the deployment doc reflects this session's change, or
    you've confirmed nothing production-facing happened.
 
-5. **Check the follow-ups landed.** The repo's next-steps list is the one
+5. **Check the follow-ups and findings landed.** The repo's next-steps
+   list is the one
    priority list a fresh session reads to learn what's next, usually kept
    by your completion gate's wrap-up: the list the repo's `CLAUDE.md` /
    `AGENTS.md` routes what's-next questions to, or holds itself; with
@@ -89,8 +93,20 @@ only the files already there.
    why it holds its rank, its next concrete action, the path to read
    first. Add any that are missing, in priority order, and decide
    whether each also belongs in this project's issue tracker.
+   Give each *finding* a disposition: an issue-tracker or next-steps
+   entry, fixed (name the commit), or not handled with its reason. When
+   the report is in the repo, write the disposition beside its item
+   there; otherwise put the not-handled reasons in your reply. An
+   entry, new or existing, counts once you've opened it and read the
+   finding in it; when the entry doesn't name the finding, add the
+   finding to the entry.
+   ⚠️ Observed in practice: an affected, unfixed item written only in a
+   scratch report's prose, and a report table assigning a finding to an
+   existing issue that never mentioned it — both passed every wrap-up
+   check that looked only at what the session changed.
    *Done when*: every follow-up candidate has an entry in the next-steps
-   list.
+   list, and every finding's disposition points at an entry that names
+   it, a commit, or a written reason.
 
 ## Also worth checking
 

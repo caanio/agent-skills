@@ -1873,3 +1873,20 @@ Entries run oldest first; new entries are appended at the end.
       sentence restating the reply words for every stop was dropped in
       review: each prompt already names its own. Checked by a `verifier`
       read-back: 7 of 7 criteria passed.
+- [x] `handover` carries report findings to a disposition (2026-10-27).
+      Step 1 adds *findings* as a candidate class: every item a scan, audit
+      or investigation judged to affect the project, fixed or not, from a
+      report's prose as well as its table, in the repo or a scratch
+      directory. Step 5 gives each one a disposition (a tracker or
+      next-steps entry, a fixing commit, or a written reason) and counts an
+      entry only once it has been opened and names the finding. Before,
+      every wrap-up check enumerated what the session changed; two real
+      sessions shipped through a passing wrap-up with an affected item
+      left only in a scratch report's prose, and with a report row pointing
+      at an existing issue that never mentioned it. Dry runs on a fixture
+      of both shapes (4 runs on the new text, 4 on the old) caught both
+      items every time, the old text included: a fresh context does not
+      reproduce the attention loss of a long session, so the acceptance
+      test is the next real investigation session's wrap-up. Checked by a
+      `verifier` read-back: 11 of 11 questions passed, plus a re-check of
+      two wording fixes: 2 of 2.
