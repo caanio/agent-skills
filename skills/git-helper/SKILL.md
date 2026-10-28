@@ -172,6 +172,9 @@ reviews skipped earlier because nothing was committed yet never ran before the p
   run the next round with `<from>` = the previous round's HEAD, so it reviews the fix commits alone.
 - At the end of each round, ask the user about its judgment calls: those picked join that round's fixes;
   the rest go to the project's issue tracker (an online one only after the user oks the exact command). Minor items are listed.
+- Each ticket a round opens and each item a fix commit closes reach the project's next-steps list (its TODO or priority list)
+  that same round, inside that round's fix commit; a round with no fix commit puts them in a docs-only commit of its own,
+  reviewed as one more round before the push.
 - The loop closes on a round with no fix decided on. After round 3's reviews it stops before making their fixes,
   lists what is still open and asks whether to stop here or keep fixing.
 - A review the change's scope doesn't reach, or one not installed, is skipped with its own Bash call before the push,
