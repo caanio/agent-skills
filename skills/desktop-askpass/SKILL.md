@@ -1,6 +1,6 @@
 ---
 name: desktop-askpass
-description: Run a command that needs a password without the password passing through the agent — a GUI dialog on the user's desktop (osascript on macOS, zenity on Linux) collects it instead. Use whenever sudo, ssh, scp, rsync, git, or a LUKS/gpg helper is about to prompt for a password the agent cannot type, when the user says 密碼不要給你 / 密碼框彈在我桌面 / askpass, or when a command just failed with "no tty present", "sudo: a password is required", "a terminal is required", or "Permission denied (password)".
+description: 'Run a command that needs a password without the password passing through the agent — a GUI dialog on the user''s desktop (osascript on macOS, zenity on Linux) collects it instead. Use whenever sudo, ssh, scp, rsync, git, or a LUKS/gpg helper is about to prompt for a password the agent cannot type, when the user says 密碼不要給你 / 密碼框彈在我桌面 / askpass, or when a command just failed with "no tty present", "sudo: a password is required", "a terminal is required", or "Permission denied (password)".'
 ---
 
 # Desktop askpass
