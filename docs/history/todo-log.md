@@ -1918,3 +1918,12 @@ Entries run oldest first; new entries are appended at the end.
       `--batch --pinentry-mode loopback`, git with
       `-c credential.helper=`, and the untested ssh row dropped.
       Untested here, filed as #3, #4, #5 (Open 9).
+- [x] `desktop-askpass` description quoted (2026-10-29). The first push
+      would not install: `npx skills add` skipped the skill with "YAML
+      parse error: Nested mappings are not allowed in compact mappings",
+      because the plain-scalar description held `"sudo: a password is
+      required"` and YAML read the `: ` as a mapping. Three read-backs had
+      checked the frontmatter's content, never parsed it. Fixed by a
+      single-quoted scalar; `ruby -ryaml` now parses it and the value
+      matches the old text byte for byte (491 chars), and every other
+      `skills/*/SKILL.md` parses too.
