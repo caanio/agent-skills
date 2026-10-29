@@ -1890,3 +1890,31 @@ Entries run oldest first; new entries are appended at the end.
       test is the next real investigation session's wrap-up. Checked by a
       `verifier` read-back: 11 of 11 questions passed, plus a re-check of
       two wording fixes: 2 of 2.
+- [x] New skill `desktop-askpass` (2026-10-29). Adapted from a colleague's
+      Linux/zenity askpass skill used on Ubuntu; one helper,
+      `scripts/askpass.sh`, picks osascript on macOS and keeps the zenity
+      path. macOS changes: the prompt goes to AppleScript as argv (a host
+      name in an ssh prompt is remote-controlled), Cancel is caught inside
+      the script so exit 1 means only Cancel, any other osascript failure
+      exits 2, and `ASKPASS_TIMEOUT` must be a positive integer (exit 2).
+      The original's SSH note was corrected to ssh(1): without `force`,
+      ssh uses the helper with no tty and `DISPLAY` set. Dropped from the
+      original: two failure-table rows that contradicted the helper's
+      discarded stderr, and the `--key-file=-` pipe (the trailing newline
+      becomes part of the key); the LUKS example now runs `sudo -A -v`
+      first so only one dialog is open. Verified 2026-10-29 on macOS
+      15.8.2: typed secret returned exactly (exit 0), Cancel exit 1,
+      timeout exit 5, `0`/`00`/`-1`/`abc`/`2m` exit 2 with no dialog, an
+      AppleScript-injection prompt left no side effect, `sudo -A -v`
+      authenticated, and the sudo messages in the failure table were
+      observed. Two `verifier` read-backs (second caught `00`, fixed).
+      A `deep-reviewer` pass then drove: a rule that the helper's stdout
+      goes only to the asking program (run alone or via `$(…)` it would
+      print the password into the transcript), `requested by <parent>`
+      appended to the dialog title, `ASKPASS_TIMEOUT` capped at 86400,
+      unexpected osascript output mapped to 2, pipes limited to commands
+      that check an existing secret, the sudo + pipe pair in one Bash call
+      (no tty ties sudo's cache to the parent process), gpg with
+      `--batch --pinentry-mode loopback`, git with
+      `-c credential.helper=`, and the untested ssh row dropped.
+      Untested here, filed as #3, #4, #5 (Open 9).

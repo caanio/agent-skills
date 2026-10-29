@@ -62,7 +62,7 @@ See `docs/agents/triage-labels.md`.
 Single-context: `CONTEXT.md` at the root, ADRs under `docs/adr/`.
 See `docs/agents/domain.md`.
 
-## Open items (last updated 2026-10-27)
+## Open items (last updated 2026-10-29)
 
 The only live list. The per-change log — what each change did, why, and how
 it was verified — is `docs/history/todo-log.md`; read it before reworking a
@@ -170,8 +170,14 @@ Open:
    too. Watch the next real investigation session's wrap-up; if step 1
    lists no finding, the check needs a gate that does not rely on
    recall. Log: 2026-10-27.
+9. `desktop-askpass` paths not testable on macOS: Linux display failure
+   reads as Cancel (#3), zenity Pango markup in the prompt (#4),
+   `SSH_ASKPASS_PROMPT=confirm/none` (#5). Fix each on a Linux desktop or
+   with a FIDO key. Log: 2026-10-29.
 
 ## Source Material
 
 `haos-addon-deploy` was distilled from the verified deployment records of
 two private RPi projects (2026-06).
+`desktop-askpass` was adapted from a colleague's Linux/zenity version used
+on Ubuntu, with a macOS osascript backend added (2026-10-29).
