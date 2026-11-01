@@ -47,7 +47,8 @@ only the files already there.
    facts**: what a fresh session needs to continue or to avoid redoing
    work and cannot read from git, the repo's files or the tracker — a
    state you checked, a reply still awaited, an area not yet tested or a
-   check that failed, a step left half done.
+   check that failed, a step left half done, a decision too small for an
+   ADR.
    Wait for any tool or job this session started that is still running;
    one that cannot finish this session is listed with how to read its
    outcome. A secret or personal value is listed as existing, never by
@@ -71,7 +72,8 @@ only the files already there.
    changes *how* the system is built or *why*, not just *what* changed, and
    isn't already recorded: write or update an ADR under `docs/adr/` (hand
    the mechanics to your domain-modeling skill, or write it directly if none
-   is installed). Skip whatever didn't clear that bar.
+   is installed). A decision that didn't clear that bar is a session-only
+   fact: step 5 writes it into its entry.
    *Done when*: every candidate tagged "architecture decision" in step 1 has
    a matching ADR, or an explicit note that none was warranted.
 
@@ -109,9 +111,9 @@ only the files already there.
    why it holds its rank, its next concrete action, the path to read
    first. Add any that are missing, in priority order, and decide
    whether each also belongs in this project's issue tracker.
-   A session-only fact goes into the entry of the work it belongs to, as
-   that entry's current state, adding that entry when none exists; the
-   entry's next concrete action covers it.
+   Write each session-only fact into the entry of the work it belongs to,
+   as that entry's current state, adding that entry when none exists, and
+   update the entry's next concrete action when the fact changes it.
    Give each *finding* a disposition: an issue-tracker or next-steps
    entry, fixed (name the commit), or not handled with its reason. When
    the report is in the repo, write the disposition beside its item
@@ -124,10 +126,10 @@ only the files already there.
    scratch report's prose, and a report table assigning a finding to an
    existing issue that never mentioned it — both passed every wrap-up
    check that looked only at what the session changed.
-   *Done when*: every follow-up candidate, session-only facts included,
-   has an entry in the next-steps list, and every finding's disposition
-   points at an entry that names it, a commit, or a reason written in
-   the repo.
+   *Done when*: every follow-up candidate has an entry in the next-steps
+   list, every session-only fact reads back from its entry once you open
+   it, and every finding's disposition points at an entry that names it,
+   a commit, or a reason written in the repo.
 
 ## Also worth checking
 
