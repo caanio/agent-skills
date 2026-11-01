@@ -1,6 +1,6 @@
 # TODO log (2026-07-03 – 2026-09-26)
 
-Version: 1.0.3 | Moved verbatim from `CLAUDE.md`'s TODO section on
+Version: 1.0.4 | Moved verbatim from `CLAUDE.md`'s TODO section on
 2026-09-26; entries unchanged, including their checkbox state at the time.
 How to read: **a log, not current state** — later entries often supersede
 earlier ones, and a `[ ]` here only means it was open when written.
@@ -1927,3 +1927,17 @@ Entries run oldest first; new entries are appended at the end.
       single-quoted scalar; `ruby -ryaml` now parses it and the value
       matches the old text byte for byte (491 chars), and every other
       `skills/*/SKILL.md` parses too.
+- [x] `handover` records session-only facts (2026-11-01). A recorded
+      wrap-up's final reply said the session could be cleared while its
+      findings and next step lived only in the conversation; they reached
+      a file only after the user asked again before clearing. Step 1 now
+      lists **session-only facts** (what a fresh session needs and cannot
+      read from git, the repo or the tracker: a checked state, an awaited
+      reply, an untested area or failed check, a half-done step, an
+      unwritten decision), tagged *follow-up*; a still-running job is
+      awaited first; a secret or personal value is listed as existing
+      only. Step 5 writes a finding's not-handled reason into the
+      next-steps entry instead of the reply. The scope boundary says such
+      facts stay this skill's, not the conversation-handoff skill's.
+      Verified by one `verifier` read-back (all five checks PASS) and a
+      `ruby -ryaml` parse of the frontmatter.

@@ -30,6 +30,8 @@ it in production.
   collection doesn't ship one (e.g. `mattpocock/skills`' `handoff`). That
   targets the next **agent turn**; this skill targets the next **human**,
   further out, and writes durable repo files, not a temp-directory note.
+  A fact the next session needs is still this skill's: step 1 lists it
+  as a session-only fact and step 5 lands it in the repo.
 
 ## Process
 
@@ -41,13 +43,26 @@ only the files already there.
    discovered along the way, and **findings**: every item a scan, audit or
    investigation this session judged to affect the project, fixed or
    not — from the report's prose as well as its table, whether the
-   report sits in the repo or in a scratch directory. List each candidate
-   before touching any file, tagged with where it lands: *architecture
-   decision* (step 2), *top-level docs* (step 3), *production* (step 4),
-   *follow-up* or *finding* (step 5).
+   report sits in the repo or in a scratch directory; and **session-only
+   facts**: what a fresh session needs to continue or to avoid redoing
+   work and cannot read from git, the repo's files or the tracker — a
+   state you checked, a reply still awaited, an area not yet tested or a
+   check that failed, a step left half done, a decision nobody wrote down.
+   A tool or job this session started that is still running is awaited
+   first; one that cannot finish is listed with how to read its outcome.
+   A secret or personal value is listed as existing, never by its value.
+   List each candidate before touching any file, tagged with where it
+   lands: *architecture decision* (step 2), *top-level docs* (step 3),
+   *production* (step 4), *follow-up* or *finding* (step 5); a
+   session-only fact is a *follow-up*.
+   ⚠️ Observed in practice: a wrap-up's final reply said the session could
+   be cleared while its findings and next step lived only in the
+   conversation; they reached a file only after the user asked again
+   before clearing.
    *Done when*: every decision, rejected alternative, discovered
-   constraint and finding from the session is on the list with a tag, or
-   you've concluded there's nothing beyond the diff worth carrying forward.
+   constraint, finding and session-only fact from the session is on the
+   list with a tag, or you've concluded there's nothing beyond the diff
+   worth carrying forward.
    An empty list ends the run here: report one line,
    `handover-skip: <reason>`.
 
@@ -96,7 +111,9 @@ only the files already there.
    Give each *finding* a disposition: an issue-tracker or next-steps
    entry, fixed (name the commit), or not handled with its reason. When
    the report is in the repo, write the disposition beside its item
-   there; otherwise put the not-handled reasons in your reply. An
+   there; otherwise write it into the next-steps entry that tracks this
+   work, since a reason given only in your reply is gone once the
+   session is cleared. An
    entry, new or existing, counts once you've opened it and read the
    finding in it; when the entry doesn't name the finding, add the
    finding to the entry.
@@ -104,9 +121,10 @@ only the files already there.
    scratch report's prose, and a report table assigning a finding to an
    existing issue that never mentioned it — both passed every wrap-up
    check that looked only at what the session changed.
-   *Done when*: every follow-up candidate has an entry in the next-steps
-   list, and every finding's disposition points at an entry that names
-   it, a commit, or a written reason.
+   *Done when*: every follow-up candidate, session-only facts included,
+   has an entry in the next-steps list, and every finding's disposition
+   points at an entry that names it, a commit, or a reason written in
+   the repo.
 
 ## Also worth checking
 
