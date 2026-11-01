@@ -73,9 +73,9 @@ only the files already there.
    isn't already recorded: write or update an ADR under `docs/adr/` (hand
    the mechanics to your domain-modeling skill, or write it directly if none
    is installed). A decision that didn't clear that bar is a session-only
-   fact: step 5 writes it into its entry.
+   fact: retag it *follow-up*, and step 5 writes it into its entry.
    *Done when*: every candidate tagged "architecture decision" in step 1 has
-   a matching ADR, or an explicit note that none was warranted.
+   a matching ADR or is retagged *follow-up*.
 
 3. **Check the top-level docs against reality.** Read `README.md` and
    `CONTEXT.md` (or `CONTEXT-MAP.md` if this repo has more than one

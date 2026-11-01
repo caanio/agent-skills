@@ -1941,7 +1941,7 @@ Entries run oldest first; new entries are appended at the end.
       only. Step 5 writes a
       finding's not-handled reason into the next-steps entry instead of
       the reply; either kind adds the entry when none exists. Step 2
-      hands a decision below the ADR bar to step 5. The scope
+      retags a decision below the ADR bar *follow-up* for step 5. The scope
       boundary says such facts stay this skill's, not the
       conversation-handoff skill's.
       Verified by a fresh-context read-back of the skill and a
