@@ -48,13 +48,15 @@ only the files already there.
    work and cannot read from git, the repo's files or the tracker — a
    state you checked, a reply still awaited, an area not yet tested or a
    check that failed, a step left half done, a decision nobody wrote down.
-   A tool or job this session started that is still running is awaited
-   first; one that cannot finish is listed with how to read its outcome.
-   A secret or personal value is listed as existing, never by its value.
+   Wait for any tool or job this session started that is still running;
+   one that cannot finish this session is listed with how to read its
+   outcome. A secret or personal value is listed as existing, never by
+   its value.
    List each candidate before touching any file, tagged with where it
    lands: *architecture decision* (step 2), *top-level docs* (step 3),
    *production* (step 4), *follow-up* or *finding* (step 5); a
-   session-only fact is a *follow-up*.
+   session-only fact takes the tag its content fits, and *follow-up*
+   when no other fits.
    ⚠️ Observed in practice: a wrap-up's final reply said the session could
    be cleared while its findings and next step lived only in the
    conversation; they reached a file only after the user asked again
@@ -108,14 +110,15 @@ only the files already there.
    why it holds its rank, its next concrete action, the path to read
    first. Add any that are missing, in priority order, and decide
    whether each also belongs in this project's issue tracker.
+   A session-only fact goes into the entry of the work it belongs to, as
+   that entry's current state; it needs no action of its own.
    Give each *finding* a disposition: an issue-tracker or next-steps
    entry, fixed (name the commit), or not handled with its reason. When
    the report is in the repo, write the disposition beside its item
    there; otherwise write it into the next-steps entry that tracks this
-   work, since a reason given only in your reply is gone once the
-   session is cleared. An
-   entry, new or existing, counts once you've opened it and read the
-   finding in it; when the entry doesn't name the finding, add the
+   work, adding that entry when none exists, since a reason given only
+   in your reply is gone once the session is cleared. An entry, new or
+   existing, counts once you've opened it and read the finding in it; when the entry doesn't name the finding, add the
    finding to the entry.
    ⚠️ Observed in practice: an affected, unfixed item written only in a
    scratch report's prose, and a report table assigning a finding to an

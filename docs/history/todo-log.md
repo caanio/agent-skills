@@ -1934,10 +1934,11 @@ Entries run oldest first; new entries are appended at the end.
       lists **session-only facts** (what a fresh session needs and cannot
       read from git, the repo or the tracker: a checked state, an awaited
       reply, an untested area or failed check, a half-done step, an
-      unwritten decision), tagged *follow-up*; a still-running job is
-      awaited first; a secret or personal value is listed as existing
+      unwritten decision), tagged by content (*follow-up* when nothing
+      else fits) and kept as its entry's current state; a still-running
+      job is awaited first; a secret or personal value is listed as existing
       only. Step 5 writes a finding's not-handled reason into the
       next-steps entry instead of the reply. The scope boundary says such
       facts stay this skill's, not the conversation-handoff skill's.
-      Verified by one `verifier` read-back (all five checks PASS) and a
+      Verified by a fresh-context read-back of the skill and a
       `ruby -ryaml` parse of the frontmatter.
