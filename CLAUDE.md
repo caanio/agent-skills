@@ -193,6 +193,11 @@ Open:
     detect` over this repo's history to size its false positives.
     Read first: `skills/git-helper/SKILL.md` Step 2 and
     `docs/history/todo-log.md` (2026-11-02 entry). Log: 2026-11-02.
+12. `git-helper`'s Auto path has yet to run on a real commit: every
+    2026-11-02 commit took the manual path (an old install, then fix
+    commits). On the next clean first commit of a run, check that it
+    committed without stopping, listed the staged files, and replied
+    with `git log -1` plus the "Rules applied" line. Log: 2026-11-02.
 
 ## Source Material
 
