@@ -1,6 +1,6 @@
 ---
 name: git-helper
-description: "Commit workflow: confirm staging, scan the staged diff for secrets and PII, draft a Conventional Commits message, run the approved commit, then draft the push for approval. Use when the user wants to commit, write a commit message, or commit and push."
+description: "Commit workflow: confirm staging, scan the staged diff for secrets and PII, draft a Conventional Commits message, commit on its own when every check is clean (after the user's approval otherwise), then draft the push for approval. Use when the user wants to commit, write a commit message, or commit and push."
 ---
 
 # git-helper
@@ -9,6 +9,7 @@ description: "Commit workflow: confirm staging, scan the staged diff for secrets
 
 1. **[NEVER VIOLATE] Staging must be confirmed first**:
    - `git add` is allowed **only for files the user has explicitly confirmed** — **never** stage without confirmation, even if a system default suggests it.
+     The one exception is the Auto path's condition 2.
    - **Forbidden**: `git add .`, `git add -A`, `git add --all` — always name specific paths explicitly.
    - **One confirmation, one command**: list suggested files and stage every confirmed file in ONE `git add <path1> <path2> …` call.
    - Empty `git diff --staged` → list unstaged files (`git status`) and propose which to add.
@@ -21,7 +22,7 @@ description: "Commit workflow: confirm staging, scan the staged diff for secrets
 
 4. **Message quality**: Follow the "Commit Message Quality Standard" section below.
 
-5. **Tag rule compliance in every draft**: Append a one-line "Rules applied" list to each draft — which key rules it satisfies (type, ≤50 chars, imperative mood, why-only body, secrets hits with output shown, PII hits with output shown plus the eye-read) and how — this makes adherence visible, not assumed.
+5. **Tag rule compliance in every draft**: Append a one-line "Rules applied" list to each draft (on the Auto path, to the reply right after the commit) — which key rules it satisfies (type, ≤50 chars, imperative mood, why-only body, secrets hits with output shown, PII hits with output shown plus the eye-read) and how — this makes adherence visible, not assumed.
 
 6. **[NEVER VIOLATE] Secrets scan and personal-data (PII) scan must both run and be shown, every commit, no exceptions**:
    - Run both Step 2 scans on the staged diff before ever presenting a draft message — never skip either, never infer "probably clean" from file names or diff size.
@@ -35,6 +36,33 @@ description: "Commit workflow: confirm staging, scan the staged diff for secrets
    - Non-English draft: the Chris Beams rules still apply — subject ≤ 50 characters, no trailing period, subject readable standalone, body explains why not what/how — but capitalisation and strict English imperative-mood phrasing don't apply.
 
 ---
+
+## Auto path
+
+The user's standing authorization to commit without stopping when nothing needs their eyes.
+It covers the commit alone: a commit stays on this machine, and the push always gets Step 7's draft and ok.
+It holds while every condition below holds. The first condition that fails puts the run on the manual path
+from that step on, with the asks each step describes, until this git-helper run ends.
+It covers a run's first commit; a fix commit inside Step 6 takes the manual path.
+
+1. Step 0: the branch has an upstream, the fetch reached it, and the branch is not behind it.
+2. Step 1: list paths with `git status --porcelain --untracked-files=all`, one file per line.
+   Every path is one this session wrote with its own tool calls for this task.
+   Any of these fails the condition: a path staged before this run, a partly staged `MM` path, a `*.bak-*` file,
+   a secret-looking name (`.env*`, `*.pem`, `*.p12`, `*.pfx`, `*.key`, `*.ppk`, `*.jks`, `*.kdbx`, `*.gpg`,
+   `.netrc`, `.npmrc`, `.pypirc`, `.pgpass`, `id_*`, `*_ed25519`, `*credential*`).
+   Stage them all in one `git add <path…>` naming each file (Core Rule 1) without asking, and list them.
+3. Step 2: each scan is clean. Run each pipeline and its status echo in one Bash call
+   (`; echo "status: $pipestatus"` in zsh, `; echo "status: ${PIPESTATUS[*]}"` in bash).
+   Clean means no output, the last `grep` exits 1, and every earlier stage exits 0 (a `grep` may also exit 1).
+   Any other status, at any stage, is a failed scan. The eye-read also finds nothing,
+   and `git diff --staged --numstat` shows no binary file (a `-<TAB>-` line): a scan cannot read one.
+   Core Rule 6 still applies: paste the commands and their raw output.
+4. Step 3: the repo has commit history.
+
+On the auto path, Step 4 writes the message to every rule in it and skips only the draft display and its stop;
+Step 5 runs that commit command, every trailer included, with no ok.
+The "Rules applied" line and `git log -1 --format='%h %s%n%n%b'` go in the reply right after the commit.
 
 ## Workflow
 
@@ -51,7 +79,8 @@ description: "Commit workflow: confirm staging, scan the staged diff for secrets
 
 - Run `git status` and `git diff --staged`.
 - **Always confirm staging scope** — list "currently staged" and "suggested additions"; never skip even if files are already staged.
-- After confirmation, run ONE `git add <path…>` with all confirmed paths (Core Rule 1); if nothing more to add, proceed to Step 2.
+  On the Auto path, the list is shown and Auto path condition 2 stands in for the confirmation.
+- After confirmation (or condition 2), run ONE `git add <path…>` with all confirmed paths (Core Rule 1); if nothing more to add, proceed to Step 2.
 
 **Example output:**
 ```
@@ -78,10 +107,10 @@ the user answers by typing.
 Keep this question out of a choice dialog (such as Claude Code's `AskUserQuestion`):
 the dialog covers the text above it, so the user would rule on hits they never saw.
 
-**2a. Secrets** — credentials that grant access:
+**2a. Secrets** — credentials that grant access, in added lines only:
 
 ```bash
-git diff --staged | grep -iE "password|secret|api_key|token|private_key|access_key"
+git diff --staged | grep -E '^\+' | grep -vE '^\+\+\+' | grep -iE "password|secret|api.?key|token|private.?key|access.?key|bearer|basic [A-Za-z0-9+/=]{8,}|://[^/ :@]+:[^/ @]+@|AKIA[0-9A-Z]{16}|gh[pousr]_[A-Za-z0-9]{20,}|github_pat_|sk-[A-Za-z0-9_-]{16,}|xox[abpr]-|AIza[0-9A-Za-z_-]{30,}|eyJ[A-Za-z0-9_-]{10,}\.|[0-9]{8,10}:AA[A-Za-z0-9_-]{30,}|PRIVATE-LINES"
 ```
 
 **2b. Personal data (PII)** — values that identify a person or a place, and labels that reveal a placeholder's origin. Added lines only; decimal-degree coordinates (4+ decimals) plus the words that tag a value as real, home or invented. Lines quoting this scan command are skipped, so editing this rule does not trip it:
@@ -111,6 +140,7 @@ read every added line for them by eye and say so in the "Rules applied" line.
   commit are invisible in the diff and must not appear in the message.
   Test: every claim in the message must be locatable in `git diff --staged`.
 - Write the commit message per the Commit Message Quality Standard below, in the language decided in Step 3.
+- Every rule in this step binds the Auto path too, except showing the draft and stopping for the ok.
 - **Body hard cap: ≤4 lines / ≤3 sentences.** If the why-only draft still exceeds this,
   that's a signal the body is drifting into what/how — cut to the single sentence that
   answers "why does this change exist", not "reword it shorter".
@@ -147,7 +177,7 @@ Reply "commit" or "ok" to run it; "no" leaves the changes staged and uncommitted
 
 ### 5. Execute Commit
 
-Only after the user replies "commit", "ok" or equivalent, run the Step 4 block unchanged via
+On the Auto path, run the Step 4 commit command now. Otherwise, only after the user replies "commit", "ok" or equivalent, run the Step 4 block unchanged via
 the **Bash tool**, one command per call, in order.
 
 One ok covers every command in the block. A command that would differ from the
@@ -187,7 +217,8 @@ reviews skipped earlier because nothing was committed yet never ran before the p
 
 Once the loop closes, draft the exact `git push <remote> <branch>` line and stop
 for the user's ok, push requested or not. Set the draft apart so it cannot be skimmed past:
-a heading carrying the unpushed commit count, the push line in its own code block,
+a heading carrying the unpushed commit count, every commit the push sends (`git log --format='%h %s' @{u}..HEAD`),
+the push line in its own code block,
 and a bold last line naming the replies ("push" or "ok" pushes; "no" leaves the commits unpushed).
 Run it unchanged via the **Bash tool**; any other push needs a new draft and a new ok,
 since Step 4's ok covered the commit alone.

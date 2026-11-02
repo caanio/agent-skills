@@ -1946,3 +1946,20 @@ Entries run oldest first; new entries are appended at the end.
       conversation-handoff skill's.
       Verified by a fresh-context read-back of the skill and a
       `ruby -ryaml` parse of the frontmatter.
+- [x] `git-helper` Auto path (2026-11-02). The maintainer wanted a clean
+      wrap-up to commit without stopping. A new Auto path section lets
+      Step 5 commit with no draft or ok while four conditions hold, each
+      checked at the step it names: upstream reached and not behind; every
+      path (listed with `--untracked-files=all`) written by this session,
+      none pre-staged, partly staged, a `.bak-*` or secret-looking name;
+      both scans clean by `$pipestatus` and no binary in `--numstat`;
+      commit history. Auto push was drafted too and dropped: two
+      `deep-reviewer` rounds kept finding false-auto pushes (token formats
+      the regex missed, a push refspec sending another branch's held
+      commit, a deploy declaration the session could write itself). The
+      push draft now lists every commit it sends (`@{u}..HEAD`). Scan 2a
+      reads added lines only and gained token-format patterns.
+      Verified by a fresh-context read-back of the final text (PASS), and
+      a scratch repo where the new 2a caught ten token formats, skipped a
+      context-only `token`, and passed `mkdir -p` / `set -o pipefail`.
+      Gaps left: Open 10.

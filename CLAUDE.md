@@ -62,7 +62,7 @@ See `docs/agents/triage-labels.md`.
 Single-context: `CONTEXT.md` at the root, ADRs under `docs/adr/`.
 See `docs/agents/domain.md`.
 
-## Open items (last updated 2026-10-29)
+## Open items (last updated 2026-11-02)
 
 The only live list. The per-change log — what each change did, why, and how
 it was verified — is `docs/history/todo-log.md`; read it before reworking a
@@ -107,6 +107,11 @@ Settled — reopen only on new evidence:
     or not, is a block of its own (Step 7), drafted once the loop closes
     in a set-apart format and run only on its own ok. Maintainer
     call, log: 2026-09-27, 2026-10-08 to 2026-10-10, 2026-10-20.
+    The Auto path is the one exception, and it covers the commit alone:
+    while its four conditions hold, Step 5 commits with no draft or ok;
+    the push always keeps its draft and ok, since two adversarial rounds
+    found regex scans and self-judged scope too weak to gate an
+    unattended outward send. Maintainer call, log: 2026-11-02.
 11. `web-stack-selector` keeps `simple-datatables (LGPL)` as excluded;
     its survey line takes the license from the repo's `LICENSE` file and
     `package.json`, since the GitHub API reports `NOASSERTION`.
@@ -174,6 +179,20 @@ Open:
    reads as Cancel (#3), zenity Pango markup in the prompt (#4),
    `SSH_ASKPASS_PROMPT=confirm/none` (#5). Fix each on a Linux desktop or
    with a FIDO key. Log: 2026-10-29.
+10. `git-helper`'s manual path leaves two Auto-path exits without a next
+    action: Step 0 says nothing for a branch with no upstream (and Step 7
+    never says where `<remote>` comes from), and Step 2 covers a scan hit
+    but not a failed scan (a `$pipestatus` stage outside 0/1, e.g.
+    `git diff` exiting 128). Both already stop the Auto path; only the
+    manual follow-up is missing. Log: 2026-11-02.
+11. `git-helper`'s scans stay regex: 2b has no email, phone or national-ID
+    pattern, and 2a matches token formats and keywords, not entropy. With
+    the push behind a human ok this was accepted; a real scanner
+    (`gitleaks`) would need installing on every machine. Revisit if the
+    push ever loses its ok; the first step then is running `gitleaks
+    detect` over this repo's history to size its false positives.
+    Read first: `skills/git-helper/SKILL.md` Step 2 and
+    `docs/history/todo-log.md` (2026-11-02 entry). Log: 2026-11-02.
 
 ## Source Material
 
