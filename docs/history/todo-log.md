@@ -1963,3 +1963,9 @@ Entries run oldest first; new entries are appended at the end.
       a scratch repo where the new 2a caught ten token formats, skipped a
       context-only `token`, and passed `mkdir -p` / `set -o pipefail`.
       Gaps left: Open 10, 11.
+- [x] `git-helper` Auto path, first real run (2026-11-02). Commit
+      e71907a in this repo took the Auto path end to end: staged its one
+      path without asking and listed it, ran both scans with
+      `$pipestatus` (`0 0 0 1` each) and `--numstat`, committed with no
+      draft or ok, then replied with `git log -1` and the "Rules
+      applied" line. Closes the short-lived Open 12 that commit added.
