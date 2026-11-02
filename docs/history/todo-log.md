@@ -1962,4 +1962,4 @@ Entries run oldest first; new entries are appended at the end.
       Verified by a fresh-context read-back of the final text (PASS), and
       a scratch repo where the new 2a caught ten token formats, skipped a
       context-only `token`, and passed `mkdir -p` / `set -o pipefail`.
-      Gaps left: Open 10.
+      Gaps left: Open 10, 11.

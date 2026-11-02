@@ -42,7 +42,8 @@ description: "Commit workflow: confirm staging, scan the staged diff for secrets
 The user's standing authorization to commit without stopping when nothing needs their eyes.
 It covers the commit alone: a commit stays on this machine, and the push always gets Step 7's draft and ok.
 It holds while every condition below holds. The first condition that fails puts the run on the manual path
-from that step on, with the asks each step describes, until this git-helper run ends.
+from that step on, with the asks each step describes, until this git-helper run ends;
+paths condition 2 already staged stay staged, and the manual draft names them.
 It covers a run's first commit; a fix commit inside Step 6 takes the manual path.
 
 1. Step 0: the branch has an upstream, the fetch reached it, and the branch is not behind it.
@@ -55,7 +56,7 @@ It covers a run's first commit; a fix commit inside Step 6 takes the manual path
 3. Step 2: each scan is clean. Run each pipeline and its status echo in one Bash call
    (`; echo "status: $pipestatus"` in zsh, `; echo "status: ${PIPESTATUS[*]}"` in bash).
    Clean means no output, the last `grep` exits 1, and every earlier stage exits 0 (a `grep` may also exit 1).
-   Any other status, at any stage, is a failed scan. The eye-read also finds nothing,
+   Any other status, at any stage, or a blank status, is a failed scan. The eye-read also finds nothing,
    and `git diff --staged --numstat` shows no binary file (a `-<TAB>-` line): a scan cannot read one.
    Core Rule 6 still applies: paste the commands and their raw output.
 4. Step 3: the repo has commit history.
@@ -110,7 +111,7 @@ the dialog covers the text above it, so the user would rule on hits they never s
 **2a. Secrets** — credentials that grant access, in added lines only:
 
 ```bash
-git diff --staged | grep -E '^\+' | grep -vE '^\+\+\+' | grep -iE "password|secret|api.?key|token|private.?key|access.?key|bearer|basic [A-Za-z0-9+/=]{8,}|://[^/ :@]+:[^/ @]+@|AKIA[0-9A-Z]{16}|gh[pousr]_[A-Za-z0-9]{20,}|github_pat_|sk-[A-Za-z0-9_-]{16,}|xox[abpr]-|AIza[0-9A-Za-z_-]{30,}|eyJ[A-Za-z0-9_-]{10,}\.|[0-9]{8,10}:AA[A-Za-z0-9_-]{30,}|PRIVATE-LINES"
+git diff --staged | grep -E '^\+' | grep -vE '^\+\+\+' | grep -iE "password|secret|api.?key|token|private.?key|access.?key|bearer|basic [A-Za-z0-9+/=]{8,}|://[^/ :@]+:[^/ @]+@|AKIA[0-9A-Z]{16}|gh[pousr]_[A-Za-z0-9]{20,}|github_pat_|sk-[A-Za-z0-9_-]{16,}|xox[abpr]-|AIza[0-9A-Za-z_-]{30,}|eyJ[A-Za-z0-9_-]{10,}\.|[0-9]{8,10}:AA[A-Za-z0-9_-]{30,}"
 ```
 
 **2b. Personal data (PII)** — values that identify a person or a place, and labels that reveal a placeholder's origin. Added lines only; decimal-degree coordinates (4+ decimals) plus the words that tag a value as real, home or invented. Lines quoting this scan command are skipped, so editing this rule does not trip it:
@@ -221,7 +222,7 @@ a heading carrying the unpushed commit count, every commit the push sends (`git 
 the push line in its own code block,
 and a bold last line naming the replies ("push" or "ok" pushes; "no" leaves the commits unpushed).
 Run it unchanged via the **Bash tool**; any other push needs a new draft and a new ok,
-since Step 4's ok covered the commit alone.
+since a commit's ok, where one was given, never covers the push.
 A push requested later, in a run with nothing to commit, starts here,
 after one Step 6 round over the commits not yet reviewed.
 
