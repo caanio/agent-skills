@@ -1970,24 +1970,28 @@ Entries run oldest first; new entries are appended at the end.
       draft or ok, then replied with `git log -1` and the "Rules
       applied" line. Closes the short-lived Open 12 that commit added.
 - [x] Prompt-audit cleanup, own skills (2026-11-03). An audit of the
-      always-loaded instructions against the current target model flagged
-      wording written for older models. Applied seven rewrites:
+      always-loaded instructions against the current target model
+      flagged wording written for older models. Applied seven rewrites:
       `git-helper` drops the numeric body cap and its escape valve for
-      "body length follows the why", restates Step 6's why-a-separate-push
-      reason in the present tense, and says a review the agent's
-      instructions require takes the skip echo; `completion-gate` step 6
-      drops the old-version narrative from its ⚠️; `python-coding-standards`
-      drops the `^=` syntax aside; `haos-addon-deploy` drops two
-      incident-cost parentheticals and keeps the misdiagnosis trap as a
-      present-tense line. ⚠️ markers stay; their sessions are logged above.
+      "body length follows the why", restates Step 6's
+      why-a-separate-push reason in the present tense, and says a review
+      the agent is required to run counts as one the project uses,
+      skipped only with the echo; `completion-gate` step 6 drops the
+      old-version narrative from its ⚠️ and states the pitfall as one
+      that happened; `python-coding-standards` drops the `^=` syntax
+      aside; `haos-addon-deploy` drops two incident-cost parentheticals
+      and keeps the misdiagnosis trap as a present-tense line. ⚠️
+      markers stay; their sessions are logged above.
       `matt-code-review`'s two sub-agent briefs end in "Report findings
       only; …" instead of "Under 400 words.", since a word cap truncates
-      findings on a large diff; the snapshot comment now lists this beside
-      the rename as a change every refresh re-applies. Maintainer call.
-      `completion-gate`'s `/security-review` example moves from "the
-      pending diff after every code change" to the committed diff in the
-      review loop, matching `git-helper` Step 6. Maintainer call.
-      Verified by a fresh-context read-back of the first seven rewrites
-      (all six acceptance checks PASS) and a grep of `skills/` and README
-      for the removed phrases (0 hits, run before the matt-code-review edit; "Under 400
-      words." now matches once, on purpose, in the snapshot comment).
+      findings on a large diff; the snapshot comment now lists this
+      beside the rename as a change every refresh re-applies. Maintainer
+      call. `completion-gate`'s `/security-review` example moves from
+      "the pending diff after every code change" to the committed diff
+      in the commit workflow's post-commit review, matching `git-helper`
+      Step 6 without naming it. Maintainer call. Verified by a
+      fresh-context read-back of the first seven rewrites (all six
+      acceptance checks PASS) and a grep of `skills/` and README for the
+      removed phrases (0 hits, run before the matt-code-review edit;
+      "Under 400 words." now matches once, on purpose, in the snapshot
+      comment).
