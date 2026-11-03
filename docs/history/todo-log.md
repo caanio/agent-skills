@@ -1987,5 +1987,7 @@ Entries run oldest first; new entries are appended at the end.
       `completion-gate`'s `/security-review` example moves from "the
       pending diff after every code change" to the committed diff in the
       review loop, matching `git-helper` Step 6. Maintainer call.
-      Verified by a fresh-context read-back of the first seven (6/6 PASS)
-      and a grep of `skills/` and README for the removed phrases (0 hits).
+      Verified by a fresh-context read-back of the first seven rewrites
+      (all six acceptance checks PASS) and a grep of `skills/` and README
+      for the removed phrases (0 hits, run before the matt-code-review edit; "Under 400
+      words." now matches once, on purpose, in the snapshot comment).

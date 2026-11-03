@@ -22,7 +22,7 @@ The gate between "I think it works" and "it is done".
 - *Security review of code crossing a trust boundary* → your security skill,
   entirely — this collection doesn't ship one (e.g. `security-and-hardening`
   while writing it; a built-in `/security-review` of the committed diff in
-  your commit workflow's review loop, after the commit and before the push;
+  your commit workflow's post-commit review, after the commit and before the push;
   `security-audit` as a focused review when the change
   crosses a trust boundary, and in full before a first production deploy).
   The security row below is the one place that says what to do when none is
@@ -244,6 +244,6 @@ inside it always looks like bad luck.
    list ends it with one `handover-skip: <reason>` line in your reply.
    *Done when*: the reply shows `handover`'s report or that skip line,
    before any commit is drafted.
-   ⚠️ Finishing step 5 tends to roll straight into drafting the commit —
+   ⚠️ Finishing step 5 has rolled straight into drafting the commit —
    the reason the done-when above requires the report or skip line in
    the reply.
