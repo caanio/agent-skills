@@ -51,7 +51,7 @@ versions. Substitute your own values; nothing here is host-specific.
   - Why: off the home LAN an mDNS name such as `homeassistant.local` does not fail fast —
     `ssh` can block on name resolution with no output at all, which `ConnectTimeout` (a TCP
     connect bound) does not cover. A backup sent with a 10-minute timeout then just looks
-    slow and sits in the background (real case: about an hour lost).
+    slow and sits in the background.
   - An alias tunnelled through `cloudflared access ssh` needs the 20 s: it timed out at
     5 s and passed within 20 s, and it may first ask the user to authorize in a browser.
 - **Re-run the preflight after any network change**, and treat a remote step whose output
@@ -205,8 +205,8 @@ When the stale copy wins, for the *other* add-on:
   `ha apps rebuild` bakes old code into the image
 - `ha store reload`, `ha supervisor restart`, `docker builder prune -a`, a full HAOS reboot,
   and even `ha apps uninstall` + `install` all change nothing — Supervisor isn't stale, the
-  winning directory genuinely *is* old. (Real case: a whole day lost to this, misdiagnosed as
-  a Supervisor version-tracking bug.)
+  winning directory genuinely *is* old. It reads like a Supervisor version-tracking bug;
+  it isn't one.
 
 **Best fix: don't ship the whole repo.** Send only the paths this add-on needs, so the
 collision never exists:

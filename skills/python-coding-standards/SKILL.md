@@ -55,9 +55,8 @@ you can't tell whether something has a runnable entry point, assume it does.
    minor/patch float to latest automatically on every install. Not
    `==exact-version` (blocks every patch/security update until a human
    manually bumps it) and not a bare `>=` (no ceiling — a future major-version
-   bump gets pulled in silently, defeating the point of pinning). `^=` isn't
-   valid pip/PEP 440 syntax — that's npm/Cargo/Poetry, and pip rejects it as
-   an invalid requirement. A calendar-versioned package (e.g. `pytz`, whose
+   bump gets pulled in silently, defeating the point of pinning). A
+   calendar-versioned package (e.g. `pytz`, whose
    releases look like `2025.2`) follows the same rule mechanically — pin
    `~=2025.2` and a same-year bump (`2025.3`) is picked up automatically,
    but a new year (`2026.1`) is not and needs a manual pin update.

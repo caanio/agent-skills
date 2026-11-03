@@ -52,7 +52,7 @@ Codex / Gemini: one folder per skill under `skills/`, each containing a
 | [haos-addon-deploy](skills/haos-addon-deploy/SKILL.md) | Deploy a self-written long-running app as a Home Assistant OS local add-on (RPi, 24/7), with every battle-tested pitfall |
 | [haos-https-tunnel](skills/haos-https-tunnel/SKILL.md) | Give a HAOS instance a real HTTPS URL via a Cloudflare Tunnel (cloudflared add-on) — no port forwarding, no device-side install |
 | [haos-cloud-backup](skills/haos-cloud-backup/SKILL.md) | Ship HAOS backups to cloud storage with rclone: upload bandwidth cap (bwlimit) and GFS-style daily/weekly/monthly retention |
-| [matt-code-review](skills/matt-code-review/SKILL.md) | Verbatim snapshot of `mattpocock/skills` `code-review` (MIT, pinned to commit `d81f3a1`), renamed so Claude Code's bundled `/code-review` stays reachable: two-axis review (Standards / Spec) of the diff since a fixed point, both axes in parallel sub-agents; needs that repo's `/setup-matt-pocock-skills` run once in the target project |
+| [matt-code-review](skills/matt-code-review/SKILL.md) | Snapshot of `mattpocock/skills` `code-review` (MIT, pinned to commit `d81f3a1`), renamed so Claude Code's bundled `/code-review` stays reachable, and with the sub-agent briefs' word cap dropped (the file's closing comment lists both edits): two-axis review (Standards / Spec) of the diff since a fixed point, both axes in parallel sub-agents; needs that repo's `/setup-matt-pocock-skills` run once in the target project |
 | [python-coding-standards](skills/python-coding-standards/SKILL.md) | Personal Python defaults: type hints, no globals, `logging` over `print()`, wrapping any I/O in try/except, commenting the why not the what, `.venv`/requirements.txt/PEP 8/Black, preferring pytest for real tests, where design docs go |
 | [video-to-line](skills/video-to-line/SKILL.md) | Convert a video into an H.264 mp4 that plays inline in LINE chat, split into parts when over LINE's 5-minute limit and capped in bitrate so LINE for Mac sends it as a video, with a bash + ffmpeg script that verifies its own output (h264, yuv420p, faststart, duration, bitrate) and reports size, bitrate and PSNR |
 | [web-stack-selector](skills/web-stack-selector/SKILL.md) | Pick the frontend library, CSS layer, map/2D/3D engine and matching MCP for a page: routes by stack (vanilla/server-rendered, React, Vue/Nuxt, PHP Laravel/Symfony) then by scene, checks CSP / no-build / low-power / license constraints; dated star snapshots in `references/` |
@@ -77,5 +77,5 @@ Codex / Gemini: one folder per skill under `skills/`, each containing a
 
 MIT, per the root [`LICENSE`](LICENSE),
 except [`skills/matt-code-review/`](skills/matt-code-review/):
-it is a verbatim snapshot of `mattpocock/skills` and stays under its own
+it is a lightly edited snapshot of `mattpocock/skills` and stays under its own
 [`LICENSE`](skills/matt-code-review/LICENSE) (MIT, Copyright Matt Pocock).

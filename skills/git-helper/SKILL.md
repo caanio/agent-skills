@@ -142,14 +142,11 @@ read every added line for them by eye and say so in the "Rules applied" line.
   Test: every claim in the message must be locatable in `git diff --staged`.
 - Write the commit message per the Commit Message Quality Standard below, in the language decided in Step 3.
 - Every rule in this step binds the Auto path too, except showing the draft and stopping for the ok.
-- **Body hard cap: ≤4 lines / ≤3 sentences.** If the why-only draft still exceeds this,
-  that's a signal the body is drifting into what/how — cut to the single sentence that
-  answers "why does this change exist", not "reword it shorter".
-- **Escape valve**: if genuinely ≥2 independent why-reasons exist (not restatements of
-  one reason, and not a what/how detail like "where the change was made"), exceeding the
-  cap is allowed — but the draft must say so explicitly in the "Rules applied" line, e.g.
-  `body 6 lines (2 independent why-reasons, see below)`. Silent overage without this flag
-  is a rule violation, not a judgement call.
+- **Body length follows the why.** A body that keeps growing has usually drifted
+  into what/how — cut back to the sentences that answer "why does this change
+  exist", not "reword it shorter". Each genuinely independent why-reason (not a
+  restatement of another, and not a what/how detail like "where the change was
+  made") gets its own sentences.
 - **Show the exact commands, byte for byte.** The draft is the literal block Step 5
   will run, never the message alone: the full `git commit` heredoc (required for
   multi-line messages) with every trailer your environment appends (e.g. a
@@ -190,8 +187,8 @@ Step 6 follows every successful commit, push requested or not.
 
 Reviews that read only committed diffs — a diff-based code review, a security
 review over `git diff <from>..HEAD` — run here, after the commit and before any push.
-⚠️ With commit and push approved as one block, this moment never existed:
-reviews skipped earlier because nothing was committed yet never ran before the push.
+This is why the push always gets its own draft (Step 7): approved together with
+the commit, it would leave no point at which these reviews can run.
 
 - Each round runs every such review the project uses over `<from>..HEAD`.
   The first round's `<from>` is the Step 0 base, never the upstream (`origin/HEAD`):
@@ -213,6 +210,7 @@ reviews skipped earlier because nothing was committed yet never ran before the p
   a tool call is kept verbatim in the session record, so a later check of that record finds the skip;
   reply text between tool calls may be stored rewritten.
 - The project uses no committed-diff review → say so in one line and go to Step 7.
+  A review your instructions require is in use here: its skip takes the echo above.
 
 ### 7. Push
 

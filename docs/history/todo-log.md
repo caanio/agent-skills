@@ -1969,3 +1969,23 @@ Entries run oldest first; new entries are appended at the end.
       `$pipestatus` (`0 0 0 1` each) and `--numstat`, committed with no
       draft or ok, then replied with `git log -1` and the "Rules
       applied" line. Closes the short-lived Open 12 that commit added.
+- [x] Prompt-audit cleanup, own skills (2026-11-03). An audit of the
+      always-loaded instructions against the current target model flagged
+      wording written for older models. Applied seven rewrites:
+      `git-helper` drops the numeric body cap and its escape valve for
+      "body length follows the why", restates Step 6's why-a-separate-push
+      reason in the present tense, and says a review the agent's
+      instructions require takes the skip echo; `completion-gate` step 6
+      drops the old-version narrative from its ⚠️; `python-coding-standards`
+      drops the `^=` syntax aside; `haos-addon-deploy` drops two
+      incident-cost parentheticals and keeps the misdiagnosis trap as a
+      present-tense line. ⚠️ markers stay; their sessions are logged above.
+      `matt-code-review`'s two sub-agent briefs end in "Report findings
+      only; …" instead of "Under 400 words.", since a word cap truncates
+      findings on a large diff; the snapshot comment now lists this beside
+      the rename as a change every refresh re-applies. Maintainer call.
+      `completion-gate`'s `/security-review` example moves from "the
+      pending diff after every code change" to the committed diff in the
+      review loop, matching `git-helper` Step 6. Maintainer call.
+      Verified by a fresh-context read-back of the first seven (6/6 PASS)
+      and a grep of `skills/` and README for the removed phrases (0 hits).
