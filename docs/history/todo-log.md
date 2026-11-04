@@ -2050,3 +2050,10 @@ Entries run oldest first; new entries are appended at the end.
       tree hash must be fixed and the preview rebuilt before Step 4.
       Re-run with each command in its own shell started in the
       subdirectory, through a real commit: tree hashes matched.
+      Round 4: a bare `:/` stages the whole repo (`git add -n -- :/`
+      listed every change), so it joined the Forbidden list; a staged
+      rename needs `:/old :/new`, and the block first unstages the
+      commit's own staged paths, since a staged rename's old path is
+      already gone from the real index; C-quoted porcelain paths come
+      raw from `--porcelain -z`. Tested a rename, a path with a space
+      and a non-ASCII path through a real commit: tree hashes matched.

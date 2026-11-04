@@ -10,10 +10,13 @@ description: "Commit workflow: preview the commit, scan it for secrets and PII, 
 1. **[NEVER VIOLATE] Stage only what the user approved**:
    - The real index changes only when Step 5 runs the Step 4 block the user approved (on the Auto path, the block Auto path condition 2 covers).
      Before that, the only index you write is Step 2's preview index.
-   - **Forbidden**: `git add .`, `git add -A`, `git add --all` — always name specific paths explicitly.
+   - **Forbidden**: `git add .`, `git add -A`, `git add --all`, a bare `:/` (it means the whole repo) — always name specific paths explicitly.
    - Stage every path of the commit in ONE `git add -- :/<path1> :/<path2> …` call.
    - Write every path as `:/<path>`: Step 1's paths are top-level-relative, and `:/` makes git read them that way
-     whatever directory the Bash call starts in.
+     whatever directory the Bash call starts in. Every `:/` carries a non-empty path.
+     A rename line `R  old -> new` gives two paths, `:/old` and `:/new`.
+     A path porcelain prints in double quotes (spaces, quotes, non-ASCII) is C-escaped: take the raw path
+     from `git status --porcelain -z` instead and single-quote the whole pathspec, as in `':/sub/a b.txt'`.
    - This rule and Core Rule 2 bind the real index; Step 2's `GIT_INDEX_FILE` commands write only the preview.
 
 2. **Separate analysis from execution**:
@@ -159,7 +162,8 @@ read every added line for them by eye and say so in the "Rules applied" line.
   made") gets its own sentences.
 - **Show the exact commands, byte for byte.** The draft is the literal block Step 5
   will run, in order, never the message alone:
-  1. `git restore --staged -- :/<path…>` for the paths Step 1 marked for unstaging
+  1. `git restore --staged -- :/<path…>` for every path already staged: the ones Step 1 marked for unstaging
+     and this commit's own, so the real index starts from HEAD like the preview (a staged rename's old path is gone from it)
      (none → leave it out; no commits yet → `git rm --cached -q -- :/<path…>`);
   2. one `git add -- :/<path…>` with the Step 1 paths;
   3. `git write-tree`, which Step 5 compares to Step 2's tree hash;
