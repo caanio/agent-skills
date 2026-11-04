@@ -11,7 +11,8 @@ description: "Commit workflow: preview the commit, scan it for secrets and PII, 
    - The real index changes only when Step 5 runs the Step 4 block the user approved (on the Auto path, the block Auto path condition 2 covers).
      Before that, the only index you write is Step 2's preview index.
    - **Forbidden**: `git add .`, `git add -A`, `git add --all` — always name specific paths explicitly.
-   - Stage every path of the commit in ONE `git add <path1> <path2> …` call.
+   - Stage every path of the commit in ONE `git add -- <path1> <path2> …` call.
+   - This rule and Core Rule 2 bind the real index; Step 2's `GIT_INDEX_FILE` commands write only the preview.
 
 2. **Separate analysis from execution**:
    - Analysis (Steps 0–4): use only commands that leave the real index and working tree untouched —
@@ -55,7 +56,7 @@ It covers a run's first commit; a fix commit inside Step 6 takes the manual path
    a secret-looking name (`.env*`, `*.pem`, `*.p12`, `*.pfx`, `*.key`, `*.ppk`, `*.jks`, `*.kdbx`, `*.gpg`,
    `.netrc`, `.npmrc`, `.pypirc`, `.pgpass`, `id_*`, `*_ed25519`, `*credential*`).
    These paths are the commit's paths without asking; list them.
-3. Step 2: each scan is clean. Run each pipeline and its status echo in one Bash call
+3. Step 2: the preview call printed a tree hash and no `fatal:` line, and each scan is clean. Run each pipeline and its status echo in one Bash call
    (`; echo "status: $pipestatus"` in zsh, `; echo "status: ${PIPESTATUS[*]}"` in bash).
    Clean means no output, the last `grep` exits 1, and every earlier stage exits 0 (a `grep` may also exit 1).
    Any other status, at any stage, or a blank status, is a failed scan. The eye-read also finds nothing,
@@ -95,7 +96,7 @@ The scans then read what the commit will hold, while the real index, partial sta
 Run these in one Bash call and keep the printed tree hash for Step 5:
 
 ```bash
-P="$(git rev-parse --git-path git-helper-preview.index)"
+P="$(git rev-parse --path-format=absolute --git-path git-helper-preview.index)"
 GIT_INDEX_FILE="$P" git read-tree HEAD   # no commits yet: git read-tree --empty
 GIT_INDEX_FILE="$P" git add -- <path…>
 GIT_INDEX_FILE="$P" git diff --cached --numstat
@@ -103,6 +104,8 @@ GIT_INDEX_FILE="$P" git write-tree
 ```
 
 Shell variables do not survive between Bash calls, so each later preview command sets `P` the same way.
+The absolute path keeps a run from a subdirectory pointing at a missing index, which reads as an empty commit.
+The next run's `read-tree` overwrites the preview file, so nothing needs cleaning.
 Run both scans below and show the actual output in the response, even when clean.
 
 **A hit from either scan is ruled on in the Step 4 reply**: the raw scan output in the body, each hit with its line.
@@ -114,13 +117,13 @@ the dialog covers the text above it, so the user would rule on hits they never s
 **2a. Secrets** — credentials that grant access, in added lines only:
 
 ```bash
-P="$(git rev-parse --git-path git-helper-preview.index)"; GIT_INDEX_FILE="$P" git diff --cached | grep -E '^\+' | grep -vE '^\+\+\+' | grep -iE "password|secret|api.?key|token|private.?key|access.?key|bearer|basic [A-Za-z0-9+/=]{8,}|://[^/ :@]+:[^/ @]+@|AKIA[0-9A-Z]{16}|gh[pousr]_[A-Za-z0-9]{20,}|github_pat_|sk-[A-Za-z0-9_-]{16,}|xox[abpr]-|AIza[0-9A-Za-z_-]{30,}|eyJ[A-Za-z0-9_-]{10,}\.|[0-9]{8,10}:AA[A-Za-z0-9_-]{30,}"
+P="$(git rev-parse --path-format=absolute --git-path git-helper-preview.index)"; GIT_INDEX_FILE="$P" git diff --cached | grep -E '^\+' | grep -vE '^\+\+\+' | grep -iE "password|secret|api.?key|token|private.?key|access.?key|bearer|basic [A-Za-z0-9+/=]{8,}|://[^/ :@]+:[^/ @]+@|AKIA[0-9A-Z]{16}|gh[pousr]_[A-Za-z0-9]{20,}|github_pat_|sk-[A-Za-z0-9_-]{16,}|xox[abpr]-|AIza[0-9A-Za-z_-]{30,}|eyJ[A-Za-z0-9_-]{10,}\.|[0-9]{8,10}:AA[A-Za-z0-9_-]{30,}"
 ```
 
 **2b. Personal data (PII)** — values that identify a person or a place, and labels that reveal a placeholder's origin. Added lines only; decimal-degree coordinates (4+ decimals) plus the words that tag a value as real, home or invented. Lines quoting this scan command are skipped, so editing this rule does not trip it:
 
 ```bash
-P="$(git rev-parse --git-path git-helper-preview.index)"; GIT_INDEX_FILE="$P" git diff --cached | grep -E '^\+' | grep -vE '^\+\+\+|grep -iE' | grep -iE '\b[0-9]{1,3}\.[0-9]{4,}\b|real (home|work|address|coordinate|name)|fictional|真實|虛構|住家|家附近'
+P="$(git rev-parse --path-format=absolute --git-path git-helper-preview.index)"; GIT_INDEX_FILE="$P" git diff --cached | grep -E '^\+' | grep -vE '^\+\+\+|grep -iE' | grep -iE '\b[0-9]{1,3}\.[0-9]{4,}\b|real (home|work|address|coordinate|name)|fictional|真實|虛構|住家|家附近'
 ```
 
 A PII hit is resolved once the user confirms it is not personal
@@ -160,7 +163,7 @@ read every added line for them by eye and say so in the "Rules applied" line.
      trailer your environment appends (e.g. a `Co-Authored-By:` line).
   What the user approves is exactly what lands in the log.
   The push gets its own block in Step 7, after Step 6's review loop.
-- **The reply is the run's one stop**: Step 0's fetch result, Step 1's list, both scans'
+- **The reply is the run's one stop**, besides Step 0's offer when the branch is behind: Step 0's fetch result, Step 1's list, both scans'
   commands and raw output with any hits numbered, Step 3's verdict, then the block,
   and a last line naming the replies.
 
@@ -205,7 +208,8 @@ On the Auto path, run the Step 4 block now. Otherwise, only after the user answe
 with "commit", "ok" or equivalent, run the block unchanged via the **Bash tool**, one command per call, in order.
 
 `git write-tree` printing anything other than Step 2's tree hash means the files changed after the preview:
-stop before the commit, show both hashes, and start again at Step 1, which now lists those paths as staged.
+stop before the commit, show both hashes, say the block's staging commands already ran,
+and start again at Step 1 on the manual path, which now lists those paths as staged.
 
 One ok covers every command in the block. A command that would differ from the
 block in any character — a reworded line, an added trailer — needs a new draft

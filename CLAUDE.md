@@ -62,7 +62,7 @@ See `docs/agents/triage-labels.md`.
 Single-context: `CONTEXT.md` at the root, ADRs under `docs/adr/`.
 See `docs/agents/domain.md`.
 
-## Open items (last updated 2026-11-02)
+## Open items (last updated 2026-11-04)
 
 The only live list. The per-change log — what each change did, why, and how
 it was verified — is `docs/history/todo-log.md`; read it before reworking a
@@ -81,7 +81,7 @@ Settled — reopen only on new evidence:
    2026-08-19 "docs baseline missing" item).
 3. The PII read-back question sits only in `completion-gate`'s Docs row;
    placeholder swaps in code files are covered by `git-helper` step 2b
-   scanning every staged file. Maintainer call, log: 2026-09-26.
+   scanning every file in the commit's preview. Maintainer call, log: 2026-09-26.
 4. The old-Mac wheel-pin pitfall lives in `python-coding-standards`
    rule 6 as a ⚠️ paragraph; too rare for its own skill, too specific for
    the global rules file. Log: 2026-09-26.
@@ -108,7 +108,7 @@ Settled — reopen only on new evidence:
     in a set-apart format and run only on its own ok. Maintainer
     call, log: 2026-09-27, 2026-10-08 to 2026-10-10, 2026-10-20.
     The block opens with the staging commands, and the Step 4 reply is
-    the manual path's one stop: the scans read a preview index first, so
+    the manual path's one stop besides Step 0's behind-remote offer: the scans read a preview index first, so
     the path list, scan hits and draft share one ok. Log: 2026-11-04.
     The Auto path is the one exception, and it covers the commit alone:
     while its four conditions hold, Step 5 commits with no draft or ok;
