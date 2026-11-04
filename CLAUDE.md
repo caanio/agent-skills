@@ -107,6 +107,9 @@ Settled — reopen only on new evidence:
     or not, is a block of its own (Step 7), drafted once the loop closes
     in a set-apart format and run only on its own ok. Maintainer
     call, log: 2026-09-27, 2026-10-08 to 2026-10-10, 2026-10-20.
+    The block opens with the staging commands, and the Step 4 reply is
+    the manual path's one stop: the scans read a preview index first, so
+    the path list, scan hits and draft share one ok. Log: 2026-11-04.
     The Auto path is the one exception, and it covers the commit alone:
     while its four conditions hold, Step 5 commits with no draft or ok;
     the push always keeps its draft and ok, since two adversarial rounds

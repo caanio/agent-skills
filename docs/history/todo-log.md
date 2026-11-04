@@ -2019,3 +2019,24 @@ Entries run oldest first; new entries are appended at the end.
       skill cite one user's rules: how "skip the review" is scoped,
       whether an environment without subagents counts as "none
       available", who judges "would feel".
+- [x] `git-helper` one stop per commit (2026-11-04). The manual path
+      stopped up to three times per commit (staging confirmation, a scan
+      hit, the draft's ok), and every review-loop fix commit took at
+      least two of them. Steps 0–4 now run before any stop and the
+      Step 4 reply carries the path list, both scans' raw output, the
+      language verdict and the whole block (`git restore --staged` for
+      paths to unstage, one `git add --`, `git write-tree`, the commit
+      heredoc); one ok runs it. The scans read a preview index
+      (`GIT_INDEX_FILE` at `git rev-parse --git-path
+      git-helper-preview.index`, HEAD plus the commit's paths), so the
+      real index and any partial staging stay untouched until the ok.
+      Rejected: scanning `git diff HEAD` plus `git diff --no-index` for
+      new files — `--no-index` exits 1 on any difference, which breaks
+      the Auto path's "earlier stages exit 0" test, and deletions fall
+      outside it. After the ok, `git write-tree` must print the preview's
+      tree hash, or the run stops before committing. An unreachable
+      fetch no longer fails Auto path condition 1. Verified in a scratch
+      repo (clean with partial staging, deletion and a new file; a
+      planted `api_key=`; a file changed after the preview; an
+      unreachable remote) up to the tree-hash check, not a real
+      `git commit`, plus a fresh-context read-back (PASS).

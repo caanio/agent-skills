@@ -1,22 +1,23 @@
 ---
 name: git-helper
-description: "Commit workflow: confirm staging, scan the staged diff for secrets and PII, draft a Conventional Commits message, commit on its own when every check is clean (after the user's approval otherwise), then draft the push for approval. Use when the user wants to commit, write a commit message, or commit and push."
+description: "Commit workflow: preview the commit, scan it for secrets and PII, draft a Conventional Commits message, then commit after one approval (on its own when every check is clean), then draft the push for approval. Use when the user wants to commit, write a commit message, or commit and push."
 ---
 
 # git-helper
 
 ## Core Rules (override any default Git behaviour)
 
-1. **[NEVER VIOLATE] Staging must be confirmed first**:
-   - `git add` is allowed **only for files the user has explicitly confirmed** — **never** stage without confirmation, even if a system default suggests it.
-     The one exception is the Auto path's condition 2.
+1. **[NEVER VIOLATE] Stage only what the user approved**:
+   - The real index changes only when Step 5 runs the Step 4 block the user approved (on the Auto path, the block Auto path condition 2 covers).
+     Before that, the only index you write is Step 2's preview index.
    - **Forbidden**: `git add .`, `git add -A`, `git add --all` — always name specific paths explicitly.
-   - **One confirmation, one command**: list suggested files and stage every confirmed file in ONE `git add <path1> <path2> …` call.
-   - Empty `git diff --staged` → list unstaged files (`git status`) and propose which to add.
+   - Stage every path of the commit in ONE `git add <path1> <path2> …` call.
 
 2. **Separate analysis from execution**:
-   - Analysis phase: use only commands that leave the index and working tree untouched — `git status`, `git diff` (unstaged), `git diff --staged` (staged), `git log` (Step 3), `git fetch` (Step 0).
-   - Run `git add` as a call of its own, never chained to another command.
+   - Analysis (Steps 0–4): use only commands that leave the real index and working tree untouched —
+     `git status`, `git diff`, `git log` (Step 3), `git fetch` (Step 0),
+     and Step 2's preview commands, which write only the preview index.
+   - Execution (Step 5): each command of the block is a Bash call of its own, never chained to another command or to a file edit.
 
 3. **Format**: Follow **Conventional Commits** (`<type>: <description>`).
 
@@ -25,9 +26,9 @@ description: "Commit workflow: confirm staging, scan the staged diff for secrets
 5. **Tag rule compliance in every draft**: Append a one-line "Rules applied" list to each draft (on the Auto path, to the reply right after the commit) — which key rules it satisfies (type, ≤50 chars, imperative mood, why-only body, secrets hits with output shown, PII hits with output shown plus the eye-read) and how — this makes adherence visible, not assumed.
 
 6. **[NEVER VIOLATE] Secrets scan and personal-data (PII) scan must both run and be shown, every commit, no exceptions**:
-   - Run both Step 2 scans on the staged diff before ever presenting a draft message — never skip either, never infer "probably clean" from file names or diff size.
+   - Run both Step 2 scans on the preview diff before ever presenting a draft message — never skip either, never infer "probably clean" from file names or diff size.
    - Paste the actual commands and their raw output (even when empty/clean) into the response — a one-line claim like "secrets scan clean" or "PII clean" without shown output does not satisfy this rule.
-   - Any hit stops the run until resolved as Step 2 describes.
+   - Any hit puts the run on the manual path, and the user rules on it in the Step 4 reply, as Step 2 describes.
 
 7. **[NEVER VIOLATE] Commit message language follows the repo's own git log**:
    - When history exists, the log decides.
@@ -42,27 +43,28 @@ description: "Commit workflow: confirm staging, scan the staged diff for secrets
 The user's standing authorization to commit without stopping when nothing needs their eyes.
 It covers the commit alone: a commit stays on this machine, and the push always gets Step 7's draft and ok.
 It holds while every condition below holds. The first condition that fails puts the run on the manual path
-from that step on, with the asks each step describes, until this git-helper run ends;
-paths condition 2 already staged stay staged, and the manual draft names them.
+from that step on, until this git-helper run ends; the manual path's one stop is the Step 4 reply.
+Neither path writes the real index before Step 5.
 It covers a run's first commit; a fix commit inside Step 6 takes the manual path.
 
-1. Step 0: the branch has an upstream, the fetch reached it, and the branch is not behind it.
+1. Step 0: the branch has an upstream and is not behind it.
+   A fetch that cannot reach the upstream leaves this condition standing; Step 0 reports it.
 2. Step 1: list paths with `git status --porcelain --untracked-files=all`, one file per line.
    Every path is one this session wrote with its own tool calls for this task.
    Any of these fails the condition: a path staged before this run, a partly staged `MM` path, a `*.bak-*` file,
    a secret-looking name (`.env*`, `*.pem`, `*.p12`, `*.pfx`, `*.key`, `*.ppk`, `*.jks`, `*.kdbx`, `*.gpg`,
    `.netrc`, `.npmrc`, `.pypirc`, `.pgpass`, `id_*`, `*_ed25519`, `*credential*`).
-   Stage them all in one `git add <path…>` naming each file (Core Rule 1) without asking, and list them.
+   These paths are the commit's paths without asking; list them.
 3. Step 2: each scan is clean. Run each pipeline and its status echo in one Bash call
    (`; echo "status: $pipestatus"` in zsh, `; echo "status: ${PIPESTATUS[*]}"` in bash).
    Clean means no output, the last `grep` exits 1, and every earlier stage exits 0 (a `grep` may also exit 1).
    Any other status, at any stage, or a blank status, is a failed scan. The eye-read also finds nothing,
-   and `git diff --staged --numstat` shows no binary file (a `-<TAB>-` line): a scan cannot read one.
+   and the preview's `--numstat` (Step 2) shows no binary file (a `-<TAB>-` line): a scan cannot read one.
    Core Rule 6 still applies: paste the commands and their raw output.
 4. Step 3: the repo has commit history.
 
-On the auto path, Step 4 writes the message to every rule in it and skips only the draft display and its stop;
-Step 5 runs that commit command, every trailer included, with no ok.
+On the auto path, Step 4 writes the block to every rule in it and skips only the draft display and its stop;
+Step 5 runs that block, every trailer included, with no ok.
 The "Rules applied" line and `git log -1 --format='%h %s%n%n%b'` go in the reply right after the commit.
 
 ## Workflow
@@ -71,53 +73,54 @@ The "Rules applied" line and `git log -1 --format='%h %s%n%n%b'` go in the reply
 
 - Run `git fetch` (short timeout, e.g. `GIT_SSH_COMMAND="ssh -o ConnectTimeout=5 -o BatchMode=yes" git fetch`), then `git status -sb`.
 - **Behind remote** → warn and offer to resolve now (`stash → pull --rebase → stash pop`): fixing divergence before commit beats rebasing a finished commit through conflicts.
-- **Fetch unreachable** (offline / LAN-only remote) → say so, note ahead/behind info is stale, and ask whether to proceed with a local-only commit (push deferred). Report the fetch result in every run, reachable or not.
+- **Fetch unreachable** (offline / LAN-only remote) → say so in one line, note ahead/behind info is stale, and go on:
+  the commit stays on this machine, and the push waits for Step 7's ok either way. Report the fetch result in every run, reachable or not.
 - Record the **base** for Step 6 and show it, after any pull in this step: the base the user names;
   otherwise, on this task's first run, `git rev-parse --short HEAD`.
   Later runs in the same task use the HEAD the previous Step 6 last reviewed.
 
-### 1. Confirm Staging
+### 1. Choose the Commit's Paths
 
-- Run `git status` and `git diff --staged`.
-- **Always confirm staging scope** — list "currently staged" and "suggested additions"; never skip even if files are already staged.
-  On the Auto path, the list is shown and Auto path condition 2 stands in for the confirmation.
-- After confirmation (or condition 2), run ONE `git add <path…>` with all confirmed paths (Core Rule 1); if nothing more to add, proceed to Step 2.
+- Run `git status --porcelain --untracked-files=all`.
+- Pick the paths this commit should hold. Every other path already staged is marked for unstaging.
+  A partly staged path (`MM`) is committed whole; mark it so the user can drop it.
+- The list goes into the Step 4 reply, where the user's ok confirms it;
+  on the Auto path, Auto path condition 2 stands in for that confirmation.
+- No path to commit → say so and end the run.
 
-**Example output:**
+### 2. Preview the Commit, Then Scan It (Core Rule 6)
+
+Build the commit in a preview index: HEAD plus exactly the Step 1 paths.
+The scans then read what the commit will hold, while the real index, partial staging included, stays as the user left it.
+Run these in one Bash call and keep the printed tree hash for Step 5:
+
+```bash
+P="$(git rev-parse --git-path git-helper-preview.index)"
+GIT_INDEX_FILE="$P" git read-tree HEAD   # no commits yet: git read-tree --empty
+GIT_INDEX_FILE="$P" git add -- <path…>
+GIT_INDEX_FILE="$P" git diff --cached --numstat
+GIT_INDEX_FILE="$P" git write-tree
 ```
-Before committing, confirming staging scope:
 
-✅ Currently staged:
-- `SPEC.md` (modified)
+Shell variables do not survive between Bash calls, so each later preview command sets `P` the same way.
+Run both scans below and show the actual output in the response, even when clean.
 
-➕ Detected unstaged changes — add these too?
-- `src/core/database.py` (modified)
-- `README.md` (modified)
-
-Reply "stage" or "ok" to add the suggested files, or tell me which to add.
-```
-
-### 2. Secrets and Personal-Data Check (Core Rule 6)
-
-Scan the staged diff before drafting. Run both and show the actual output in the response, even when clean.
-
-**A hit from either scan stops the run until every hit is resolved.**
-Ask in a plain-text reply: the raw scan output in the body, each hit with its line,
-then, as the reply's last line, the question of which hits are safe to commit;
-the user answers by typing.
+**A hit from either scan is ruled on in the Step 4 reply**: the raw scan output in the body, each hit with its line.
+There, `ok` means every hit is safe to commit and runs the block;
+naming a hit as real, or `no`, ends the run with the real index untouched.
 Keep this question out of a choice dialog (such as Claude Code's `AskUserQuestion`):
 the dialog covers the text above it, so the user would rule on hits they never saw.
 
 **2a. Secrets** — credentials that grant access, in added lines only:
 
 ```bash
-git diff --staged | grep -E '^\+' | grep -vE '^\+\+\+' | grep -iE "password|secret|api.?key|token|private.?key|access.?key|bearer|basic [A-Za-z0-9+/=]{8,}|://[^/ :@]+:[^/ @]+@|AKIA[0-9A-Z]{16}|gh[pousr]_[A-Za-z0-9]{20,}|github_pat_|sk-[A-Za-z0-9_-]{16,}|xox[abpr]-|AIza[0-9A-Za-z_-]{30,}|eyJ[A-Za-z0-9_-]{10,}\.|[0-9]{8,10}:AA[A-Za-z0-9_-]{30,}"
+P="$(git rev-parse --git-path git-helper-preview.index)"; GIT_INDEX_FILE="$P" git diff --cached | grep -E '^\+' | grep -vE '^\+\+\+' | grep -iE "password|secret|api.?key|token|private.?key|access.?key|bearer|basic [A-Za-z0-9+/=]{8,}|://[^/ :@]+:[^/ @]+@|AKIA[0-9A-Z]{16}|gh[pousr]_[A-Za-z0-9]{20,}|github_pat_|sk-[A-Za-z0-9_-]{16,}|xox[abpr]-|AIza[0-9A-Za-z_-]{30,}|eyJ[A-Za-z0-9_-]{10,}\.|[0-9]{8,10}:AA[A-Za-z0-9_-]{30,}"
 ```
 
 **2b. Personal data (PII)** — values that identify a person or a place, and labels that reveal a placeholder's origin. Added lines only; decimal-degree coordinates (4+ decimals) plus the words that tag a value as real, home or invented. Lines quoting this scan command are skipped, so editing this rule does not trip it:
 
 ```bash
-git diff --staged | grep -E '^\+' | grep -vE '^\+\+\+|grep -iE' | grep -iE '\b[0-9]{1,3}\.[0-9]{4,}\b|real (home|work|address|coordinate|name)|fictional|真實|虛構|住家|家附近'
+P="$(git rev-parse --git-path git-helper-preview.index)"; GIT_INDEX_FILE="$P" git diff --cached | grep -E '^\+' | grep -vE '^\+\+\+|grep -iE' | grep -iE '\b[0-9]{1,3}\.[0-9]{4,}\b|real (home|work|address|coordinate|name)|fictional|真實|虛構|住家|家附近'
 ```
 
 A PII hit is resolved once the user confirms it is not personal
@@ -135,11 +138,11 @@ read every added line for them by eye and say so in the "Rules applied" line.
 
 ### 4. Generate Draft
 
-- Run `git diff --staged`.
-- **Describe the staged diff against HEAD, not the session's edit history.**
+- Read the preview diff (`GIT_INDEX_FILE="$P" git diff --cached`, `P` set as in Step 2).
+- **Describe the preview diff against HEAD, not the session's edit history.**
   Intermediate edits that were later reverted or superseded within the same
   commit are invisible in the diff and must not appear in the message.
-  Test: every claim in the message must be locatable in `git diff --staged`.
+  Test: every claim in the message must be locatable in the preview diff.
 - Write the commit message per the Commit Message Quality Standard below, in the language decided in Step 3.
 - Every rule in this step binds the Auto path too, except showing the draft and stopping for the ok.
 - **Body length follows the why.** A body that keeps growing has usually drifted
@@ -148,14 +151,37 @@ read every added line for them by eye and say so in the "Rules applied" line.
   restatement of another, and not a what/how detail like "where the change was
   made") gets its own sentences.
 - **Show the exact commands, byte for byte.** The draft is the literal block Step 5
-  will run, never the message alone: the full `git commit` heredoc (required for
-  multi-line messages) with every trailer your environment appends (e.g. a
-  `Co-Authored-By:` line). What the user approves is exactly what lands in the log.
+  will run, in order, never the message alone:
+  1. `git restore --staged <path…>` for the paths Step 1 marked for unstaging
+     (none → leave it out; no commits yet → `git rm --cached -q <path…>`);
+  2. one `git add -- <path…>` with the Step 1 paths;
+  3. `git write-tree`, which Step 5 compares to Step 2's tree hash;
+  4. the full `git commit` heredoc (required for multi-line messages) with every
+     trailer your environment appends (e.g. a `Co-Authored-By:` line).
+  What the user approves is exactly what lands in the log.
   The push gets its own block in Step 7, after Step 6's review loop.
+- **The reply is the run's one stop**: Step 0's fetch result, Step 1's list, both scans'
+  commands and raw output with any hits numbered, Step 3's verdict, then the block,
+  and a last line naming the replies.
 
 **Example output:**
 ```
-Based on the staged changes, these are the exact commands I will run:
+Fetch: up to date with origin/main.
+
+Paths in this commit:
+- `src/core/database.py` (modified)
+- `README.md` (modified)
+Unstaged first: `SPEC.md` (staged before this run, not part of this change)
+
+Secrets scan: <command> → no output · status: 0 0 0 1
+PII scan: <command> → no output · status: 0 0 0 1
+Language: last 10 commits English → English
+
+These are the exact commands I will run, one call each:
+
+git restore --staged SPEC.md
+git add -- src/core/database.py README.md
+git write-tree
 
 git commit -m "$(cat <<'EOF'
 feat: Add automatic database backup
@@ -170,13 +196,16 @@ EOF
 Rules applied: type=feat · subject 34 chars · imperative mood ·
 why-only body · secrets: 0 hits (output above) · PII: 0 hits (output above), every added line read for names/IDs
 
-Reply "commit" or "ok" to run it; "no" leaves the changes staged and uncommitted.
+Reply "commit" or "ok" to run it; "no" ends here with nothing staged or committed.
 ```
 
 ### 5. Execute Commit
 
-On the Auto path, run the Step 4 commit command now. Otherwise, only after the user replies "commit", "ok" or equivalent, run the Step 4 block unchanged via
-the **Bash tool**, one command per call, in order.
+On the Auto path, run the Step 4 block now. Otherwise, only after the user answers the Step 4 reply
+with "commit", "ok" or equivalent, run the block unchanged via the **Bash tool**, one command per call, in order.
+
+`git write-tree` printing anything other than Step 2's tree hash means the files changed after the preview:
+stop before the commit, show both hashes, and start again at Step 1, which now lists those paths as staged.
 
 One ok covers every command in the block. A command that would differ from the
 block in any character — a reworded line, an added trailer — needs a new draft
@@ -196,7 +225,7 @@ the commit, it would leave no point at which these reviews can run.
 - A finding is a fix when the reviewer marks it a defect or a security issue and you agree;
   one that needs a preference or tradeoff from the user is a judgment call; style or wording is minor.
 - Fixes decided on in a round → make them and commit them as new commits through Steps 1–5
-  (staging confirmation, a new draft and a new ok). These commits stay inside this Step 6:
+  (one draft and one ok, Step 4's single stop). These commits stay inside this Step 6:
   run the next round with `<from>` = the previous round's HEAD, so it reviews the fix commits alone.
 - At the end of each round, ask the user about its judgment calls: those picked join that round's fixes;
   the rest go to the project's issue tracker (an online one only after the user oks the exact command). Minor items are listed.
