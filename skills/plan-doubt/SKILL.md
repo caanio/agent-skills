@@ -12,7 +12,7 @@ memory of how the plan was built tries to break it. One review per plan, up to 3
 
 Run when the plan hits **A**, **B** or **C** in the description. Nothing else triggers it.
 A applies on any machine, a personal laptop included; B and C apply to production as defined below,
-a personal laptop or home device included when its loss or lockout would be felt.
+and a personal laptop or home device can qualify.
 
 - **Data** covers every file or row: gitignored files (`.env`, uploads, SQLite), logs, database rows.
   Data that cannot be recreated is data that git history, a seed script, a package install or a build cannot bring back.
