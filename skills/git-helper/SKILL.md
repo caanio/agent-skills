@@ -11,7 +11,9 @@ description: "Commit workflow: preview the commit, scan it for secrets and PII, 
    - The real index changes only when Step 5 runs the Step 4 block the user approved (on the Auto path, the block Auto path condition 2 covers).
      Before that, the only index you write is Step 2's preview index.
    - **Forbidden**: `git add .`, `git add -A`, `git add --all` — always name specific paths explicitly.
-   - Stage every path of the commit in ONE `git add -- <path1> <path2> …` call.
+   - Stage every path of the commit in ONE `git add -- :/<path1> :/<path2> …` call.
+   - Write every path as `:/<path>`: Step 1's paths are top-level-relative, and `:/` makes git read them that way
+     whatever directory the Bash call starts in.
    - This rule and Core Rule 2 bind the real index; Step 2's `GIT_INDEX_FILE` commands write only the preview.
 
 2. **Separate analysis from execution**:
@@ -44,7 +46,7 @@ description: "Commit workflow: preview the commit, scan it for secrets and PII, 
 The user's standing authorization to commit without stopping when nothing needs their eyes.
 It covers the commit alone: a commit stays on this machine, and the push always gets Step 7's draft and ok.
 It holds while every condition below holds. The first condition that fails puts the run on the manual path
-from that step on, until this git-helper run ends; the manual path's one stop is the Step 4 reply (Step 4 names the exception).
+from that step on, until this git-helper run ends; the manual path's one stop is the Step 4 reply (besides Step 0's behind-remote offer).
 Neither path writes the real index before Step 5.
 It covers a run's first commit; a fix commit inside Step 6 takes the manual path.
 
@@ -76,8 +78,6 @@ The "Rules applied" line and `git log -1 --format='%h %s%n%n%b'` go in the reply
 - **Behind remote** → warn and offer to resolve now (`stash → pull --rebase → stash pop`): fixing divergence before commit beats rebasing a finished commit through conflicts.
 - **Fetch unreachable** (offline / LAN-only remote) → say so in one line, note ahead/behind info is stale, and go on:
   the commit stays on this machine, and the push waits for Step 7's ok either way. Report the fetch result in every run, reachable or not.
-- Move to the top level first (`cd "$(git rev-parse --show-toplevel)"`): Step 1 lists paths from there,
-  and every later `git add` resolves them against the current directory.
 - Record the **base** for Step 6 and show it, after any pull in this step: the base the user names;
   otherwise, on this task's first run, `git rev-parse --short HEAD`.
   Later runs in the same task use the HEAD the previous Step 6 last reviewed.
@@ -97,12 +97,12 @@ Build the commit in a preview index: HEAD plus exactly the Step 1 paths.
 The scans then read what the commit will hold, while the real index, partial staging included, stays as the user left it.
 Run these in one Bash call and keep the printed tree hash for Step 5.
 A `fatal:` line, or no tree hash, means the preview is wrong and its scans read nothing:
-fix the cause and rebuild it before Step 4, on either path.
+fix the cause and rebuild it before Step 4, on either path; a failed preview never drops the run to the manual path on its own.
 
 ```bash
 P="$(git rev-parse --path-format=absolute --git-path git-helper-preview.index)"
 GIT_INDEX_FILE="$P" git read-tree HEAD   # no commits yet: git read-tree --empty
-GIT_INDEX_FILE="$P" git add -- <path…>
+GIT_INDEX_FILE="$P" git add -- :/<path…>
 GIT_INDEX_FILE="$P" git diff --cached --numstat
 GIT_INDEX_FILE="$P" git write-tree
 ```
@@ -159,9 +159,9 @@ read every added line for them by eye and say so in the "Rules applied" line.
   made") gets its own sentences.
 - **Show the exact commands, byte for byte.** The draft is the literal block Step 5
   will run, in order, never the message alone:
-  1. `git restore --staged <path…>` for the paths Step 1 marked for unstaging
-     (none → leave it out; no commits yet → `git rm --cached -q <path…>`);
-  2. one `git add -- <path…>` with the Step 1 paths;
+  1. `git restore --staged -- :/<path…>` for the paths Step 1 marked for unstaging
+     (none → leave it out; no commits yet → `git rm --cached -q -- :/<path…>`);
+  2. one `git add -- :/<path…>` with the Step 1 paths;
   3. `git write-tree`, which Step 5 compares to Step 2's tree hash;
   4. the full `git commit` heredoc (required for multi-line messages) with every
      trailer your environment appends (e.g. a `Co-Authored-By:` line).
@@ -186,8 +186,8 @@ Language: last 10 commits English → English
 
 These are the exact commands I will run, one call each:
 
-git restore --staged SPEC.md
-git add -- src/core/database.py README.md
+git restore --staged -- :/SPEC.md
+git add -- :/src/core/database.py :/README.md
 git write-tree
 
 git commit -m "$(cat <<'EOF'

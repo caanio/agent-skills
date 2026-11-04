@@ -2043,8 +2043,10 @@ Entries run oldest first; new entries are appended at the end.
       Review round 1 and 2 found the preview blind from a subdirectory:
       `--git-path` printed a cwd-relative index path and porcelain paths
       are top-level-relative while `git add` reads them from the cwd,
-      so the preview stayed empty and both scans came back clean. Step 0
-      now moves to the top level, the index path is absolute, and a
-      `fatal:` or missing tree hash stops either path before Step 4.
-      Re-run from a subdirectory through a real commit: tree hashes
-      matched and the commit held only the chosen path.
+      so the preview stayed empty and both scans came back clean. The
+      index path is now absolute, every staging command writes paths as
+      `:/<path>` (round 3 dropped a Step 0 `cd`: the Bash tool does not
+      always keep the cwd between calls), and a `fatal:` or missing
+      tree hash must be fixed and the preview rebuilt before Step 4.
+      Re-run with each command in its own shell started in the
+      subdirectory, through a real commit: tree hashes matched.
