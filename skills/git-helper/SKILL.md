@@ -44,7 +44,7 @@ description: "Commit workflow: preview the commit, scan it for secrets and PII, 
 The user's standing authorization to commit without stopping when nothing needs their eyes.
 It covers the commit alone: a commit stays on this machine, and the push always gets Step 7's draft and ok.
 It holds while every condition below holds. The first condition that fails puts the run on the manual path
-from that step on, until this git-helper run ends; the manual path's one stop is the Step 4 reply.
+from that step on, until this git-helper run ends; the manual path's one stop is the Step 4 reply (Step 4 names the exception).
 Neither path writes the real index before Step 5.
 It covers a run's first commit; a fix commit inside Step 6 takes the manual path.
 
@@ -56,7 +56,7 @@ It covers a run's first commit; a fix commit inside Step 6 takes the manual path
    a secret-looking name (`.env*`, `*.pem`, `*.p12`, `*.pfx`, `*.key`, `*.ppk`, `*.jks`, `*.kdbx`, `*.gpg`,
    `.netrc`, `.npmrc`, `.pypirc`, `.pgpass`, `id_*`, `*_ed25519`, `*credential*`).
    These paths are the commit's paths without asking; list them.
-3. Step 2: the preview call printed a tree hash and no `fatal:` line, and each scan is clean. Run each pipeline and its status echo in one Bash call
+3. Step 2: each scan is clean. Run each pipeline and its status echo in one Bash call
    (`; echo "status: $pipestatus"` in zsh, `; echo "status: ${PIPESTATUS[*]}"` in bash).
    Clean means no output, the last `grep` exits 1, and every earlier stage exits 0 (a `grep` may also exit 1).
    Any other status, at any stage, or a blank status, is a failed scan. The eye-read also finds nothing,
@@ -76,6 +76,8 @@ The "Rules applied" line and `git log -1 --format='%h %s%n%n%b'` go in the reply
 - **Behind remote** → warn and offer to resolve now (`stash → pull --rebase → stash pop`): fixing divergence before commit beats rebasing a finished commit through conflicts.
 - **Fetch unreachable** (offline / LAN-only remote) → say so in one line, note ahead/behind info is stale, and go on:
   the commit stays on this machine, and the push waits for Step 7's ok either way. Report the fetch result in every run, reachable or not.
+- Move to the top level first (`cd "$(git rev-parse --show-toplevel)"`): Step 1 lists paths from there,
+  and every later `git add` resolves them against the current directory.
 - Record the **base** for Step 6 and show it, after any pull in this step: the base the user names;
   otherwise, on this task's first run, `git rev-parse --short HEAD`.
   Later runs in the same task use the HEAD the previous Step 6 last reviewed.
@@ -93,7 +95,9 @@ The "Rules applied" line and `git log -1 --format='%h %s%n%n%b'` go in the reply
 
 Build the commit in a preview index: HEAD plus exactly the Step 1 paths.
 The scans then read what the commit will hold, while the real index, partial staging included, stays as the user left it.
-Run these in one Bash call and keep the printed tree hash for Step 5:
+Run these in one Bash call and keep the printed tree hash for Step 5.
+A `fatal:` line, or no tree hash, means the preview is wrong and its scans read nothing:
+fix the cause and rebuild it before Step 4, on either path.
 
 ```bash
 P="$(git rev-parse --path-format=absolute --git-path git-helper-preview.index)"

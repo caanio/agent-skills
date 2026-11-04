@@ -2040,3 +2040,11 @@ Entries run oldest first; new entries are appended at the end.
       planted `api_key=`; a file changed after the preview; an
       unreachable remote) up to the tree-hash check, not a real
       `git commit`, plus a fresh-context read-back (PASS).
+      Review round 1 and 2 found the preview blind from a subdirectory:
+      `--git-path` printed a cwd-relative index path and porcelain paths
+      are top-level-relative while `git add` reads them from the cwd,
+      so the preview stayed empty and both scans came back clean. Step 0
+      now moves to the top level, the index path is absolute, and a
+      `fatal:` or missing tree hash stops either path before Step 4.
+      Re-run from a subdirectory through a real commit: tree hashes
+      matched and the commit held only the chosen path.
