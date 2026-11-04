@@ -1995,3 +1995,27 @@ Entries run oldest first; new entries are appended at the end.
       removed phrases (0 hits, run before the matt-code-review edit;
       "Under 400 words." now matches once, on purpose, in the snapshot
       comment).
+
+- [x] `plan-doubt` (2026-11-04). The maintainer's global rules named an
+      adversarial-review skill that no session had invoked in 44 days
+      although the same period held 18 dispatches that fit it, and six
+      rounds of patching the rules around an external skill each drew
+      fresh high findings. The thin `plan-doubt` skill replaces it: a
+      closed trigger list (A delete or overwrite unrecreatable data
+      without a plan-made, restorable backup; B production permission or
+      account change; C production schema change or data migration), a
+      fresh-context reviewer, at most 3 rounds, findings carried in the
+      plan's own ask. Two sandbox read-backs (12 then 14 scenarios, no
+      hit/no-hit answer opposite to the expected one) and a
+      `deep-reviewer` pass drove five edits: description and body agree
+      on local machines, data a package install or build rebuilds is
+      outside A, a personal laptop or home device counts as production
+      when its loss or lockout would be felt, the "one run serves every
+      rule" sentence moved to the rules that stack rows, and a reviewer
+      fallback never uses a tier that needs per-use approval. Two more
+      from the read-backs: `chmod`/`chown` count as permissions, and
+      findings still open after round 3 leave the plan waiting for the
+      user. Left as written, since fixing them would make this public
+      skill cite one user's rules: how "skip the review" is scoped,
+      whether an environment without subagents counts as "none
+      available", who judges "would be felt".
