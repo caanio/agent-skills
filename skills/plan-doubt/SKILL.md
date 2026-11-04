@@ -11,8 +11,7 @@ memory of how the plan was built tries to break it. One review per plan, up to 3
 ## Trigger (closed list)
 
 Run when the plan hits **A**, **B** or **C** in the description. Nothing else triggers it.
-A applies on any machine, a personal laptop included; B and C apply to production as defined below,
-and a personal laptop or home device can qualify.
+A applies on any machine, a personal laptop included; B and C apply to production as defined below.
 
 - **Data** covers every file or row: gitignored files (`.env`, uploads, SQLite), logs, database rows.
   Data that cannot be recreated is data that git history, a seed script, a package install or a build cannot bring back.
@@ -22,7 +21,8 @@ and a personal laptop or home device can qualify.
   and the restore command, so the user can find it after the plan has run. B and C run regardless of backups.
   A plan that mixes a revertable code deploy with a schema change or data migration is C.
 - **Permissions** (B) cover file modes and ownership (`chmod`, `chown`) as well as ACLs, sudoers and accounts.
-- **Production** is any system whose loss or lockout the user would feel. A throwaway local environment
+- **Production** is any system whose loss or lockout the user would feel,
+  a personal laptop or home device included. A throwaway local environment
   that seeds can rebuild is not production.
 
 ## Steps

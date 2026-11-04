@@ -2009,8 +2009,8 @@ Entries run oldest first; new entries are appended at the end.
       hit/no-hit answer opposite to the expected one) and a
       `deep-reviewer` pass drove five edits: description and body agree
       on local machines, data a package install or build rebuilds is
-      outside A, a personal laptop or home device can count as production
-      under the existing definition, the "one run serves every
+      outside A, the production definition names a personal laptop or
+      home device, the "one run serves every
       rule" sentence moved to the rules that stack rows, and a reviewer
       fallback never uses a tier that needs per-use approval. Two more
       from the read-backs: `chmod`/`chown` count as permissions, and
@@ -2018,4 +2018,4 @@ Entries run oldest first; new entries are appended at the end.
       user. Left as written, since fixing them would make this public
       skill cite one user's rules: how "skip the review" is scoped,
       whether an environment without subagents counts as "none
-      available", who judges "would be felt".
+      available", who judges "would feel".
