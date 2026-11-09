@@ -62,7 +62,7 @@ See `docs/agents/triage-labels.md`.
 Single-context: `CONTEXT.md` at the root, ADRs under `docs/adr/`.
 See `docs/agents/domain.md`.
 
-## Open items (last updated 2026-11-04)
+## Open items (last updated 2026-11-09)
 
 The only live list. The per-change log — what each change did, why, and how
 it was verified — is `docs/history/todo-log.md`; read it before reworking a
@@ -130,6 +130,12 @@ Settled — reopen only on new evidence:
     extension, phone, odd-size input, split parts, iPhone HDR, UI-text
     readability at the cap) are tested when a real send breaks; that
     break earns its ⚠️. Maintainer call, log: 2026-10-14.
+14. `matt-code-review` is a snapshot of upstream `code-review`, refreshed
+    by re-copying and re-applying its three edits (rename, the two brief
+    endings, the tracker line). The tracker line keeps the earlier
+    upstream wording naming `docs/agents/issue-tracker.md` instead of the
+    newest "If not", so a missing tracker doc stays a named stop.
+    Maintainer call, log: 2026-11-09.
 
 Open:
 

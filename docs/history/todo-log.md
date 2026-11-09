@@ -2057,3 +2057,19 @@ Entries run oldest first; new entries are appended at the end.
       already gone from the real index; C-quoted porcelain paths come
       raw from `--porcelain -z`. Tested a rename, a path with a space
       and a non-ASCII path through a real commit: tree hashes matched.
+- [x] `matt-code-review` upstream refresh (2026-11-09). The pinned
+      snapshot (`d81f3a1`, 2026-09-29) was two upstream commits behind:
+      `3da8c01` (standards files searched for, sub-agent calls issued
+      together in the foreground, tracker path made generic) and
+      `7739eae` (sub-agents start with a fresh context window). All
+      three changes were applied and the pin moved to `7739eae`, except
+      the generic tracker wording: the line keeps the earlier upstream
+      text naming `docs/agents/issue-tracker.md`, so a missing tracker
+      doc stays a named stop (maintainer call; the third edit beside the
+      rename and the brief endings, now listed in the file's closing
+      comment, the README row and Settled 14). Checked with a `diff`
+      against upstream `main` (only the allowed differences remained),
+      a fresh-context read-back of seven questions on the touched
+      passages, and a fresh-context read-back of the README row.
+      Each other machine runs `npx skills@latest update
+      matt-code-review -g` once this is pushed.
