@@ -2073,3 +2073,33 @@ Entries run oldest first; new entries are appended at the end.
       passages, and a fresh-context read-back of the README row.
       Each other machine runs `npx skills@latest update
       matt-code-review -g` once this is pushed.
+- [x] `git-helper` pathspecs no longer pass through the shell (2026-11-11).
+      Open 12's rounds 1–5 kept patching quoting: a `'` in a path broke
+      the shell, pathspecs globbed (`g*.txt` also staged `gx.txt`),
+      `--porcelain -z` renames come reversed, and `git rm --cached`
+      refused an `AM` path with no HEAD (confirmed in a scratch repo,
+      `error: … staged content different from both the file and the
+      HEAD`). Paths now sit in two path files (`git-helper-paths`,
+      `git-helper-unstage` under the git dir), written by a quoted
+      heredoc in the block itself, so the user sees the bytes; every
+      reading command is `git -C "$(git rev-parse --show-toplevel)"
+      --literal-pathspecs … --pathspec-from-file=<abs>`. Lines are
+      copied as `git status --porcelain` prints them (git's own
+      C-quoting, which `--pathspec-from-file` undoes), so no `-z`
+      parsing and no rename-order handling: a rename is two lines. With
+      no HEAD, `git read-tree --empty` replaces the unstage step.
+      Rejected: parsing `--porcelain -z` into NUL files — needs a shell
+      parser that differs between zsh and bash for no gain.
+      Verified in a scratch repo, each command in its own shell started
+      in a subdirectory: a path with `'`, `*`, a space, trailing space,
+      `->`, a leading `:`, non-ASCII, a rename and a deletion; preview
+      and real-index tree hashes matched (`3f4acbc…`), and the
+      unapproved `gx.txt` / `gz.txt` stayed unstaged. The no-HEAD
+      `AM` case checked for both `rm --cached` (refuses) and
+      `read-tree --empty` (works). Not run: a real `git commit` (a
+      global commit hook blocks it in a scratch repo, so the commit
+      step used `commit-tree` + `update-ref`); git older than 2.25
+      lacks `--pathspec-from-file` [unconfirmed: not tried]. A
+      fresh-context read-back passed four of five checks; its three
+      ambiguities (no-HEAD unstage file, a rename in the unstage file,
+      deleted paths) were fixed in the text. Open 12 is closed.

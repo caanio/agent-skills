@@ -10,19 +10,23 @@ description: "Commit workflow: preview the commit, scan it for secrets and PII, 
 1. **[NEVER VIOLATE] Stage only what the user approved**:
    - The real index changes only when Step 5 runs the Step 4 block the user approved (on the Auto path, the block Auto path condition 2 covers).
      Before that, the only index you write is Step 2's preview index.
-   - **Forbidden**: `git add .`, `git add -A`, `git add --all`, a bare `:/` (it means the whole repo) — always name specific paths explicitly.
-   - Stage every path of the commit in ONE `git add -- :/<path1> :/<path2> …` call.
-   - Write every path as `:/<path>`: Step 1's paths are top-level-relative, and `:/` makes git read them that way
-     whatever directory the Bash call starts in. Every `:/` carries a non-empty path.
-     A rename line `R  old -> new` gives two paths, `:/old` and `:/new`.
-     A path porcelain prints in double quotes (spaces, quotes, non-ASCII) is C-escaped: take the raw path
-     from `git status --porcelain -z` instead and single-quote the whole pathspec, as in `':/sub/a b.txt'`.
+   - **Forbidden**: `git add .`, `git add -A`, `git add --all`, a directory or an empty line in a path file — every line names one file.
+   - Paths never pass through the shell. The commit's paths sit in a **path file**, one per line, written by a quoted heredoc;
+     ONE `git add` reads it. A path with `'`, `*`, a space or non-ASCII stays literal that way.
+     The paths to unstage get a second path file the same way.
+     Locations: `$(git rev-parse --path-format=absolute --git-path git-helper-paths)` and `…git-helper-unstage`.
+   - Write each line as `git status --porcelain` prints the path: top-level-relative, and in git's own double-quoted C-escaping
+     when it has special characters (`"sub/a b.txt"`), which `--pathspec-from-file` undoes.
+     A rename line `R  old -> new` gives two lines, `old` and `new`.
+   - Every git command that reads a path file starts `git -C "$(git rev-parse --show-toplevel)" --literal-pathspecs`
+     and ends `--pathspec-from-file=<path file>`: `-C` makes top-level-relative paths resolve from any directory,
+     `--literal-pathspecs` makes `*` match a file named `*` and nothing else. Needs git 2.25+.
    - This rule and Core Rule 2 bind the real index; Step 2's `GIT_INDEX_FILE` commands write only the preview.
 
 2. **Separate analysis from execution**:
    - Analysis (Steps 0–4): use only commands that leave the real index and working tree untouched —
      `git status`, `git diff`, `git log` (Step 3), `git fetch` (Step 0),
-     and Step 2's preview commands, which write only the preview index.
+     and Step 2's preview commands, which write only the preview index and the path file.
    - Execution (Step 5): each command of the block is a Bash call of its own, never chained to another command or to a file edit.
 
 3. **Format**: Follow **Conventional Commits** (`<type>: <description>`).
@@ -88,7 +92,8 @@ The "Rules applied" line and `git log -1 --format='%h %s%n%n%b'` go in the reply
 ### 1. Choose the Commit's Paths
 
 - Run `git status --porcelain --untracked-files=all`.
-- Pick the paths this commit should hold. Every other path already staged is marked for unstaging.
+- Pick the paths this commit should hold, copied as porcelain prints them (Core Rule 1).
+  Every other path already staged is marked for unstaging.
   A partly staged path (`MM`) is committed whole; mark it so the user can drop it.
 - The list goes into the Step 4 reply, where the user's ok confirms it;
   on the Auto path, Auto path condition 2 stands in for that confirmation.
@@ -103,9 +108,13 @@ A `fatal:` line, or no tree hash, means the preview is wrong and its scans read 
 fix the cause and rebuild it before Step 4, on either path; a failed preview never drops the run to the manual path on its own.
 
 ```bash
+F="$(git rev-parse --path-format=absolute --git-path git-helper-paths)"
+cat > "$F" <<'GIT_HELPER_END'
+<path, one per line>
+GIT_HELPER_END
 P="$(git rev-parse --path-format=absolute --git-path git-helper-preview.index)"
 GIT_INDEX_FILE="$P" git read-tree HEAD   # no commits yet: git read-tree --empty
-GIT_INDEX_FILE="$P" git add -- :/<path…>
+GIT_INDEX_FILE="$P" git -C "$(git rev-parse --show-toplevel)" --literal-pathspecs add --pathspec-from-file="$F"
 GIT_INDEX_FILE="$P" git diff --cached --numstat
 GIT_INDEX_FILE="$P" git write-tree
 ```
@@ -162,13 +171,21 @@ read every added line for them by eye and say so in the "Rules applied" line.
   made") gets its own sentences.
 - **Show the exact commands, byte for byte.** The draft is the literal block Step 5
   will run, in order, never the message alone:
-  1. `git restore --staged -- :/<path…>` for every path already staged: the ones Step 1 marked for unstaging
-     and this commit's own, so the real index starts from HEAD like the preview (a staged rename's old path is gone from it)
-     (none → leave it out; no commits yet → `git rm --cached -q -- :/<path…>`);
-  2. one `git add -- :/<path…>` with the Step 1 paths;
-  3. `git write-tree`, which Step 5 compares to Step 2's tree hash;
-  4. the full `git commit` heredoc (required for multi-line messages) with every
+  1. the unstage path file, a quoted heredoc as in Step 2, holding every path already staged: the ones Step 1 marked for
+     unstaging and this commit's own that are staged, so the real index starts from HEAD like the preview.
+     A staged rename takes two lines, old and new, as in the commit's path file;
+  2. `git -C "$(git rev-parse --show-toplevel)" --literal-pathspecs restore --staged --pathspec-from-file="$(git rev-parse --path-format=absolute --git-path git-helper-unstage)"`;
+  Nothing staged → leave out steps 1 and 2. No commits yet and something staged → replace steps 1 and 2 with the single command
+  `git read-tree --empty`: it needs no file, unstages every staged path (all of them are unstaged anyway),
+  and succeeds where `git rm --cached` refuses an `AM` path;
+  3. the commit's path file, the same quoted heredoc as Step 2;
+  4. `git -C "$(git rev-parse --show-toplevel)" --literal-pathspecs add --pathspec-from-file="$(git rev-parse --path-format=absolute --git-path git-helper-paths)"`;
+  5. `git write-tree`, which Step 5 compares to Step 2's tree hash;
+  6. the full `git commit` heredoc (required for multi-line messages) with every
      trailer your environment appends (e.g. a `Co-Authored-By:` line).
+  The unstage file lists only paths that are staged now: `restore --staged` errors on a path that is neither in HEAD nor staged,
+  and fails the whole call. The commit's path file also takes the old path of a rename and a path deleted in the working tree
+  (`D`, written like any other line); `git add` stages both removals.
   What the user approves is exactly what lands in the log.
   The push gets its own block in Step 7, after Step 6's review loop.
 - **The reply is the run's one stop**, besides Step 0's offer when the branch is behind: Step 0's fetch result, Step 1's list, both scans'
@@ -190,8 +207,19 @@ Language: last 10 commits English → English
 
 These are the exact commands I will run, one call each:
 
-git restore --staged -- :/SPEC.md
-git add -- :/src/core/database.py :/README.md
+cat > "$(git rev-parse --path-format=absolute --git-path git-helper-unstage)" <<'GIT_HELPER_END'
+SPEC.md
+GIT_HELPER_END
+
+git -C "$(git rev-parse --show-toplevel)" --literal-pathspecs restore --staged --pathspec-from-file="$(git rev-parse --path-format=absolute --git-path git-helper-unstage)"
+
+cat > "$(git rev-parse --path-format=absolute --git-path git-helper-paths)" <<'GIT_HELPER_END'
+src/core/database.py
+README.md
+GIT_HELPER_END
+
+git -C "$(git rev-parse --show-toplevel)" --literal-pathspecs add --pathspec-from-file="$(git rev-parse --path-format=absolute --git-path git-helper-paths)"
+
 git write-tree
 
 git commit -m "$(cat <<'EOF'

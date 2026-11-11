@@ -62,7 +62,7 @@ See `docs/agents/triage-labels.md`.
 Single-context: `CONTEXT.md` at the root, ADRs under `docs/adr/`.
 See `docs/agents/domain.md`.
 
-## Open items (last updated 2026-11-09)
+## Open items (last updated 2026-11-11)
 
 The only live list. The per-change log — what each change did, why, and how
 it was verified — is `docs/history/todo-log.md`; read it before reworking a
@@ -203,31 +203,6 @@ Open:
     detect` over this repo's history to size its false positives.
     Read first: `skills/git-helper/SKILL.md` Step 2 and
     `docs/history/todo-log.md` (2026-11-02 entry). Log: 2026-11-02.
-12. `git-helper` pathspecs still go through shell quoting. Rounds 1–3
-    of the one-stop review fixed subdirectories and the cwd, round 4
-    added a bare-`:/` ban, renames and C-quoted paths; round 5 found
-    four more, so the paths should stop passing through the shell:
-    a path with `'` is printed unquoted and breaks the shell; pathspecs
-    glob by default, so `':/g*.txt'` also stages an unapproved
-    `gx.txt` and the preview takes it too, past the tree-hash check
-    (pre-existing: plain `git add <path>` globbed as well); with
-    `--porcelain -z` a rename reads `R  new\0old\0`, the reverse of
-    v1; with no HEAD, `git rm --cached -q` refuses an `AM` path
-    [unconfirmed: read from `builtin/rm.c`, not run].
-    Next: parse `git status --porcelain -z` (drop the `XY ` prefix,
-    take a rename's next field as its old path) into NUL-separated
-    files at absolute `--git-path` locations, one for the commit's
-    paths and one for the paths to unstage, then run
-    `git -C "$(git rev-parse --show-toplevel)" --literal-pathspecs
-    add --pathspec-from-file=<abs> --pathspec-file-nul` for the
-    preview and the block; the unstage step and its no-HEAD form
-    read their file the same way [unconfirmed: direction not run].
-    Test in a scratch repo through a real commit, every command in
-    its own shell from a subdirectory: `'`, `*`, a space, non-ASCII,
-    a rename, a repo with no commits. Read first:
-    `skills/git-helper/SKILL.md` Core Rule 1, Steps 1, 2 and 4, and
-    the `git-helper` one stop per commit (2026-11-04) entry in
-    `docs/history/todo-log.md`. Log: 2026-11-04.
 
 ## Source Material
 
