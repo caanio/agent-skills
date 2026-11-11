@@ -136,6 +136,10 @@ Settled — reopen only on new evidence:
     upstream wording naming `docs/agents/issue-tracker.md` instead of the
     newest "If not", so a missing tracker doc stays a named stop.
     Maintainer call, log: 2026-11-09.
+15. `git-helper` spells the `git -C … --literal-pathspecs …
+    --pathspec-from-file=…` command out in full only where a block runs:
+    Step 2's preview and Step 4's example. Core Rule 1 describes the
+    form; Step 4's numbered list points to it. Issue #6, log: 2026-11-11.
 
 Open:
 
@@ -203,14 +207,6 @@ Open:
     detect` over this repo's history to size its false positives.
     Read first: `skills/git-helper/SKILL.md` Step 2 and
     `docs/history/todo-log.md` (2026-11-02 entry). Log: 2026-11-02.
-13. `git-helper` spells the `git -C … --literal-pathspecs …
-    --pathspec-from-file=…` command and the path-file heredoc out in
-    full in Step 2, in Step 4's list and in Step 4's example. The block
-    must be byte for byte, so the copies are deliberate; the risk is
-    drift when one is edited alone. Decide: point two copies at Core
-    Rule 1, or keep four and add a match check. Tracker: issue #6.
-    Read first: `skills/git-helper/SKILL.md` Core Rule 1, Steps 2 and 4.
-    Log: 2026-11-11.
 14. `git-helper`'s unstage path file has no guard: a path that is
     neither in HEAD nor staged makes `restore --staged` fail the whole
     call, so the block stops at Step 5 after the user's ok (index

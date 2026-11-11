@@ -175,12 +175,12 @@ read every added line for them by eye and say so in the "Rules applied" line.
   1. the unstage path file, a quoted heredoc as in Step 2, holding every path already staged: the ones Step 1 marked for
      unstaging and this commit's own that are staged, so the real index starts from HEAD like the preview.
      A staged rename takes two lines, old and new, as in the commit's path file;
-  2. `git -C "$(git rev-parse --show-toplevel)" --literal-pathspecs restore --staged --pathspec-from-file="$(git rev-parse --path-format=absolute --git-path git-helper-unstage)"`;
+  2. `restore --staged` reading the unstage file, in Core Rule 1's command form (written out in the example below);
   Nothing staged → leave out steps 1 and 2. No commits yet and something staged → replace steps 1 and 2 with the single command
   `git read-tree --empty`: it needs no file, unstages every staged path (all of them are unstaged anyway),
   and succeeds where `git rm --cached` refuses an `AM` path;
   3. the commit's path file, the same quoted heredoc as Step 2;
-  4. `git -C "$(git rev-parse --show-toplevel)" --literal-pathspecs add --pathspec-from-file="$(git rev-parse --path-format=absolute --git-path git-helper-paths)"`;
+  4. `add` reading the commit's path file, in Core Rule 1's command form (written out in the example below);
   5. `git write-tree`, which Step 5 compares to Step 2's tree hash;
   6. the full `git commit` heredoc (required for multi-line messages) with every
      trailer your environment appends (e.g. a `Co-Authored-By:` line).

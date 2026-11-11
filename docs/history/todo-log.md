@@ -2115,3 +2115,17 @@ Entries run oldest first; new entries are appended at the end.
       Open 14). Left as is: the indent of the "Nothing staged" sentence
       in Step 4, and the `GIT_HELPER_END` delimiter clashing with a file
       of that exact name.
+
+- 2026-11-11 — Open 13 closed (issue #6): `git-helper` Step 4's numbered
+  list items 2 and 4 no longer carry the full `--literal-pathspecs …
+  --pathspec-from-file=…` command; they name the subcommand and point to
+  Core Rule 1's form and the Step 4 example. The literal command now
+  stands in Step 2's preview and Step 4's example (two blocks that run),
+  plus Core Rule 1's description. Why: four copies drift when one is
+  edited alone; the example stays literal because Step 5 needs the block
+  byte for byte. Verified: `grep -n literal-pathspecs` shows lines 21, 23
+  (Core Rule 1), 118 (Step 2), 215, 222 (example) only; a fresh-context
+  `verifier` read-back passed all four checks, with two minor notes (the
+  pointer is forward-looking; Core Rule 1 leaves the path-file expression
+  to line 17 and the example). Not run: a live commit through the edited
+  skill.
