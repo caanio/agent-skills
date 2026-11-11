@@ -20,7 +20,8 @@ description: "Commit workflow: preview the commit, scan it for secrets and PII, 
      A rename line `R  old -> new` gives two lines, `old` and `new`.
    - Every git command that reads a path file starts `git -C "$(git rev-parse --show-toplevel)" --literal-pathspecs`
      and ends `--pathspec-from-file=<path file>`: `-C` makes top-level-relative paths resolve from any directory,
-     `--literal-pathspecs` makes `*` match a file named `*` and nothing else. Needs git 2.25+.
+     `--literal-pathspecs` makes `*` match a file named `*` and nothing else.
+     Needs a git whose `add` and `restore` take `--pathspec-from-file` [unconfirmed: the first release with it is not looked up].
    - This rule and Core Rule 2 bind the real index; Step 2's `GIT_INDEX_FILE` commands write only the preview.
 
 2. **Separate analysis from execution**:

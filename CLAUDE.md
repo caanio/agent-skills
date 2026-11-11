@@ -203,6 +203,21 @@ Open:
     detect` over this repo's history to size its false positives.
     Read first: `skills/git-helper/SKILL.md` Step 2 and
     `docs/history/todo-log.md` (2026-11-02 entry). Log: 2026-11-02.
+13. `git-helper` spells the `git -C … --literal-pathspecs …
+    --pathspec-from-file=…` command and the path-file heredoc out in
+    full in Step 2, in Step 4's list and in Step 4's example. The block
+    must be byte for byte, so the copies are deliberate; the risk is
+    drift when one is edited alone. Decide: point two copies at Core
+    Rule 1, or keep four and add a match check. Tracker: issue #6.
+    Read first: `skills/git-helper/SKILL.md` Core Rule 1, Steps 2 and 4.
+    Log: 2026-11-11.
+14. `git-helper`'s unstage path file has no guard: a path that is
+    neither in HEAD nor staged makes `restore --staged` fail the whole
+    call, so the block stops at Step 5 after the user's ok (index
+    unchanged). Decide whether Step 4 should compare the list with
+    `git diff --cached --name-only` before the draft. Tracker: issue #7.
+    Read first: `skills/git-helper/SKILL.md` Step 4, list items 1–2.
+    Log: 2026-11-11.
 
 ## Source Material
 

@@ -2098,8 +2098,20 @@ Entries run oldest first; new entries are appended at the end.
       `AM` case checked for both `rm --cached` (refuses) and
       `read-tree --empty` (works). Not run: a real `git commit` (a
       global commit hook blocks it in a scratch repo, so the commit
-      step used `commit-tree` + `update-ref`); git older than 2.25
-      lacks `--pathspec-from-file` [unconfirmed: not tried]. A
+      step used `commit-tree` + `update-ref`); the first git release with
+      `--pathspec-from-file` on `add` and `restore` [unconfirmed: a
+      release-notes lookup returned 404, so no version is stated]. A
       fresh-context read-back passed four of five checks; its three
       ambiguities (no-HEAD unstage file, a rename in the unstage file,
-      deleted paths) were fixed in the text. Open 12 is closed.
+      deleted paths) were fixed in the text, and a second fresh-context
+      quote-back of the fixed passages answered every question
+      correctly. Open 12 is closed.
+      Review round 1 (`matt-code-review`; `/security-review` skipped,
+      documentation only): no hard violation. Fixed: the `git 2.25+`
+      claim, which had no source, now reads `[unconfirmed]`, and this
+      entry gained the second quote-back. Two tradeoffs went to the
+      tracker instead: four spelled-out copies of the pathspec command
+      (issue #6, Open 13) and an unstage list with no guard (issue #7,
+      Open 14). Left as is: the indent of the "Nothing staged" sentence
+      in Step 4, and the `GIT_HELPER_END` delimiter clashing with a file
+      of that exact name.
