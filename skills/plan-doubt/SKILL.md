@@ -1,6 +1,6 @@
 ---
 name: plan-doubt
-description: "Cross-examines an irreversible plan with a fresh-context adversarial reviewer before the plan reaches the user. Use before presenting, asking approval for, or running a plan that (A) deletes or overwrites data that cannot be recreated and has no backup the plan itself makes and can restore, (B) changes permissions, ACLs, sudoers or accounts on a production system, or (C) applies a schema change or data migration to production. Read-only reconnaissance, data that a seed script, package install or build rebuilds, and code deploys that a revert plus redeploy fully undoes fall outside."
+description: "Cross-examines an irreversible plan with a fresh-context adversarial reviewer before the plan reaches the user. Use before presenting, asking approval for, or running a plan that (A) deletes or overwrites data that cannot be recreated and has no backup the plan itself makes and can restore, (B) makes a production access change that can lock someone out or that no one-line undo reverses, or (C) applies a schema change or data migration to production. Read-only reconnaissance, data that a seed script, package install or build rebuilds, code deploys that a revert plus redeploy fully undoes, and additive access grants paired with a one-line undo fall outside."
 ---
 
 # plan-doubt
@@ -20,10 +20,18 @@ A applies on any machine, a personal laptop included; B and C apply to productio
   A copy with no restore command is no backup. The ask and the delivery report both state the backup's full path
   and the restore command, so the user can find it after the plan has run. B and C run regardless of backups.
   A plan that mixes a revertable code deploy with a schema change or data migration is C.
-- **Permissions** (B) cover file modes and ownership (`chmod`, `chown`) as well as ACLs, sudoers and accounts.
+- **Lockout-risk access change** (B): editing sshd or sudoers config; disabling or deleting an account or key;
+  removing a firewall or security-group rule or changing its default policy; recursive or bulk changes to modes,
+  ownership or ACLs (`chmod -R`, `chown -R`, `setfacl -R`).
+  An additive grant the plan pairs with its one-line undo — `useradd`/`userdel`, `usermod -aG`/`gpasswd -d`,
+  an allow rule added/revoked, a single-path `chmod`/`chown`/`setfacl` with its prior state recorded — goes to the
+  ordinary ask, which carries the undo command.
 - **Production** is any system whose loss or lockout the user would feel,
   a personal laptop or home device included. A throwaway local environment
   that seeds can rebuild is not production.
+
+- **One run per plan.** Steps 1–5 below, rounds included, are that run. A revised plan runs again only when the
+  revision adds an A, B or C step the earlier run never saw.
 
 ## Steps
 

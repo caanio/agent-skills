@@ -2129,3 +2129,29 @@ Entries run oldest first; new entries are appended at the end.
   pointer is forward-looking; Core Rule 1 leaves the path-file expression
   to line 17 and the example). Not run: a live commit through the edited
   skill.
+
+- 2026-11-13 — `plan-doubt` trigger B narrowed and one run per plan.
+  Before: B was any production change to permissions, ACLs, sudoers or
+  accounts, backups or not. In 2026-11-10 to 2026-11-13 one machine's
+  transcripts held 13 `plan-doubt` Skill calls across 5 repos. About 8
+  were additive grants with a one-line undo (`usermod -aG`, one
+  security-group allow rule, single-path `chown`/`setfacl`). About 3
+  re-ran a plan that had already been reviewed. The maintainer judged
+  the volume wasted time and tokens.
+  Now: B covers lockout-risk access changes: sshd or sudoers config,
+  disabling or deleting accounts or keys, removing a firewall or SG rule
+  or changing its default policy, and recursive or bulk mode, ownership or
+  ACL changes. An additive grant paired with its one-line undo goes to the
+  ordinary ask, which carries the undo. A revised plan runs again only when
+  it adds an A, B or C step the earlier run never saw. The description,
+  the Trigger section and the README row changed together.
+  Verified: a fresh-context `verifier` read-back passed four checks. Five
+  scenario questions were answered correctly from the file alone (additive
+  `usermod -aG` → no; sshd config → yes; `setfacl -R` → yes; revision with
+  no new A/B/C step → no; removing an SG rule → yes). The four B wordings
+  do not contradict each other, and the files hold no PII.
+  Rejected: keeping B as is and only adding one run per plan (cuts the
+  ~3 re-runs, keeps the ~8 additive grants); dropping `plan-doubt`
+  entirely (back to no independent review of irreversible plans).
+  Not run: a real plan through the narrowed trigger; `npx skills@latest
+  update plan-doubt -g` on each machine after the push.
