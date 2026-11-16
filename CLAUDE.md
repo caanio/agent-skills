@@ -226,7 +226,12 @@ Open:
 15. Whether a Claude Code worktree-isolated session accepts
     `git pull --rebase --autostash` (`git-helper` Step 0) [unconfirmed];
     the git behaviour was tested in a plain linked worktree. Check it in
-    the worktree acceptance run with Open 16 and 18. Log: 2026-11-16.
+    the worktree acceptance run with Open 16 and 18, then add the form
+    (and Step 0's after-pull commands) to `WORKTREE.md`'s accepted list.
+    A recorded worktree session on 2026-11-16 ran four git-helper
+    commits with no refusal at Steps 0, 2 or 5, and `git rebase
+    origin/main` passed there; `pull --autostash` itself was not in that
+    run. Log: 2026-11-16.
 16. A worktree session committing a second repo needs `-C <that repo>`
     on every git command; `WORKTREE.md` does not say so. Reads into the
     other repo pass, writes (`add`, `commit`) are untested. Add the rule
