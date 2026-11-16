@@ -2350,3 +2350,19 @@ Entries run oldest first; new entries are appended at the end.
   whether the skills CLI can install one skill alone, was not checked;
   the item reopens on a recorded install where the pointer had no
   target.
+- 2026-11-16 — Not-done items now carry a pointer to their entry.
+  Trigger: a recorded wrap-up reported four not-done items, every wrap-up
+  check passed, and only one had reached a repo file; a leftover backup
+  was recorded only as a state ("half-made"), so no entry said it still
+  had to be removed. `completion-gate` "The Delivery Message" part 3:
+  each item ends with `→ <list path> <entry>`, `→ <tracker>#<n>` or
+  `→ no entry needed: <reason>`, and an item with no entry gets one
+  before the message goes out; wrap-up step 5 drafts part 3 first, so
+  those entries are written there. `handover` step 1 lists each
+  not-done item as a *follow-up* candidate, an item judged minor and
+  not worth doing excepted. Rejected: a script that greps each not-done
+  line in the list, since the near-match "half-made" would have passed
+  it in the recorded case. The pointer's shape can be checked
+  mechanically; whether the entry behind it names the item cannot, so
+  this rests on the model like Open 8. Both `description:` lines left
+  unchanged; no trigger eval run.

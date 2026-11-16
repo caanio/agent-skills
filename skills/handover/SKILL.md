@@ -48,7 +48,11 @@ only the files already there.
    work and cannot read from git, the repo's files or the tracker — a
    state you checked, a reply still awaited, an area not yet tested or a
    check that failed, a step left half done, a decision too small for an
-   ADR.
+   ADR; and **not-done items**: every item for the delivery message's
+   not-done part, drafted now, one candidate each, a leftover recorded
+   only as a state included (a backup left behind is a follow-up). An
+   item judged minor and not worth doing stays off the list; it ends in
+   `→ no entry needed: <reason>` in the reply.
    Wait for any tool or job this session started that is still running;
    one that cannot finish this session is listed with how to read its
    outcome. A secret or personal value is listed as existing, never by
@@ -56,13 +60,14 @@ only the files already there.
    List each candidate before touching any file, tagged with where it
    lands: *architecture decision* (step 2), *top-level docs* (step 3),
    *production* (step 4), *follow-up* or *finding* (step 5); a
-   session-only fact is a *follow-up*.
+   session-only fact or not-done item is a *follow-up*.
    ⚠️ Observed in practice: a wrap-up's final reply said the session could
    be cleared while its findings and next step lived only in the
    conversation; they reached a file only after the user asked again
    before clearing.
    *Done when*: every decision, rejected alternative, discovered
-   constraint, finding and session-only fact from the session is on the
+   constraint, finding, session-only fact and not-done item needing an
+   entry from the session is on the
    list with a tag, or you've concluded there's nothing beyond the diff
    worth carrying forward.
    An empty list ends the run here: report one line,

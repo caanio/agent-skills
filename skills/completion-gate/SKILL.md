@@ -147,7 +147,15 @@ A downgraded delivery is honest. It is still not a pass.
 2. **How it was verified, and the raw result** — paste the actual output. A
    summary of a result is not a result.
 3. **What was *not* done** — skipped steps, unverified areas, known gaps,
-   anything deferred. State it even when nobody asked.
+   anything deferred. State it even when nobody asked. Each item ends with
+   a pointer to where it lives: `→ <list path> <entry>`, `→ <tracker>#<n>`,
+   or `→ no entry needed: <reason>` (a minor item judged not worth doing,
+   a deliberate non-goal). Writing the pointer is the check: an item with
+   no entry gets one before the message goes out.
+   ⚠️ Observed in practice: a wrap-up reported four not-done items, every
+   wrap-up check passed, and only one had reached a repo file; a leftover
+   backup was recorded only as a state ("half-made"), so no entry said it
+   still had to be removed.
 
 ## Failure Counting (for work you performed yourself)
 
@@ -205,7 +213,9 @@ inside it always looks like bad luck.
    you may not write **verified / PASS** as a claim about the change until the
    second opinion you decided to run has actually come back.
 5. **Then** update the repo's **next-steps list**: the one priority list a
-   fresh session reads to learn what's next. First list what the whole
+   fresh session reads to learn what's next. First draft part 3 of the
+   delivery message: each not-done item that needs an entry is one this
+   step opens or advances. Then list what the whole
    session changed, file by file, not recalled from memory:
    `git status --short` (a new tracker ticket is usually untracked),
    `git diff --stat <last commit before this session>..HEAD`, and the
