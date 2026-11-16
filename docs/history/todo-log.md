@@ -2210,8 +2210,14 @@ Entries run oldest first; new entries are appended at the end.
   Review round 3 (`f6d3b59..HEAD`): the `SKILL.md` pointer now defers
   to `WORKTREE.md`'s restart rule instead of paraphrasing it; the
   restart names the manual path, so an Auto-path run cannot resume
-  unattended; the `-c` line names its two refused keys and calls every
-  other key untested.
+  unattended; it reads "after the block was cleared to run", which also
+  holds on the Auto path, and Step 1 "shows the real index as those
+  commands left it", since they may have unstaged rather than staged;
+  the `-c` line names its two refused keys and the accepted
+  `core.quotepath`, and calls every key not named there untested.
+  Review round 4 (`fe29b17..HEAD`) found three structural points, left
+  for Open 18. Each fixed round had triggered a further wording round,
+  and the worktree acceptance run should show which ones matter.
   Rejected: switching the main-tree form to literal paths too, so one
   spelling serves both (maintainer call: keep Settled 15 untouched).
   Not run: a full commit through the edited skill inside a worktree

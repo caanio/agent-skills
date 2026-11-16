@@ -234,6 +234,15 @@ Open:
     drift as Open 6, so settle them together: one pattern file both
     forms `grep -f`, or `[g]ithub_pat_` in `SKILL.md` too. Revisit
     before Open 11 adds patterns. Log: 2026-11-16.
+18. `git-helper`'s Step 5 refusal rule has three loose ends:
+    `WORKTREE.md`'s opening paragraph both points to `SKILL.md` Step 5's
+    `write-tree` restart and restates it in other words; `SKILL.md`
+    Step 0 calls it "the restart rule", a label `WORKTREE.md` never
+    uses; and Step 5 never says whether a harness refusing `git commit`
+    is a "failed commit" (ends the run) or a refusal (restart at Step 1).
+    Settle after the first real worktree commit. Read first:
+    `skills/git-helper/WORKTREE.md` lines 5–8, `SKILL.md` Steps 0 and 5.
+    Log: 2026-11-16.
 
 ## Source Material
 
