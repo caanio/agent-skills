@@ -246,6 +246,14 @@ Open:
     Settle after the first real worktree commit. Read first:
     `skills/git-helper/WORKTREE.md` lines 5–8, `SKILL.md` Steps 0 and 5.
     Log: 2026-11-16.
+19. `git-helper` Step 0's four after-pull steps leave two paths
+    unstated: an autostash conflict that first appears when the user runs
+    `git rebase --continue` inside step 2's hold (step 1's hash is then
+    taken out of order), and step 3 with no hash kept. Each wording round
+    on Step 0 surfaced the next edge case, so fix one only when a
+    recorded session hits it; a rewrite that ends the run on any conflict
+    is the fallback. Read first: `skills/git-helper/SKILL.md` Step 0,
+    `docs/history/todo-log.md` (2026-11-16, review round 3). Log: 2026-11-16.
 
 ## Source Material
 

@@ -91,14 +91,18 @@ The "Rules applied" line and `git log -1 --format='%h %s%n%n%b'` go in the reply
 - **Behind remote** → warn and offer to resolve now with `git pull --rebase --autostash`:
   fixing divergence before commit beats rebasing a finished commit through conflicts.
   Until the autostash reapplies, it lives in this worktree's own rebase directory, apart from the stash stack every worktree of the repo shares;
-  a rebase that conflicts keeps it there until `git rebase --continue` or `--abort`.
-  Staging can change on the way (a clean reapply or an `--abort` returns staged edits to tracked files unstaged):
-  once the pull or its rebase has finished, run `git status -sb` again, compare its first column with the one taken before the pull,
-  and tell the user which files lost their staging. Step 1 then reads the index as it now stands.
-  ⚠️ When reapplying it conflicts ("Applying autostash resulted in conflicts"), the working tree holds conflict markers
-  and git also stores the autostash on that shared stack under the message `autostash`, which other worktrees' entries can share.
-  Run `git rev-parse 'stash@{0}'` at once and keep the hash. Hand the markers to the user; once resolved,
-  run `git stash list --format='%gd %H %gs'` and drop the entry carrying that hash by its exact ref (`git stash drop 'stash@{n}'`).
+  a rebase that conflicts keeps it there until `git rebase --continue` or `--abort`. After the pull, in this order:
+  1. ⚠️ On "Applying autostash resulted in conflicts", run `git rev-parse 'stash@{0}'` at once and keep the hash:
+     the working tree holds conflict markers, and git also stores the autostash on that shared stack
+     under the message `autostash`, which other worktrees' entries can share.
+  2. A pull that stopped on a conflict, in the rebase or in the autostash, goes to the user and holds the run at Step 0
+     until `git status -sb` names the branch again (not `## HEAD (no branch)`) and shows no `UU` line;
+     a resolved autostash file leaves `UU` with `git restore --staged <file>`, which keeps it unstaged.
+  3. With a hash kept in 1, run `git stash list --format='%gd %H %gs'`
+     and drop the entry carrying that hash by its exact ref (`git stash drop 'stash@{n}'`).
+  4. Run `git status -sb` again, compare its first column with Step 0's first `git status -sb`,
+     and tell the user which files lost their staging (a clean reapply or an `--abort` returns staged edits to tracked files unstaged).
+     Step 1 then reads the index as it now stands.
 - **Fetch unreachable** (offline / LAN-only remote) → say so in one line, note ahead/behind info is stale, and go on:
   the commit stays on this machine, and the push waits for Step 7's ok either way. Report the fetch result in every run, reachable or not.
 - Record the **base** for Step 6 and show it, after any pull in this step: the base the user names;

@@ -2271,3 +2271,22 @@ Entries run oldest first; new entries are appended at the end.
   predicting the result, and Step 1 waits for the pull or its rebase to
   finish. Minor, left as is: `rev-parse 'stash@{0}'` right after the
   conflict can still race another worktree's push in between (not hit).
+  Review round 3 (`b69796c..HEAD`): both axes found Step 1's wait only
+  implied ("once the pull or its rebase has finished" reads as "the
+  command returned", while `git pull` returns with the rebase paused).
+  Step 0 now holds the run until `git status -sb` names the branch
+  again and shows no `UU` line, and names Step 0's first status as the
+  comparison's baseline. Checked in throwaway repos: a paused rebase
+  prints `## HEAD (no branch)` and `UU f.txt`; after an autostash
+  conflict, `git restore --staged f.txt` turned `UU f.txt` into
+  ` M f.txt`. Maintainer call: keep fixing past round 3.
+  The round-3 fix's read-back failed once: the stash drop had no place
+  relative to the settle check and the staging comparison, so Step 1
+  could start with the autostash still on the shared stack. The tail of
+  Step 0's bullet is now four numbered steps in run order: keep the
+  hash, hold until settled, drop by hash, compare staging.
+  Its second read-back found two rarer paths (an autostash conflict
+  that first appears after the user's `rebase --continue`, and step 3
+  with no hash kept). Failure count 2 on this fix, so no further
+  wording variant: maintainer call to commit the four-step form and
+  park both paths as Open 19.
