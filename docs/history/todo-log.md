@@ -2346,7 +2346,7 @@ Entries run oldest first; new entries are appended at the end.
 - 2026-11-16 — Open 3 (`haos-cloud-backup` line 12's pointer to
   `haos-addon-deploy` §0/§8 for the `ha` alias and the `bash -lc` rule)
   closed as Settled 19 with no `SKILL.md` edit, by maintainer call: the
-  dependency was judged acceptable as is. The question it hinged on,
+  dependency was judged acceptable for now. The question it hinged on,
   whether the skills CLI can install one skill alone, was not checked;
   the item reopens on a recorded install where the pointer had no
   target.
