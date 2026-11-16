@@ -249,11 +249,16 @@ Open:
 19. `git-helper` Step 0's four after-pull steps leave two paths
     unstated: an autostash conflict that first appears when the user runs
     `git rebase --continue` inside step 2's hold (step 1's hash is then
-    taken out of order), and step 3 with no hash kept. Each wording round
-    on Step 0 surfaced the next edge case, so fix one only when a
-    recorded session hits it; a rewrite that ends the run on any conflict
-    is the fallback. Read first: `skills/git-helper/SKILL.md` Step 0,
-    `docs/history/todo-log.md` (2026-11-16, review round 3). Log: 2026-11-16.
+    taken out of order), and step 3 with no hash kept. Step 2's settle
+    check is also loose: it names only `UU`, not the other unmerged codes
+    (`AA`, `DU`, `UD`, …) an add/delete conflict leaves; `git restore
+    --staged` clears `UU` with markers still in the file; and it never
+    says the agent re-runs `git status -sb` when the user replies
+    (review round 4). Each wording round on Step 0 surfaced the next
+    edge case, so fix one only when a recorded session hits it; a rewrite
+    that ends the run on any conflict is the fallback. Read first:
+    `skills/git-helper/SKILL.md` Step 0, `docs/history/todo-log.md`
+    (2026-11-16, review rounds 3–4). Log: 2026-11-16.
 
 ## Source Material
 

@@ -2290,3 +2290,7 @@ Entries run oldest first; new entries are appended at the end.
   with no hash kept). Failure count 2 on this fix, so no further
   wording variant: maintainer call to commit the four-step form and
   park both paths as Open 19.
+  Review round 4 (`15b3f73..HEAD`) found three more loose ends in
+  step 2's settle check (only `UU` named, `restore --staged` clears
+  `UU` with markers left, no stated re-check on the user's reply);
+  per the round-3 call they joined Open 19 instead of a SKILL.md edit.
