@@ -144,6 +144,11 @@ Settled — reopen only on new evidence:
     `WORKTREE.md`: one git per call, literal absolute paths, the preview
     index outside `.git`. Step 0 detects the worktree; Settled 15's
     main-tree form stays as is. Maintainer call, log: 2026-11-16.
+17. `git-helper` Step 0 syncs a branch behind its remote with
+    `git pull --rebase --autostash`, never `stash` / `stash pop`: every
+    worktree of a repo shares one stash stack, and a bare `pop` took
+    another worktree's entry in a recorded test. Maintainer call,
+    log: 2026-11-16.
 
 Open:
 
@@ -218,12 +223,10 @@ Open:
     `git diff --cached --name-only` before the draft. Tracker: issue #7.
     Read first: `skills/git-helper/SKILL.md` Step 4, list items 1–2.
     Log: 2026-11-11.
-15. `git-helper` Step 0's behind-remote fix (`stash → pull --rebase →
-    stash pop`) runs on the stash stack every worktree of a repo shares,
-    so in a linked worktree the pop can take another worktree's entry.
-    `WORKTREE.md` says nothing about it. Decide a worktree-safe form
-    (e.g. pop by the stash's own ref) and test it in a real worktree.
-    Log: 2026-11-16.
+15. Whether a Claude Code worktree-isolated session accepts
+    `git pull --rebase --autostash` (`git-helper` Step 0) [unconfirmed];
+    the git behaviour was tested in a plain linked worktree. Check it in
+    the worktree acceptance run with Open 16 and 18. Log: 2026-11-16.
 16. A worktree session committing a second repo needs `-C <that repo>`
     on every git command; `WORKTREE.md` does not say so. Reads into the
     other repo pass, writes (`add`, `commit`) are untested. Add the rule

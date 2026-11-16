@@ -2223,3 +2223,29 @@ Entries run oldest first; new entries are appended at the end.
   Not run: a full commit through the edited skill inside a worktree
   (planned as the acceptance run in the requesting repo); Open 15 and 16
   record the two gaps found.
+
+- 2026-11-16 — `git-helper` Step 0's behind-remote fix is now
+  `git pull --rebase --autostash` (was `stash → pull --rebase → stash
+  pop`); closes Open 15's design half, Settled 17.
+  Before: `refs/stash` lives in the common git dir, so every worktree of
+  a repo shares one stack. Test (throwaway repos, git 2.53.0, a real
+  linked worktree): the worktree stashed, the main tree stashed after
+  it, and the worktree's `stash pop` restored the main tree's change,
+  leaving its own entry on the stack.
+  Now: the autostash is held in the worktree's own
+  `.git/worktrees/<name>/rebase-merge/autostash`. Tested cases: another
+  worktree's entry already on the stack → changes reapplied, stack
+  unchanged; the rebase itself conflicting → `rebase --abort` restored
+  the changes, stack unchanged; reapplying the autostash conflicting →
+  conflict markers in the working tree and the autostash stored on the
+  shared stack as `autostash` (no hash printed), so Step 0 now says to
+  drop that entry by its exact `stash@{n}` once the markers are resolved.
+  Rejected: keeping stash/pop and addressing the entry by its own ref
+  (a peer session ran `stash push -m <label>` → SHA lookup →
+  `merge --ff-only` → `stash apply <SHA>` → index lookup → `stash drop
+  stash@{n}` in a worktree, each call accepted; six calls, a
+  copied SHA, and a lookup-to-drop race it did not test); warning only
+  inside worktrees (leaves the user to resolve divergence by hand).
+  Maintainer call.
+  Not run: the harness check of `git pull --rebase --autostash` inside a
+  Claude Code worktree-isolated session (Open 15, now that check alone).

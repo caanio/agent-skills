@@ -88,7 +88,13 @@ The "Rules applied" line and `git log -1 --format='%h %s%n%n%b'` go in the reply
   A harness refusing a command for its form mid-run switches the run to `WORKTREE.md` from that command on;
   a refusal at Step 5 follows `WORKTREE.md`'s restart rule before anything else runs.
 - Run `git fetch` (short timeout, e.g. `GIT_SSH_COMMAND="ssh -o ConnectTimeout=5 -o BatchMode=yes" git fetch`), then `git status -sb`.
-- **Behind remote** → warn and offer to resolve now (`stash → pull --rebase → stash pop`): fixing divergence before commit beats rebasing a finished commit through conflicts.
+- **Behind remote** → warn and offer to resolve now with `git pull --rebase --autostash`:
+  fixing divergence before commit beats rebasing a finished commit through conflicts.
+  The autostash lives in this worktree's own rebase directory, so the stash stack every worktree of the repo shares stays untouched.
+  ⚠️ When reapplying it conflicts ("Applying autostash resulted in conflicts"), the working tree holds conflict markers
+  and git also stores the autostash on that shared stack under the message `autostash`.
+  Hand the markers to the user; once resolved, run `git stash list`
+  and drop the entry whose message is `autostash` by its exact ref (`git stash drop stash@{n}`), since the top entry may be another worktree's.
 - **Fetch unreachable** (offline / LAN-only remote) → say so in one line, note ahead/behind info is stale, and go on:
   the commit stays on this machine, and the push waits for Step 7's ok either way. Report the fetch result in every run, reachable or not.
 - Record the **base** for Step 6 and show it, after any pull in this step: the base the user names;
