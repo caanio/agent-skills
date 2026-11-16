@@ -153,6 +153,11 @@ Settled — reopen only on new evidence:
     stack and still fires on Vue / Nuxt: HEAD scored 7/7 on seven Vue
     queries (`sonnet`, one run each), tying a variant that names
     Vue/Nuxt. Reopen on a recorded Vue miss. Log: 2026-11-16.
+19. `haos-cloud-backup` keeps line 12's pointer to `haos-addon-deploy`
+    §0/§8 for the `ha` alias and the `bash -lc` rule; whether the skills
+    CLI can install one skill alone stays unchecked. Reopen on a
+    recorded install where that pointer had no target.
+    Maintainer call, log: 2026-11-16.
 
 Open:
 
@@ -162,10 +167,6 @@ Open:
    otherwise [unconfirmed], nothing thins them. Check the filenames on
    real hardware, then decide whether a remote delete job covers them.
    Log: 2026-10-08.
-3. `haos-cloud-backup` line 12 takes the `ha` alias and the `bash -lc`
-   rule from `haos-addon-deploy` §0/§8. If the skills CLI can install
-   one skill alone [unconfirmed], that pointer has no target and the
-   skill does not stand on its own. Check the CLI first. Log: 2026-10-08.
 4. `git-helper` Step 6 leaves edge cases out on purpose: the first
    commit in an empty repo has no base (an empty tree breaks a three-dot
    diff); a base across sessions, or before commits made outside
