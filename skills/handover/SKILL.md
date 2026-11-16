@@ -48,11 +48,13 @@ only the files already there.
    work and cannot read from git, the repo's files or the tracker — a
    state you checked, a reply still awaited, an area not yet tested or a
    check that failed, a step left half done, a decision too small for an
-   ADR; and **not-done items**: every item for the delivery message's
-   not-done part, drafted now, one candidate each, a leftover recorded
-   only as a state included (a backup left behind is a follow-up). An
-   item judged minor and not worth doing stays off the list; it ends in
-   `→ no entry needed: <reason>` in the reply.
+   ADR; and **not-done items**: every item of the delivery message's
+   not-done part (as your completion gate drafted it, or drafted now),
+   one candidate each, a leftover recorded only as a state included (a
+   backup left behind is a follow-up). An item that needs no entry (a
+   minor item judged not worth doing, a deliberate non-goal) stays off
+   the list; it ends in `→ no entry needed: <reason>` in the delivery
+   message.
    Wait for any tool or job this session started that is still running;
    one that cannot finish this session is listed with how to read its
    outcome. A secret or personal value is listed as existing, never by

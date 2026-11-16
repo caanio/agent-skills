@@ -214,9 +214,10 @@ inside it always looks like bad luck.
    second opinion you decided to run has actually come back.
 5. **Then** update the repo's **next-steps list**: the one priority list a
    fresh session reads to learn what's next. First draft part 3 of the
-   delivery message: each not-done item that needs an entry is one this
-   step opens or advances. Then list what the whole
-   session changed, file by file, not recalled from memory:
+   delivery message: every item in it that does not end in
+   `→ no entry needed` is opened or advanced in this step. Then list
+   what the whole session changed, file by file, not recalled from
+   memory:
    `git status --short` (a new tracker ticket is usually untracked),
    `git diff --stat <last commit before this session>..HEAD`, and the
    tickets it opened in a remote tracker, queried from the tracker.
