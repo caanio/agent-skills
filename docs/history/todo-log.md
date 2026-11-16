@@ -2180,6 +2180,27 @@ Entries run oldest first; new entries are appended at the end.
   check. A fresh-context `verifier` read-back of `WORKTREE.md` found two
   FAIL items in round 1 (the Step 4 variants, the clean rule not in the
   body); both were fixed and the re-check passed.
+  Refusal evidence, re-run one Bash call each in a worktree session on
+  2026-11-16, key phrase quoted: `GIT_INDEX_FILE=$TMPDIR/…` and
+  `-C "$(pwd)"` → "too complex to verify that it stays inside the
+  worktree"; `-C .` → "points git at a directory computed at runtime";
+  `git -c core.sshCommand=…` and `-c core.hooksPath=…` → "injecting
+  configuration"; `GIT_SSH_COMMAND=…` → "sets GIT_SSH_COMMAND, injecting
+  git configuration"; `git -c core.quotepath=false` and a `cat > <file>
+  <<'GIT_HELPER_END'` heredoc were accepted. The pipe whose text holds
+  `git` was hit in the session that found the problem (a grep pattern
+  holding `github_pat_`, a temp directory named `git-helper.*`), and
+  recorded in the requesting repo's item. For Open 16: `cd <other
+  repo> && git …` was refused, a lone `git -C <literal absolute path>
+  status -sb` and `fetch` were accepted.
+  Review round 1 (`matt-code-review`, `/security-review` over
+  `36eccd1..HEAD`) changed `WORKTREE.md`: the refusal list now matches
+  the evidence above (the first draft filed `$TMPDIR` and `-C "$(…)"`
+  under "computed at runtime" and had every `git -c` refused); the
+  `mktemp` template gained `.XXXXXX`, since GNU `mktemp` needs X's in a
+  `-t` template [unconfirmed: not run on Linux; BSD accepts it, checked
+  on macOS]; a refusal at Step 5 now sends the block back for a new ok.
+  The duplicated scan patterns went to Open 17 (maintainer call).
   Rejected: switching the main-tree form to literal paths too, so one
   spelling serves both (maintainer call: keep Settled 15 untouched).
   Not run: a full commit through the edited skill inside a worktree

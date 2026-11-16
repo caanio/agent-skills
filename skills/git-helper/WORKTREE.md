@@ -2,6 +2,8 @@
 
 Spell every git-helper command this way for the whole run when Step 0 finds a linked worktree,
 or once a harness refuses a git-helper command for its form.
+A refusal at Step 5 comes after the ok: the respelled block differs from the approved one,
+so draft it again in this form and wait for a new ok before running any of it.
 Every rule in `SKILL.md` still binds: the preview index, both scans, the binary check,
 the `write-tree` comparison and the one ok. Only the spelling changes, so the checks stay equivalent.
 
@@ -13,8 +15,12 @@ cannot be read from the command text alone. Refusals hit in recorded sessions, w
 - git piped into another command (`git diff … | grep …`): "too complex to verify that it stays inside the worktree".
 - `$(git …)` inside a git command: "names git more than once in a single command".
 - `GIT_INDEX_FILE` under the shared `.git`, where `--git-path` points (`.git/worktrees/<name>/…`): "the shared checkout".
-- `GIT_INDEX_FILE` or `-C` built at runtime (`"$TMPDIR/…"`, `-C .`, `-C "$(…)"`): "computed at runtime".
-- `GIT_SSH_COMMAND=… git fetch` or `git -c …`: "injecting configuration".
+- `GIT_INDEX_FILE` or `-C` holding a variable or a substitution (`GIT_INDEX_FILE=$TMPDIR/…`, `-C "$(pwd)"`):
+  "too complex to verify that it stays inside the worktree".
+- `-C .`: "points git at a directory computed at runtime".
+- `GIT_SSH_COMMAND=… git …`: "sets GIT_SSH_COMMAND, injecting git configuration".
+- `git -c` with a key such as `core.sshCommand` or `core.hooksPath`: "injecting configuration".
+  The key decides: `-c core.quotepath=false` was accepted, and no other key has been tried.
 - A command with a pipe whose text contains the letters `git` anywhere, even one that never runs git:
   a temp directory named `git-helper.*`, a grep pattern holding `github_pat_`.
 
@@ -28,10 +34,11 @@ a pipe of non-git commands over files whose path and pattern hold no `git`.
 
 ```bash
 git rev-parse --show-toplevel
-mktemp -d -t commit-preview
+mktemp -d -t commit-preview.XXXXXX
 ```
 
 Below, `<top>` is the first output and `<tmp>` the second; keep `git` out of `<tmp>`'s name.
+The `XXXXXX` lets GNU `mktemp` accept the template [unconfirmed: not run on Linux]; BSD `mktemp` keeps the X's and appends its own suffix, which works the same.
 `<tmp>/paths` and `<tmp>/unstage` replace Core Rule 1's `--git-path` locations,
 and `-C <top>` replaces `-C "$(git rev-parse --show-toplevel)"`.
 Delete `<tmp>` (`rm -r <tmp>`) once the run ends.

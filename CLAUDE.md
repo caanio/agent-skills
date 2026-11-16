@@ -225,11 +225,15 @@ Open:
     (e.g. pop by the stash's own ref) and test it in a real worktree.
     Log: 2026-11-16.
 16. A worktree session committing a second repo needs `-C <that repo>`
-    on every git command; `WORKTREE.md` does not say so. 2026-11-16 test
-    in a worktree session: `cd <other repo> && git …` was refused, while
-    a lone `git -C <literal absolute path> status -sb` and `fetch` were
-    accepted. Writes (`add`, `commit`) into the other repo are untested.
-    Log: 2026-11-16.
+    on every git command; `WORKTREE.md` does not say so. Reads into the
+    other repo pass, writes (`add`, `commit`) are untested. Add the rule
+    to `WORKTREE.md` once a real cross-repo commit runs. Log: 2026-11-16.
+17. `git-helper`'s two scan patterns now live in both `SKILL.md` Step 2
+    and `WORKTREE.md` (the copy spells `github_pat_` as `[g]ithub_pat_`);
+    a pattern edit in one file does not reach the other. Same kind of
+    drift as Open 6, so settle them together: one pattern file both
+    forms `grep -f`, or `[g]ithub_pat_` in `SKILL.md` too. Revisit
+    before Open 11 adds patterns. Log: 2026-11-16.
 
 ## Source Material
 
