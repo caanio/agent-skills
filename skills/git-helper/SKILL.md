@@ -85,7 +85,8 @@ The "Rules applied" line and `git log -1 --format='%h %s%n%n%b'` go in the reply
 
 - First run `git rev-parse --path-format=absolute --git-dir --git-common-dir`. Two different paths mean a linked worktree:
   read [`WORKTREE.md`](WORKTREE.md) now and spell every command of this run its way, Step 0's fetch included.
-  A harness refusing a command for its form mid-run switches the run to `WORKTREE.md` from that command on.
+  A harness refusing a command for its form mid-run switches the run to `WORKTREE.md` from that command on;
+  at Step 5 that means a new draft and a new ok first, as `WORKTREE.md` says.
 - Run `git fetch` (short timeout, e.g. `GIT_SSH_COMMAND="ssh -o ConnectTimeout=5 -o BatchMode=yes" git fetch`), then `git status -sb`.
 - **Behind remote** → warn and offer to resolve now (`stash → pull --rebase → stash pop`): fixing divergence before commit beats rebasing a finished commit through conflicts.
 - **Fetch unreachable** (offline / LAN-only remote) → say so in one line, note ahead/behind info is stale, and go on:

@@ -2201,6 +2201,12 @@ Entries run oldest first; new entries are appended at the end.
   `-t` template [unconfirmed: not run on Linux; BSD accepts it, checked
   on macOS]; a refusal at Step 5 now sends the block back for a new ok.
   The duplicated scan patterns went to Open 17 (maintainer call).
+  Review round 2 (`529e7f1..HEAD`): the refusal list names only the
+  two tested variable/substitution forms; untested `-c` keys read as
+  untested rather than "not tried"; a Step 5 refusal now stops, says
+  which commands ran and restarts at Step 1 like a `write-tree`
+  mismatch; `SKILL.md` Step 0's pointer names that new draft and ok,
+  so a reader who stops there cannot run a respelled block on the old ok.
   Rejected: switching the main-tree form to literal paths too, so one
   spelling serves both (maintainer call: keep Settled 15 untouched).
   Not run: a full commit through the edited skill inside a worktree
