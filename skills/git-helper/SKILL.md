@@ -92,8 +92,9 @@ The "Rules applied" line and `git log -1 --format='%h %s%n%n%b'` go in the reply
   fixing divergence before commit beats rebasing a finished commit through conflicts.
   Until the autostash reapplies, it lives in this worktree's own rebase directory, apart from the stash stack every worktree of the repo shares;
   a rebase that conflicts keeps it there until `git rebase --continue` or `--abort`.
-  It comes back unstaged: tell the user which staged files lost their staging (the first column of the `git status -sb` above),
-  and Step 1 reads the index as the pull left it.
+  Staging can change on the way (a clean reapply or an `--abort` returns staged edits to tracked files unstaged):
+  once the pull or its rebase has finished, run `git status -sb` again, compare its first column with the one taken before the pull,
+  and tell the user which files lost their staging. Step 1 then reads the index as it now stands.
   ⚠️ When reapplying it conflicts ("Applying autostash resulted in conflicts"), the working tree holds conflict markers
   and git also stores the autostash on that shared stack under the message `autostash`, which other worktrees' entries can share.
   Run `git rev-parse 'stash@{0}'` at once and keep the hash. Hand the markers to the user; once resolved,

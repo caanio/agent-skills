@@ -2262,3 +2262,12 @@ Entries run oldest first; new entries are appended at the end.
   `--continue` / `--abort`. Minor, left as is: `WORKTREE.md` names
   neither form until Open 15's harness check runs; the no-upstream
   case stays with Open 10.
+  Review round 2 (`c334a39..HEAD`): the staging line was unconditional,
+  but a reviewer's two-worktree test showed newly added files keep
+  their staging and a conflicting reapply leaves the other staged paths
+  staged; only a clean reapply or `--abort` unstages edits to tracked
+  files (the `M  f.txt` → ` M f.txt` above was a clean reapply). Step 0
+  now compares `git status -sb` before and after the pull instead of
+  predicting the result, and Step 1 waits for the pull or its rebase to
+  finish. Minor, left as is: `rev-parse 'stash@{0}'` right after the
+  conflict can still race another worktree's push in between (not hit).
