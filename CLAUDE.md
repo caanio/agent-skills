@@ -251,7 +251,9 @@ Open:
     Step 0 calls it "the restart rule", a label `WORKTREE.md` never
     uses; and Step 5 never says whether a harness refusing `git commit`
     is a "failed commit" (ends the run) or a refusal (restart at Step 1).
-    Settle after the first real worktree commit. Read first:
+    The first real worktree commits ran on 2026-11-16 (Open 15's
+    evidence) with no Step 5 refusal, so the refusal path is still
+    untried; settle it in the worktree acceptance run. Read first:
     `skills/git-helper/WORKTREE.md` lines 5–8, `SKILL.md` Steps 0 and 5.
     Log: 2026-11-16.
 19. `git-helper` Step 0's four after-pull steps leave two paths
