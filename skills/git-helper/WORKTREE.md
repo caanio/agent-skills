@@ -2,9 +2,10 @@
 
 Spell every git-helper command this way for the whole run when Step 0 finds a linked worktree,
 or once a harness refuses a git-helper command for its form.
-A refusal at Step 5 comes after the ok, and the block's earlier commands may already have changed the real index:
-stop there, say which commands ran, and start again at Step 1 in this form, as `SKILL.md` Step 5 does after a
-`write-tree` mismatch. Step 1 then lists the paths already staged, and the new block runs only on its own new ok.
+A refusal at Step 5 comes after the block was cleared to run, and its earlier commands may already have changed the real index:
+stop there, say which commands ran, and start again at Step 1 on the manual path in this form,
+as `SKILL.md` Step 5 does after a `write-tree` mismatch. Step 1 then shows the real index as those commands left it,
+and the new block runs only on its own new ok.
 Every rule in `SKILL.md` still binds: the preview index, both scans, the binary check,
 the `write-tree` comparison and the one ok. Only the spelling changes, so the checks stay equivalent.
 
@@ -19,8 +20,8 @@ cannot be read from the command text alone. Refusals hit in recorded sessions, w
 - `GIT_INDEX_FILE=$TMPDIR/…` and `-C "$(pwd)"`: "too complex to verify that it stays inside the worktree".
 - `-C .`: "points git at a directory computed at runtime".
 - `GIT_SSH_COMMAND=… git …`: "sets GIT_SSH_COMMAND, injecting git configuration".
-- `git -c` with a key such as `core.sshCommand` or `core.hooksPath`: "injecting configuration".
-  The key decides: `-c core.quotepath=false` was accepted; treat any other key as untested.
+- `git -c` with the keys `core.sshCommand` or `core.hooksPath`: "injecting configuration".
+  The key decides: `-c core.quotepath=false` was accepted; treat any key not named here as untested.
 - A command with a pipe whose text contains the letters `git` anywhere, even one that never runs git:
   a temp directory named `git-helper.*`, a grep pattern holding `github_pat_`.
 

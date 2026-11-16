@@ -2207,6 +2207,11 @@ Entries run oldest first; new entries are appended at the end.
   which commands ran and restarts at Step 1 like a `write-tree`
   mismatch; `SKILL.md` Step 0's pointer names that new draft and ok,
   so a reader who stops there cannot run a respelled block on the old ok.
+  Review round 3 (`f6d3b59..HEAD`): the `SKILL.md` pointer now defers
+  to `WORKTREE.md`'s restart rule instead of paraphrasing it; the
+  restart names the manual path, so an Auto-path run cannot resume
+  unattended; the `-c` line names its two refused keys and calls every
+  other key untested.
   Rejected: switching the main-tree form to literal paths too, so one
   spelling serves both (maintainer call: keep Settled 15 untouched).
   Not run: a full commit through the edited skill inside a worktree
