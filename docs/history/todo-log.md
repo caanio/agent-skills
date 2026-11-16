@@ -2314,3 +2314,29 @@ Entries run oldest first; new entries are appended at the end.
   commit") is now met, but no commit was refused at Step 5, so Open 18
   says the case it asks about is still untried and stays open; without
   that, a reader would settle it on no evidence.
+
+- 2026-11-16 — Open 1 (`web-stack-selector` description run for
+  Vue / Nuxt) closed with no `SKILL.md` edit. Harness: the scratch
+  patches of `docs/research/2026-10-02-web-stack-selector-trigger-eval.md`
+  §2, re-applied to `skill-creator`'s `run_eval.py` (file unchanged
+  since 2026-07-13); the competitor pool now holds 64 skills, not 43.
+  A full `opus` run (27 queries × 3 runs × 3 descriptions × 2
+  configurations, 486 calls) was stopped about 3 minutes into its first
+  round by maintainer call, for token cost; it produced no result.
+  Replacement run, competitor configuration, `sonnet`, one run per
+  query, seven Vue queries, two descriptions: HEAD, and V1 (HEAD with
+  "Vue/Nuxt, Laravel Inertia + Vue" added to the stack list). Both
+  7/7: the four should-trigger queries fired 1/1, the three should-not
+  0/1. One run per query cannot see a rate between 0 and 1, so this
+  rules out only a systematic miss, which is what Open 1 suspected.
+  Should trigger: `Nuxt 3 專案要做後台,表格跟表單元件庫要選哪個?`;
+  `laravel + inertia + vue 3, need a component kit for an admin panel
+  with data tables. primevue or element plus or something else?`;
+  `vite + vue 3 landing page, want a bento grid and marquee hero like
+  magicui but for vue. what lib?`; `which MCP server should I install
+  for a Nuxt project's UI components?`. Should not: `the <DataTable> in
+  components/OrderList.vue doesn't re-render when props change, fix
+  it`; `upgrade our Nuxt 2 app to Nuxt 3, list the breaking changes in
+  nuxt.config`; `用 NativeScript-Vue 寫手機 app,地圖套件要選哪個?`.
+  GitHub issue #1 is about the removed Open 1's "D1–D4" wording and
+  has no target now; closing it waits on the maintainer's ok.

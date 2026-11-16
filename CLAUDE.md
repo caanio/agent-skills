@@ -149,14 +149,13 @@ Settled — reopen only on new evidence:
     worktree of a repo shares one stash stack, and a bare `pop` took
     another worktree's entry in a recorded test. Maintainer call,
     log: 2026-11-16.
+18. `web-stack-selector`'s description names React as its only SPA
+    stack and still fires on Vue / Nuxt: HEAD scored 7/7 on seven Vue
+    queries, tying a variant that names Vue/Nuxt. Reopen on a recorded
+    Vue miss. Log: 2026-11-16.
 
 Open:
 
-1. `web-stack-selector` description run for Vue / Nuxt: Section F
-   landed 2026-10-04 (log entry), but the description names React as
-   the only SPA stack. Add Vue / Nuxt triggers, then score them with the
-   harness in
-   `docs/research/2026-10-02-web-stack-selector-trigger-eval.md` §2.
 2. `haos-cloud-backup`: add-on update backups may pile up on the
    remote. §3's copy job uploads all of `/backup`, but every remote
    delete job filters on `Automatic_backup_*`; if those files are named
