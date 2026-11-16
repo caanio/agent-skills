@@ -23,6 +23,7 @@ description: "Commit workflow: preview the commit, scan it for secrets and PII, 
      `--literal-pathspecs` makes `*` match a file named `*` and nothing else.
      Needs a git whose `add` and `restore` take `--pathspec-from-file` [unconfirmed: the first release with it is not looked up].
    - This rule and Core Rule 2 bind the real index; Step 2's `GIT_INDEX_FILE` commands write only the preview.
+   - In a linked worktree, the locations and the `-C` prefix take [`WORKTREE.md`](WORKTREE.md)'s literal form (Step 0 decides).
 
 2. **Separate analysis from execution**:
    - Analysis (Steps 0–4): use only commands that leave the real index and working tree untouched —
@@ -82,6 +83,9 @@ The "Rules applied" line and `git log -1 --format='%h %s%n%n%b'` go in the reply
 
 ### 0. Sync Check (last-line defence)
 
+- First run `git rev-parse --path-format=absolute --git-dir --git-common-dir`. Two different paths mean a linked worktree:
+  read [`WORKTREE.md`](WORKTREE.md) now and spell every command of this run its way, Step 0's fetch included.
+  A harness refusing a command for its form mid-run switches the run to `WORKTREE.md` from that command on.
 - Run `git fetch` (short timeout, e.g. `GIT_SSH_COMMAND="ssh -o ConnectTimeout=5 -o BatchMode=yes" git fetch`), then `git status -sb`.
 - **Behind remote** → warn and offer to resolve now (`stash → pull --rebase → stash pop`): fixing divergence before commit beats rebasing a finished commit through conflicts.
 - **Fetch unreachable** (offline / LAN-only remote) → say so in one line, note ahead/behind info is stale, and go on:

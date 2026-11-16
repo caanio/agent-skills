@@ -2155,3 +2155,33 @@ Entries run oldest first; new entries are appended at the end.
   entirely (back to no independent review of irreversible plans).
   Not run: a real plan through the narrowed trigger; `npx skills@latest
   update plan-doubt -g` on each machine after the push.
+
+- 2026-11-16 — `git-helper` gains a linked-worktree form in a new
+  `WORKTREE.md`; the main-tree form (Settled 15) is unchanged.
+  Before: in a Claude Code worktree-isolated session the harness refused
+  Step 0's `GIT_SSH_COMMAND=… git fetch`, Step 2's preview and scans
+  (git piped into grep, `$(git …)`, `GIT_INDEX_FILE` under the shared
+  `.git`) and Step 4's `-C "$(git rev-parse …)"`. The ad-hoc workaround
+  dropped the preview index and the `write-tree` check.
+  Now: Step 0 first compares `--git-dir` with `--git-common-dir`; two
+  paths send the run to `WORKTREE.md`, as does a mid-run refusal for a
+  command's form. `WORKTREE.md` lists the refused forms (⚠️, hit in
+  recorded sessions), then the accepted spelling: one git per call,
+  literal absolute paths found by two lookups, the preview index and
+  path files in a `mktemp` directory outside `.git`, the diff saved to a
+  file that the scans read with no git in the pipeline, and the clean
+  rule restated per call. Core Rule 1 gained a one-line pointer.
+  Verified: an equivalence script ran 11 cases (staged-before, unrelated
+  tracked changes, untracked new file, rename/delete, space and quote in
+  a path, C-escaped path, `*` and leading `:`, not at top level, binary
+  file, empty repo, and a file changed after the preview). The old and
+  new forms matched on tree hash, numstat and both scans in every case,
+  and the changed-after-preview case was caught by the `write-tree`
+  check. A fresh-context `verifier` read-back of `WORKTREE.md` found two
+  FAIL items in round 1 (the Step 4 variants, the clean rule not in the
+  body); both were fixed and the re-check passed.
+  Rejected: switching the main-tree form to literal paths too, so one
+  spelling serves both (maintainer call: keep Settled 15 untouched).
+  Not run: a full commit through the edited skill inside a worktree
+  (planned as the acceptance run in the requesting repo); Open 15 and 16
+  record the two gaps found.

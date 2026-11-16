@@ -62,7 +62,7 @@ See `docs/agents/triage-labels.md`.
 Single-context: `CONTEXT.md` at the root, ADRs under `docs/adr/`.
 See `docs/agents/domain.md`.
 
-## Open items (last updated 2026-11-11)
+## Open items (last updated 2026-11-16)
 
 The only live list. The per-change log — what each change did, why, and how
 it was verified — is `docs/history/todo-log.md`; read it before reworking a
@@ -140,6 +140,10 @@ Settled — reopen only on new evidence:
     --pathspec-from-file=…` command out in full only where a block runs:
     Step 2's preview and Step 4's example. Core Rule 1 describes the
     form; Step 4's numbered list points to it. Issue #6, log: 2026-11-11.
+16. `git-helper` in a linked worktree spells its commands from
+    `WORKTREE.md`: one git per call, literal absolute paths, the preview
+    index outside `.git`. Step 0 detects the worktree; Settled 15's
+    main-tree form stays as is. Maintainer call, log: 2026-11-16.
 
 Open:
 
@@ -214,6 +218,18 @@ Open:
     `git diff --cached --name-only` before the draft. Tracker: issue #7.
     Read first: `skills/git-helper/SKILL.md` Step 4, list items 1–2.
     Log: 2026-11-11.
+15. `git-helper` Step 0's behind-remote fix (`stash → pull --rebase →
+    stash pop`) runs on the stash stack every worktree of a repo shares,
+    so in a linked worktree the pop can take another worktree's entry.
+    `WORKTREE.md` says nothing about it. Decide a worktree-safe form
+    (e.g. pop by the stash's own ref) and test it in a real worktree.
+    Log: 2026-11-16.
+16. A worktree session committing a second repo needs `-C <that repo>`
+    on every git command; `WORKTREE.md` does not say so. 2026-11-16 test
+    in a worktree session: `cd <other repo> && git …` was refused, while
+    a lone `git -C <literal absolute path> status -sb` and `fetch` were
+    accepted. Writes (`add`, `commit`) into the other repo are untested.
+    Log: 2026-11-16.
 
 ## Source Material
 
