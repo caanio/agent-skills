@@ -151,8 +151,8 @@ Settled — reopen only on new evidence:
     log: 2026-11-16.
 18. `web-stack-selector`'s description names React as its only SPA
     stack and still fires on Vue / Nuxt: HEAD scored 7/7 on seven Vue
-    queries, tying a variant that names Vue/Nuxt. Reopen on a recorded
-    Vue miss. Log: 2026-11-16.
+    queries (`sonnet`, one run each), tying a variant that names
+    Vue/Nuxt. Reopen on a recorded Vue miss. Log: 2026-11-16.
 
 Open:
 

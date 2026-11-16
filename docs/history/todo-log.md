@@ -2338,5 +2338,7 @@ Entries run oldest first; new entries are appended at the end.
   components/OrderList.vue doesn't re-render when props change, fix
   it`; `upgrade our Nuxt 2 app to Nuxt 3, list the breaking changes in
   nuxt.config`; `用 NativeScript-Vue 寫手機 app,地圖套件要選哪個?`.
-  GitHub issue #1 is about the removed Open 1's "D1–D4" wording and
-  has no target now; closing it waits on the maintainer's ok.
+  GitHub issue #1 (an earlier Open 1 used "D1–D4" for three unrelated
+  sets of description candidates: `completion-gate`, `haos-https-tunnel`,
+  `haos-cloud-backup`) had no target left: that wording was gone from
+  `CLAUDE.md` by `5f26e96`. Closed 2026-11-16 by maintainer call.
