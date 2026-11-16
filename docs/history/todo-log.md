@@ -2303,10 +2303,14 @@ Entries run oldest first; new entries are appended at the end.
   each tool result matched to its call. First worktree: the harness
   refused Step 0's `GIT_SSH_COMMAND=… git fetch` and Step 2's
   `git rev-parse --git-path` path-file commands (02:45:40Z–02:45:57Z);
-  the run went on in `WORKTREE.md`'s literal form. Second worktree:
+  the run went on in `WORKTREE.md`'s literal form and committed twice
+  with no refusal at Step 5 (02:51Z, 02:56Z). Second worktree:
   four git-helper commits in that form, none refused at Steps 0, 2 or 5
   (03:21Z–03:48Z); `git rebase origin/main` succeeded twice. No
   `git pull --rebase --autostash` ran anywhere in it, so Open 15 stays
   open. Review round 1 (`1e8af68..HEAD`): the first wording ("four
   commits with no refusal at Steps 0, 2 or 5") left out the first
-  worktree's refusals.
+  worktree's refusals. Open 18's trigger ("the first real worktree
+  commit") is now met, but no commit was refused at Step 5, so Open 18
+  says the case it asks about is still untried and stays open; without
+  that, a reader would settle it on no evidence.

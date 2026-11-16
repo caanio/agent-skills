@@ -231,10 +231,10 @@ Open:
     A recorded session on 2026-11-16 worked in two worktrees: in the
     first, the harness refused Step 0's `GIT_SSH_COMMAND=… git fetch`
     and Step 2's path-file commands until the run switched to
-    `WORKTREE.md`'s literal form; in the second, four git-helper commits
-    in that form passed Steps 0, 2 and 5 with no refusal, and `git
-    rebase origin/main` passed twice. `pull --autostash` was not in that
-    run. Log: 2026-11-16.
+    `WORKTREE.md`'s literal form, and two commits in it passed Step 5;
+    in the second, four git-helper commits in that form passed Steps 0,
+    2 and 5 with no refusal, and `git rebase origin/main` passed twice.
+    `pull --autostash` was not in that run. Log: 2026-11-16.
 16. A worktree session committing a second repo needs `-C <that repo>`
     on every git command; `WORKTREE.md` does not say so. Reads into the
     other repo pass, writes (`add`, `commit`) are untested. Add the rule
@@ -252,8 +252,9 @@ Open:
     uses; and Step 5 never says whether a harness refusing `git commit`
     is a "failed commit" (ends the run) or a refusal (restart at Step 1).
     The first real worktree commits ran on 2026-11-16 (Open 15's
-    evidence) with no Step 5 refusal, so the refusal path is still
-    untried; settle it in the worktree acceptance run. Read first:
+    evidence) and the harness refused none at Step 5, so a refused
+    `git commit` (the case above) is still untried; settle it in the
+    worktree acceptance run. Read first:
     `skills/git-helper/WORKTREE.md` lines 5–8, `SKILL.md` Steps 0 and 5.
     Log: 2026-11-16.
 19. `git-helper` Step 0's four after-pull steps leave two paths
