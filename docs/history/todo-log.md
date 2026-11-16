@@ -2294,3 +2294,19 @@ Entries run oldest first; new entries are appended at the end.
   step 2's settle check (only `UU` named, `restore --staged` clears
   `UU` with markers left, no stated re-check on the user's reply);
   per the round-3 call they joined Open 19 instead of a SKILL.md edit.
+
+- 2026-11-16 — Open 15 gained its follow-through (once the harness
+  check passes, add `git pull --rebase --autostash` and Step 0's
+  after-pull commands to `WORKTREE.md`'s accepted list) and the
+  evidence a recorded Claude Code session already gave. Source: that
+  session's transcript on the maintainer's machine, read 2026-11-16,
+  each tool result matched to its call. First worktree: the harness
+  refused Step 0's `GIT_SSH_COMMAND=… git fetch` and Step 2's
+  `git rev-parse --git-path` path-file commands (02:45:40Z–02:45:57Z);
+  the run went on in `WORKTREE.md`'s literal form. Second worktree:
+  four git-helper commits in that form, none refused at Steps 0, 2 or 5
+  (03:21Z–03:48Z); `git rebase origin/main` succeeded twice. No
+  `git pull --rebase --autostash` ran anywhere in it, so Open 15 stays
+  open. Review round 1 (`1e8af68..HEAD`): the first wording ("four
+  commits with no refusal at Steps 0, 2 or 5") left out the first
+  worktree's refusals.
