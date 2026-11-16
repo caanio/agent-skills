@@ -188,7 +188,10 @@ Open:
    can drift and already differ in when they create `docs/TODO.md`.
    Decide: keep both copies, or point one at the other at the cost of
    standing alone; Open 5 would add a third copy in `git-helper`.
-   Log: 2026-10-16.
+   The not-done pointer's no-entry cases (a minor item judged not worth
+   doing, a deliberate non-goal) are a second shared copy: `handover`
+   step 1 and `completion-gate`'s "The Delivery Message" part 3.
+   Log: 2026-10-16, 2026-11-16.
 7. With no route line, the list lookup adopts only `docs/TODO.md` /
    `TODO.md`, so a repo whose list is `docs/roadmap-*.md` without a
    route line reads as having none. Decide: scan `docs/` for such
