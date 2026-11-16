@@ -90,11 +90,14 @@ The "Rules applied" line and `git log -1 --format='%h %s%n%n%b'` go in the reply
 - Run `git fetch` (short timeout, e.g. `GIT_SSH_COMMAND="ssh -o ConnectTimeout=5 -o BatchMode=yes" git fetch`), then `git status -sb`.
 - **Behind remote** → warn and offer to resolve now with `git pull --rebase --autostash`:
   fixing divergence before commit beats rebasing a finished commit through conflicts.
-  The autostash lives in this worktree's own rebase directory, so the stash stack every worktree of the repo shares stays untouched.
+  Until the autostash reapplies, it lives in this worktree's own rebase directory, apart from the stash stack every worktree of the repo shares;
+  a rebase that conflicts keeps it there until `git rebase --continue` or `--abort`.
+  It comes back unstaged: tell the user which staged files lost their staging (the first column of the `git status -sb` above),
+  and Step 1 reads the index as the pull left it.
   ⚠️ When reapplying it conflicts ("Applying autostash resulted in conflicts"), the working tree holds conflict markers
-  and git also stores the autostash on that shared stack under the message `autostash`.
-  Hand the markers to the user; once resolved, run `git stash list`
-  and drop the entry whose message is `autostash` by its exact ref (`git stash drop stash@{n}`), since the top entry may be another worktree's.
+  and git also stores the autostash on that shared stack under the message `autostash`, which other worktrees' entries can share.
+  Run `git rev-parse 'stash@{0}'` at once and keep the hash. Hand the markers to the user; once resolved,
+  run `git stash list --format='%gd %H %gs'` and drop the entry carrying that hash by its exact ref (`git stash drop 'stash@{n}'`).
 - **Fetch unreachable** (offline / LAN-only remote) → say so in one line, note ahead/behind info is stale, and go on:
   the commit stays on this machine, and the push waits for Step 7's ok either way. Report the fetch result in every run, reachable or not.
 - Record the **base** for Step 6 and show it, after any pull in this step: the base the user names;

@@ -2249,3 +2249,16 @@ Entries run oldest first; new entries are appended at the end.
   Maintainer call.
   Not run: the harness check of `git pull --rebase --autostash` inside a
   Claude Code worktree-isolated session (Open 15, now that check alone).
+  Review round 1 (`matt-code-review` over `4197f9d..HEAD`;
+  `/security-review` skipped, docs-only) changed Step 0: several
+  worktrees' conflicting autostashes all carry the message `autostash`,
+  so the entry is now found by the hash `git rev-parse 'stash@{0}'`
+  prints right after the conflict (checked in the conflict fixture:
+  `stash list --format='%gd %H %gs'` lists that hash beside its
+  `stash@{n}`); the autostash reapplies without `--index`, so staged
+  files come back unstaged (reproduced: `M  f.txt` → ` M f.txt`) and
+  Step 0 now says so; "stays untouched" became conditional on the
+  reapply, and a conflicting rebase keeps the autostash until
+  `--continue` / `--abort`. Minor, left as is: `WORKTREE.md` names
+  neither form until Open 15's harness check runs; the no-upstream
+  case stays with Open 10.
