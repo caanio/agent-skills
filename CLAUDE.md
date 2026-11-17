@@ -62,7 +62,7 @@ See `docs/agents/triage-labels.md`.
 Single-context: `CONTEXT.md` at the root, ADRs under `docs/adr/`.
 See `docs/agents/domain.md`.
 
-## Open items (last updated 2026-11-16)
+## Open items (last updated 2026-11-17)
 
 The only live list. The per-change log — what each change did, why, and how
 it was verified — is `docs/history/todo-log.md`; read it before reworking a
@@ -273,6 +273,17 @@ Open:
     that ends the run on any conflict is the fallback. Read first:
     `skills/git-helper/SKILL.md` Step 0, `docs/history/todo-log.md`
     (2026-11-16, review rounds 3–4). Log: 2026-11-16.
+20. `completion-gate` step 6 and `handover` step 1 now say the wrap-up
+    turn runs on into `git-helper` after the skip line; whether that
+    stops the early turn end is unobserved. Watch the next five
+    wrap-ups: the turn should end at the commit draft, never on the
+    `handover` line or on a progress line naming the commit step. A
+    repeat means wording is exhausted; the next step is a Stop-hook
+    check in the host setup, not more text here. The edit reaches a
+    machine only after push, via `npx skills@latest update
+    completion-gate handover -g` there; until then that machine's
+    installed copies still read the old text. Read first:
+    `skills/completion-gate/SKILL.md` step 6. Log: 2026-11-17.
 
 ## Source Material
 

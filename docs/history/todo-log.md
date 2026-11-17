@@ -2366,3 +2366,20 @@ Entries run oldest first; new entries are appended at the end.
   mechanically; whether the entry behind it names the item cannot, so
   this rests on the model like Open 8. Both `description:` lines left
   unchanged; no trigger eval run.
+
+- 2026-11-17 — A wrap-up's turn ends on the `handover` result line.
+  Trigger: three recorded wrap-ups ended the turn right after `handover`
+  (a bare skip line, or a progress line naming the commit step as next),
+  and the user had to reply "ok" before `git-helper` began. The last
+  case ran with a global rule already in context saying the run goes
+  through to the commit draft, so the rule text alone did not hold.
+  `completion-gate` step 6's done-when now says the same turn carries on
+  into the commit step when a commit is next, and its ⚠️ records the
+  opposite slip next to the existing one; `handover` step 1 says an
+  empty list ends the run, not the turn. Both edits are wording only;
+  read back by a fresh-context `verifier` (4 of 4 questions answered
+  correctly from the edited passages alone). Not verified: whether the
+  turn still ends early in later wrap-ups. Watch the next five; a repeat
+  means the prompt layer is exhausted and a Stop-hook check in the host
+  setup is the next step. Both `description:` lines left unchanged; no
+  trigger eval run.

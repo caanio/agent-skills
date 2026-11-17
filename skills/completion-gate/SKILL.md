@@ -254,7 +254,13 @@ inside it always looks like bad luck.
    user. Its step 1 decides whether anything is owed: an empty candidate
    list ends it with one `handover-skip: <reason>` line in your reply.
    *Done when*: the reply shows `handover`'s report or that skip line,
-   before any commit is drafted.
+   before any commit is drafted, and the same turn then carries on into
+   the commit step (`git-helper`) when a commit is next: the report or
+   skip line is a mid-turn line, and the commit draft is where the turn
+   ends.
    ⚠️ Finishing step 5 has rolled straight into drafting the commit —
    the reason the done-when above requires the report or skip line in
-   the reply.
+   the reply. The opposite slip is recorded too: in three wrap-ups the
+   turn ended on that line, or on a progress line naming the commit
+   step as next, and the user had to reply "ok" before the commit step
+   began.

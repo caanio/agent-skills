@@ -72,8 +72,9 @@ only the files already there.
    entry from the session is on the
    list with a tag, or you've concluded there's nothing beyond the diff
    worth carrying forward.
-   An empty list ends the run here: report one line,
-   `handover-skip: <reason>`.
+   An empty list ends this run, not the turn: report one line,
+   `handover-skip: <reason>`, then carry on with the step the caller
+   has next.
 
 2. **Backfill architecture decisions.** For each candidate from step 1 that
    changes *how* the system is built or *why*, not just *what* changed, and
