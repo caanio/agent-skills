@@ -2383,3 +2383,16 @@ Entries run oldest first; new entries are appended at the end.
   means the prompt layer is exhausted and a Stop-hook check in the host
   setup is the next step. Both `description:` lines left unchanged; no
   trigger eval run.
+
+- 2026-11-18 — `clipping-capture` added (capture a pasted link as a
+  structured Markdown clipping, marked unevaluated; capture only, the
+  evaluation step stays in the consuming repo).
+  Trigger: a consuming repo kept the capture procedure in its own README,
+  so the procedure lived in two places once other repos wanted it.
+  The skill carries the read-everything rule (images, video transcript),
+  the fixed section order and the `[unconfirmed]` tagging. No ⚠️: no
+  recorded miss backs one. Read back by a fresh-context `verifier`
+  (6 of 6 checks passed; its 4 ambiguous sentences were reworded).
+  Not verified: an install through `npx skills@latest add` and a real
+  capture run with the installed copy; no trigger eval run on the
+  `description:`.
